@@ -1,0 +1,6 @@
+[{
+  "modid": "testing",
+  "name": "a test mod",
+  "version": ${version},
+  "mcversion": ${mcversion}
+}]

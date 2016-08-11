@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "testing:portalInteriorBlock",
+    "textures": {
+      "type": "testing:blocks/portalInteriorDefault"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "type": {
+      "inward": {
+        "textures": {
+          "type": "testing:blocks/portalInteriorDown"
+        }
+      },
+      "outward": {
+        "textures": {
+          "type": "testing:blocks/portalInteriorUp"
+        }
+      }
+    }
+  }
+}
