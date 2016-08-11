@@ -144,13 +144,14 @@ public class BlockArea implements Iterable<BlockPos>, INBTSerializable<NBTTagCom
 					case X: minX = maxX; break;
 					case Y: minY = maxY; break;
 					case Z: minZ = maxZ; break;
-				}
+				} break;
+			
 			case NEGATIVE:
 				switch (side.getAxis()) {
 					case X: maxX = minX; break;
 					case Y: maxY = minY; break;
 					case Z: maxZ = minZ; break;
-				}
+				} break;
 		}
 
 		return new BlockArea(new BlockPos(minX, minY, minZ), new BlockPos(maxX, maxY, maxZ));

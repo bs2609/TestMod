@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "#type"
+    "all": "testing:blocks/portal_block"
   }
 }

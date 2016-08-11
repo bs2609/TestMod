@@ -32,7 +32,7 @@ import java.util.Random;
 @SuppressWarnings("deprecation")
 public class PortalInteriorBlock extends BasicBlock {
 
-	public static final String NAME = "portalInteriorBlock";
+	public static final String NAME = "portal_interior_block";
 	public static final IProperty<PortalType> TYPE = PortalType.PROPERTY;
 
 	PortalInteriorBlock() {

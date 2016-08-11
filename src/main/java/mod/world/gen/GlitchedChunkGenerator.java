@@ -1,6 +1,5 @@
 package mod.world.gen;
 
-import mod.TestMod;
 import mod.util.MiscUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -31,7 +30,6 @@ public class GlitchedChunkGenerator extends AbstractChunkGenerator {
 		Random random = new Random(seed ^ xz);
 
 		if (random.nextInt(48) == 0) {
-			TestMod.getLogger().info("changing chunk (" + x + ", " + z + ")");
 			int off = random.nextBoolean() ? random.nextInt(32) : 1;
 			Chunk in = random.nextBoolean() ? source.provideChunk(x^off, z) : source.provideChunk(x, z^off);
 			Chunk out = new Chunk(world, x, z);

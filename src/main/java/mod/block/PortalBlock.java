@@ -25,7 +25,7 @@ import java.util.WeakHashMap;
 
 public class PortalBlock extends BasicBlock {
 
-	public static final String NAME = "portalBlock";
+	public static final String NAME = "portal_block";
 	
 	private static class DimensionPos {
 		
@@ -81,4 +81,3 @@ public class PortalBlock extends BasicBlock {
 		return true;
 	}
 }
-

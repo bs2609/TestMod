@@ -22,7 +22,7 @@ import java.util.Random;
 
 public class SurrealBlock extends BasicBlock {
 
-	public static final String NAME = "surrealBlock";
+	public static final String NAME = "surreal_block";
 	public static final UnlistedPropertyBlockAppearance APPEARANCE = new UnlistedPropertyBlockAppearance();
 
 	SurrealBlock() {

@@ -1,9 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "testing:portalInteriorBlock",
+    "model": "testing:portal_interior_block",
     "textures": {
-      "type": "testing:blocks/portalInteriorDefault"
+      "type": "testing:blocks/portal_interior_default"
     }
   },
   "variants": {
@@ -12,12 +12,12 @@
     "type": {
       "inward": {
         "textures": {
-          "type": "testing:blocks/portalInteriorDown"
+          "type": "testing:blocks/portal_interior_down"
         }
       },
       "outward": {
         "textures": {
-          "type": "testing:blocks/portalInteriorUp"
+          "type": "testing:blocks/portal_interior_up"
         }
       }
     }

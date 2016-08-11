@@ -1,4 +1,4 @@
 # Blocks
-tile.portalBlock.name=Portal Block
-tile.portalFrameBlock.inward.name=Portal Frame (inbound)
-tile.portalFrameBlock.outward.name=Portal Frame (outbound)
+tile.portal_block.name=Portal Block
+tile.portal_frame_block.inward.name=Portal Frame (inbound)
+tile.portal_frame_block.outward.name=Portal Frame (outbound)

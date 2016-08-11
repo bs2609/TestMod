@@ -23,7 +23,7 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class PortalFrameBlock extends VariantBlock<PortalType> {
 
-	public static final String NAME = "portalFrameBlock";
+	public static final String NAME = "portal_frame_block";
 	public static final IProperty<PortalType> TYPE = PortalType.PROPERTY;
 	public static final int RANGE = 16;
 
