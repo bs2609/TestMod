@@ -1,5 +1,6 @@
 package mod.block;
 
+import mod.TestMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemBlock;
@@ -9,9 +10,13 @@ public abstract class BasicBlock extends Block {
 
 	protected BasicBlock(String name, Material material) {
 		super(material);
-		setUnlocalizedName(name);
+		setUnlocalizedName(TestMod.MOD_ID + "." + name);
 		setRegistryName(name);
 		GameRegistry.register(this);
-		GameRegistry.register(new ItemBlock(this), getRegistryName());
+		GameRegistry.register(createItemBlock(), getRegistryName());
+	}
+	
+	protected ItemBlock createItemBlock() {
+		return new ItemBlock(this);
 	}
 }
