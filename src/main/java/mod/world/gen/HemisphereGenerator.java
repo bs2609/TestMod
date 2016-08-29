@@ -23,7 +23,7 @@ public class HemisphereGenerator extends ShapeGenerator {
 
 		public boolean test(int x, int y, int z) {
 			int dx = Math.abs(x-cx), dy = Math.abs(y-cy), dz = Math.abs(z-cz);
-			return y <= cy && Math.round(Math.sqrt(dx*dx + dy*dy + dz*dz)) <= size;
+			return y <= cy && dx*dx + dy*dy + dz*dz <= size*size;
 		}
 	}
 
