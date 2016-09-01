@@ -27,7 +27,7 @@ public class CommonEventHandlers {
 			World world = event.getEntity().worldObj;
 			if (world.isRemote) return;
 
-			TestMod.getLogger().info("Event location: " + new Vec3d(event.getTargetX(), event.getTargetY(), event.getTargetZ()));
+			TestMod.getLogger().debug("Event location: " + new Vec3d(event.getTargetX(), event.getTargetY(), event.getTargetZ()));
 			// get the actual thrown entity so we can guess the target block
 			EntityEnderPearl pearl = getThrownEnderPearl(world, event.getTargetX(), event.getTargetY(), event.getTargetZ());
 			if (pearl == null) return;
@@ -35,15 +35,15 @@ public class CommonEventHandlers {
 			BlockPos pos = getTargetPos(pearl);
 			if (pos == null) return;
 
-			TestMod.getLogger().info("Event target: " + pos);
+			TestMod.getLogger().debug("Event target: " + pos);
 			if (world.getBlockState(pos) != Portal.getInterior()) return;
 
 			// check for portal at this location
-			TestMod.getLogger().info("Searching for portal...");
+			TestMod.getLogger().debug("Searching for portal...");
 			BlockArea portal = PortalUtils.isInsidePortal(world, pos);
 			if (portal == null) return;
 
-			TestMod.getLogger().info("Found portal: " + portal);
+			TestMod.getLogger().debug("Found portal: " + portal);
 			IBlockState border = Portal.getBorder();
 			IBlockState interior = Portal.getInterior();
 			if (PortalUtils.checkPortal(world, portal, border, interior)) {

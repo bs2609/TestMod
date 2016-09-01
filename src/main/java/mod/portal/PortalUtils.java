@@ -48,7 +48,7 @@ public class PortalUtils {
 		if (entityPortalTimes.containsKey(entity) && entityPortalTimes.get(entity) > System.currentTimeMillis() - 2000L) {
 			return false;
 		}
-		TestMod.getLogger().info(System.currentTimeMillis());
+		TestMod.getLogger().debug(entity.getName() + "@" + System.currentTimeMillis());
 		entityPortalTimes.put(entity, System.currentTimeMillis());
 		return true;
 	}
@@ -94,13 +94,13 @@ public class PortalUtils {
 		PortalType type = state.getValue(PortalFrameBlock.TYPE);
 		BlockArea frame = new BlockArea(min, max);
 
-		TestMod.getLogger().info("Found portal frame: " + frame);
+		TestMod.getLogger().debug("Found portal frame: " + frame);
 		addCandidatePortal(world, frame);
 		return frame;
 	}
 
 	public static void frameRemoved(World world, BlockPos pos) {
-		TestMod.getLogger().info("Frame block removed: " + pos);
+		TestMod.getLogger().debug("Frame block removed: " + pos);
 
 		Set<BlockArea> actives = getLocationData(world).activePortals;
 		BlockArea active = isFrameBlock(pos, actives);
@@ -163,7 +163,7 @@ public class PortalUtils {
 	}
 
 	public static boolean constructPortal(World world, BlockArea area, IBlockState frame, IBlockState border, IBlockState interior) {
-		TestMod.getLogger().info("Constructing portal: " + area);
+		TestMod.getLogger().debug("Constructing portal: " + area);
 		constructFrame(world, area, frame);
 		constructBorder(world, area, border);
 		constructInterior(world, area, interior);
@@ -204,7 +204,7 @@ public class PortalUtils {
 	}
 
 	public static boolean checkPortal(World world, BlockArea area, IBlockState border, IBlockState interior) {
-		TestMod.getLogger().info("Checking portal type...");
+		TestMod.getLogger().debug("Checking portal type...");
 		PortalType type = getPortalType(world, area);
 		return (type != null) && validateWorld(world, type) && validatePortal(world, area, border, interior) && activatePortal(world, area, type) || deactivatePortal(world, area);
 	}
@@ -215,7 +215,7 @@ public class PortalUtils {
 	}
 
 	private static boolean validatePortal(World world, BlockArea area, IBlockState border, IBlockState interior) {
-		TestMod.getLogger().info("Checking portal structure...");
+		TestMod.getLogger().debug("Checking portal structure...");
 		return validateInterior(world, area, interior) && validateBorder(world, area, border);
 	}
 
@@ -234,7 +234,7 @@ public class PortalUtils {
 
 	private static boolean activatePortal(World world, BlockArea portal, PortalType type) {
 		if (getLocationData(world).activePortals.contains(portal)) return true;
-		TestMod.getLogger().info("Activating portal...");
+		TestMod.getLogger().debug("Activating portal...");
 		IBlockState active = Portal.getInterior(type);
 		BlockUtils.fillArea(world, portal.getInternalArea(), active);
 		addActivePortal(world, portal);
@@ -243,7 +243,7 @@ public class PortalUtils {
 
 	private static boolean deactivatePortal(World world, BlockArea portal) {
 		if (removeActivePortal(world, portal)) {
-			TestMod.getLogger().info("Deactivating portal...");
+			TestMod.getLogger().debug("Deactivating portal...");
 			IBlockState clear = Blocks.AIR.getDefaultState();
 			BlockUtils.fillArea(world, portal.getInternalArea(), clear);
 		}
