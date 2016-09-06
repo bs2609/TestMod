@@ -1,12 +1,15 @@
 package mod;
 
+import mod.command.ModCommands;
 import mod.proxy.CommonProxy;
+import net.minecraft.command.ICommand;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = TestMod.MOD_ID, name = TestMod.MOD_NAME, version = TestMod.VERSION,
@@ -43,6 +46,13 @@ public class TestMod {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit(event);
+	}
+	
+	@Mod.EventHandler
+	public void serverStarting(FMLServerStartingEvent event) {
+		for (ICommand command : ModCommands.getCommands()) {
+			event.registerServerCommand(command);
+		}
 	}
 
 	public static Logger getLogger() {
