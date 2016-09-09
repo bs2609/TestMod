@@ -90,7 +90,7 @@ public class BlockUtils {
 		int minY = area.minPos.getY(), maxY = area.maxPos.getY();
 		int minZ = area.minPos.getZ(), maxZ = area.maxPos.getZ();
 
-		Set<Integer> X = new HashSet<Integer>(), Y = new HashSet<Integer>(), Z = new HashSet<Integer>();
+		Set<Integer> X = new HashSet<Integer>(2), Y = new HashSet<Integer>(2), Z = new HashSet<Integer>(2);
 
 		X.add(minX); X.add(maxX);
 		Y.add(minY); Y.add(maxY);
