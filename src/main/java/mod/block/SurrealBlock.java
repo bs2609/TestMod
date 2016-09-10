@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -63,11 +64,8 @@ public class SurrealBlock extends BasicBlock {
 	}
 
 	private IBlockState getBlockAppearance(IBlockAccess world, BlockPos pos) {
-		return MiscUtils.worldServerForDimension(0).getBlockState(invertPos(pos));
-	}
-
-	private BlockPos invertPos(BlockPos orig) {
-		return new BlockPos(orig.getX(), 255-orig.getY(), orig.getZ());
+		Chunk chunk = MiscUtils.worldServerForDimension(0).getChunkFromBlockCoords(pos);
+		return chunk.getBlockState(pos.getX(), 255 - pos.getY(), pos.getZ());
 	}
 
 	@Override
