@@ -28,8 +28,7 @@ public class PortalFrameBlock extends VariantBlock<PortalType> {
 	public static final int RANGE = 16;
 
 	PortalFrameBlock() {
-		super(NAME, Material.ROCK);
-		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
+		super(NAME, Material.ROCK, CreativeTabs.BUILDING_BLOCKS);
 	}
 
 	@SideOnly(Side.CLIENT)

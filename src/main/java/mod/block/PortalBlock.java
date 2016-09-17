@@ -41,8 +41,7 @@ public class PortalBlock extends BasicBlock {
 	private static final Map<EntityPlayerMP, DimensionPos> cachedPositions = new WeakHashMap<EntityPlayerMP, DimensionPos>();
 
 	PortalBlock() {
-		super(NAME, Material.ROCK);
-		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
+		super(NAME, Material.ROCK, CreativeTabs.BUILDING_BLOCKS);
 	}
 
 	@SideOnly(Side.CLIENT)

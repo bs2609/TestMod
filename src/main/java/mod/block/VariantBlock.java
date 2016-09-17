@@ -2,6 +2,7 @@ package mod.block;
 
 import com.google.common.base.Function;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
@@ -11,6 +12,10 @@ public abstract class VariantBlock<E extends Enum<E> & IStringSerializable> exte
 	
 	protected VariantBlock(String name, Material material) {
 		super(name, material);
+	}
+	
+	protected VariantBlock(String name, Material material, CreativeTabs tab) {
+		super(name, material, tab);
 	}
 	
 	@Override
