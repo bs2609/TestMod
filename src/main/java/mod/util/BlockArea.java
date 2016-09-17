@@ -92,9 +92,15 @@ public class BlockArea implements Iterable<BlockPos>, INBTSerializable<NBTTagCom
 		double z = (1.0-vec.zCoord) * minPos.getZ() + vec.zCoord * (maxPos.getZ()+1.0);
 		return new Vec3d(x, y, z);
 	}
+	
+	private static final Vec3d CENTRE = new Vec3d(0.5, 0.5, 0.5);
+	
+	public Vec3d getCentre() {
+		return getRelativePosition(CENTRE);
+	}
 
 	public Comparator<BlockArea> compareDistances() {
-		Comparator<BlockArea> comparator = new Comparator<BlockArea>() {
+		return new Comparator<BlockArea>() {
 			@Override
 			public int compare(BlockArea o1, BlockArea o2) {
 				double d1 = getDist(o1, BlockArea.this), d2 = getDist(o2, BlockArea.this);
@@ -102,13 +108,11 @@ public class BlockArea implements Iterable<BlockPos>, INBTSerializable<NBTTagCom
 			}
 
 			private double getDist(BlockArea a1, BlockArea a2) {
-				Vec3d centre = new Vec3d(0.5, 0.5, 0.5);
-				Vec3d v1 = a1.getRelativePosition(centre);
-				Vec3d v2 = a2.getRelativePosition(centre);
+				Vec3d v1 = a1.getCentre();
+				Vec3d v2 = a2.getCentre();
 				return v1.squareDistanceTo(v2);
 			}
 		};
-		return comparator;
 	}
 
 	public boolean intersects(BlockArea other) {
