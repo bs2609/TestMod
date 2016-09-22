@@ -144,6 +144,12 @@ public class PortalUtils {
 		Collections.sort(portals, area.compareDistances());
 		return portals;
 	}
+	
+	public static BlockArea getClosestPortal(World world, Entity entity) {
+		Set<BlockArea> portals = getLocationData(world).activePortals;
+		Comparator<BlockArea> distanceToEntity = BlockArea.compareDistancesTo(entity.getPositionVector());
+		return portals.isEmpty() ? null : Collections.min(portals, distanceToEntity);
+	}
 
 	private static BlockArea isFrameBlock(BlockPos pos, Set<BlockArea> areas) {
 		for (BlockArea area : areas) {

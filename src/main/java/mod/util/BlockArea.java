@@ -108,9 +108,18 @@ public class BlockArea implements Iterable<BlockPos>, INBTSerializable<NBTTagCom
 			}
 
 			private double getDist(BlockArea a1, BlockArea a2) {
-				Vec3d v1 = a1.getCentre();
-				Vec3d v2 = a2.getCentre();
+				Vec3d v1 = a1.getCentre(), v2 = a2.getCentre();
 				return v1.squareDistanceTo(v2);
+			}
+		};
+	}
+	
+	public static Comparator<BlockArea> compareDistancesTo(final Vec3d vec) {
+		return new Comparator<BlockArea>() {
+			@Override
+			public int compare(BlockArea o1, BlockArea o2) {
+				double d1 = o1.getCentre().squareDistanceTo(vec), d2 = o2.getCentre().squareDistanceTo(vec);
+				return Double.compare(d1, d2);
 			}
 		};
 	}
