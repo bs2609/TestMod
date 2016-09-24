@@ -2,3 +2,6 @@
 tile.testing.portal_block.name=Portal Block
 tile.testing.portal_frame_block.inward.name=Portal Frame (inbound)
 tile.testing.portal_frame_block.outward.name=Portal Frame (outbound)
+
+# Items
+item.testing.portal_compass.name=Portal Compass

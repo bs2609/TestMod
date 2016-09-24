@@ -1,6 +1,7 @@
 package mod.crafting;
 
 import mod.block.ModBlocks;
+import mod.item.ModItems;
 import mod.portal.PortalType;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.init.Blocks;
@@ -14,6 +15,7 @@ public class ModCrafting {
 	public static void init() {
 		addPortalFrameRecipes();
 		addPortalBlockRecipe();
+		addPortalCompassRecipe();
 	}
 
 	private static void addPortalFrameRecipes() {
@@ -40,6 +42,17 @@ public class ModCrafting {
 				'A', new ItemStack(ModBlocks.portalFrameBlock, 1, ModBlocks.portalFrameBlock.getMetaForType(PortalType.IN)),
 				'B', Blocks.QUARTZ_BLOCK,
 				'C', Items.ENDER_PEARL
+		);
+	}
+	
+	private static void addPortalCompassRecipe() {
+		
+		GameRegistry.addRecipe(new ItemStack(ModItems.portalCompass, 1),
+				"ABC", "BDB", "CBA",
+				'A', Items.REDSTONE,
+				'B', Items.QUARTZ,
+				'C', new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage()),
+				'D', Items.COMPASS
 		);
 	}
 }
