@@ -26,6 +26,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -41,6 +43,7 @@ public class PortalInteriorBlock extends BasicBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
@@ -56,6 +59,7 @@ public class PortalInteriorBlock extends BasicBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
 		IBlockState other = worldIn.getBlockState(pos.offset(side));
 		return other != state && super.shouldSideBeRendered(state, worldIn, pos, side);
