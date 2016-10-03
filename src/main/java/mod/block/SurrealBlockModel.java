@@ -10,7 +10,9 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,13 +21,24 @@ import java.util.List;
 public class SurrealBlockModel implements IBakedModel {
 
 	public static final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(TestMod.MOD_ID + ":" + SurrealBlock.NAME);
+	
+	public static class EventHandler {
+		
+		@SubscribeEvent
+		public void onModelBakeEvent(ModelBakeEvent event) {
+			Object object = event.getModelRegistry().getObject(modelResourceLocation);
+			if (object != null) {
+				event.getModelRegistry().putObject(modelResourceLocation, new SurrealBlockModel());
+			}
+		}
+	}
 
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
 		IExtendedBlockState extendedState = (IExtendedBlockState) state;
 		IBlockState appearance = extendedState.getValue(SurrealBlock.APPEARANCE);
-		if (appearance.getBlock().canRenderInLayer(appearance, layer)) {
+		if (appearance != null && appearance.getBlock().canRenderInLayer(appearance, layer)) {
 			Minecraft mc = Minecraft.getMinecraft();
 			BlockRendererDispatcher blockRendererDispatcher = mc.getBlockRendererDispatcher();
 			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShapes();

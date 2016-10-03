@@ -13,10 +13,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class CommonEventHandlers {
+	
+	public static void register() {
+		MinecraftForge.EVENT_BUS.register(new CommonEventHandlers());
+	}
 
 	// TODO: Use ThrowableImpactEvent for 1.10
 	

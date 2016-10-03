@@ -1,9 +1,13 @@
 package mod.util;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class MiscUtils {
 
@@ -34,5 +38,13 @@ public class MiscUtils {
 	public static void setInvulnerableDimensionChange(EntityPlayerMP player) {
 		String[] fieldNames = {"invulnerableDimensionChange", "field_184851_cj"};
 		ReflectionHelper.setPrivateValue(EntityPlayerMP.class, player, true, fieldNames);
+	}
+	
+	public static Side getSide(IBlockAccess access) {
+		if (access instanceof World) {
+			World world = (World) access;
+			return world.isRemote ? Side.CLIENT : Side.SERVER;
+		}
+		return FMLCommonHandler.instance().getEffectiveSide();
 	}
 }

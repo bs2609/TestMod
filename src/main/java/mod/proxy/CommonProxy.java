@@ -4,8 +4,8 @@ import mod.block.ModBlocks;
 import mod.crafting.ModCrafting;
 import mod.event.CommonEventHandlers;
 import mod.item.ModItems;
+import mod.network.ModPacketHandler;
 import mod.world.ModDimensions;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -18,8 +18,8 @@ public class CommonProxy implements IProxy {
 		ModItems.init();
 		ModCrafting.init();
 		ModDimensions.init();
-
-		MinecraftForge.EVENT_BUS.register(new CommonEventHandlers());
+		ModPacketHandler.init();
+		CommonEventHandlers.register();
 	}
 
 	@Override
