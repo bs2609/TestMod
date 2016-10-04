@@ -9,29 +9,31 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 
 public class SurrealChunkGenerator extends AbstractChunkGenerator {
-
-	private final World template;
-
+	
 	private final PortalFieldGenerator portalGen = new PortalFieldGenerator();
 	private final IBlockState blockState = ModBlocks.surrealBlock.getDefaultState();
-
+	
 	private Chunk templateChunk;
 
 	public SurrealChunkGenerator(World world) {
 		super(world);
-		template = MiscUtils.worldServerForDimension(0);
 	}
 
 	@Override
 	public Chunk provideChunk(int x, int z) {
-		templateChunk = template.getChunkFromChunkCoords(x, z);
+		templateChunk = getTemplate().getChunkFromChunkCoords(x, z);
 		ChunkPrimer primer = new ChunkPrimer();
 		pregenChunk(primer);
 		portalGen.generate(primer);
 		Chunk chunk = new Chunk(world, primer, x, z);
 		copyBiomes(templateChunk, chunk);
+		templateChunk = null;
 		chunk.generateSkylightMap();
 		return chunk;
+	}
+	
+	private World getTemplate() {
+		return MiscUtils.worldServerForDimension(0);
 	}
 
 	private void pregenChunk(ChunkPrimer primer) {

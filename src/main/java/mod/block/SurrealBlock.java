@@ -36,7 +36,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import javax.annotation.Nullable;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
@@ -45,7 +44,7 @@ public class SurrealBlock extends BasicBlock {
 	public static final String NAME = "surreal_block";
 	public static final IUnlistedProperty<IBlockState> APPEARANCE = new UnlistedPropertyBlockAppearance();
 	
-	private static final int DIM_ID = 0;
+	public static final int DIM_ID = 0;
 	
 	private final ChunkBuffer buffer = new ChunkBuffer() {
 		
@@ -175,7 +174,7 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (heldItem != null && heldItem.getItem() == Items.STICK) {
 			IBlockState appearance = getBlockAppearance(world, pos);
 			if (appearance != null) {

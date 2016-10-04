@@ -5,6 +5,7 @@ import mod.portal.PortalType;
 import mod.portal.PortalUtils;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
 import java.util.HashMap;
@@ -23,9 +24,7 @@ public class ModDimensions {
 	public static int DIM_SURREAL = 39;
 	public static int DIM_GLITCHED = 101;
 
-	public static DimensionType surreal;
-	public static DimensionType glitched;
-	public static DimensionType test;
+	public static DimensionType surreal, glitched, test;
 
 	private static final Map<Integer, IDimensionSpecifier> dimTypes = new HashMap<Integer, IDimensionSpecifier>();
 
@@ -35,6 +34,7 @@ public class ModDimensions {
 		registerDimensions();
 		setupDimensions();
 		linkDimensions();
+		registerForEvents();
 	}
 
 	private static void loadFromConfig() {
@@ -73,6 +73,10 @@ public class ModDimensions {
 			PortalUtils.addDimensionMapping(PortalType.IN, dims[i-1], dims[i]);
 			PortalUtils.addDimensionMapping(PortalType.OUT, dims[i], dims[i-1]);
 		}
+	}
+	
+	private static void registerForEvents() {
+		MinecraftForge.EVENT_BUS.register(new SurrealWorldUpdater());
 	}
 
 	static double getMovementFactor(int dim) {
