@@ -91,7 +91,7 @@ public class SurrealBlock extends BasicBlock {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void initModel() {
+	void initModel() {
 		StateMapperBase ignoreState = new StateMapperBase() {
 			@Override
 			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
@@ -102,7 +102,7 @@ public class SurrealBlock extends BasicBlock {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void initItemModel() {
+	void initItemModel() {
 		Item item = Item.REGISTRY.getObject(getRegistryName());
 		ModelResourceLocation itemMRL = new ModelResourceLocation(getRegistryName(), "inventory");
 		ModelLoader.setCustomModelResourceLocation(item, 0, itemMRL);

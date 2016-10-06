@@ -32,7 +32,7 @@ public class PortalFrameBlock extends VariantBlock<PortalType> {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void initModel() {
+	void initModel() {
 		Item item = Item.getItemFromBlock(this);
 		for (PortalType type : PortalType.values()) {
 			ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "type="+type.getName());

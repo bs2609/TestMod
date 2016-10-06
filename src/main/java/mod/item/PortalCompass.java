@@ -38,7 +38,7 @@ public class PortalCompass extends BasicItem {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void initModel() {
+	void initModel() {
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
 	}
 	
