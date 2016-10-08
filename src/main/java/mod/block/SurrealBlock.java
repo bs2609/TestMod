@@ -6,6 +6,7 @@ import mod.network.ModPacketHandler;
 import mod.network.ChunkBuffer;
 import mod.util.MiscUtils;
 import mod.world.ModDimensions;
+import mod.world.SimpleBlockAccess;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -61,6 +62,19 @@ public class SurrealBlock extends BasicBlock {
 			// mark chunk for render update
 			int x = chunk.xPosition << 4, z = chunk.zPosition << 4;
 			Minecraft.getMinecraft().theWorld.markBlockRangeForRenderUpdate(x, 0, z, x + 15, 255, z + 15);
+		}
+	};
+	
+	private final IBlockAccess localBlockAccess = new SimpleBlockAccess() {
+		
+		@Override
+		protected Chunk getChunk(int x, int z) {
+			return buffer.getChunk(x, z);
+		}
+		
+		@Override
+		protected World getWorld() {
+			return Minecraft.getMinecraft().theWorld;
 		}
 	};
 	
@@ -121,10 +135,17 @@ public class SurrealBlock extends BasicBlock {
 		IBlockState blockAppearance = getBlockAppearance(world, pos);
 		return extendedState.withProperty(APPEARANCE, blockAppearance);
 	}
+	
+	private IBlockState getBlockAppearance(IBlockState state, IBlockAccess world, BlockPos pos) {
+		IBlockState appearance = getBlockAppearance(state);
+		if (appearance != null) return appearance;
+		return getBlockAppearance(world, pos);
+	}
 
 	private IBlockState getBlockAppearance(IBlockAccess world, BlockPos pos) {
-		Chunk chunk = getChunk(pos, MiscUtils.getSide(world));
-		return (chunk != null) ? chunk.getBlockState(pos.getX(), 255-pos.getY(), pos.getZ()) : null;
+		IBlockAccess access = getBlockAccess(MiscUtils.getSide(world));
+		BlockPos inverted = new BlockPos(pos.getX(), 255-pos.getY(), pos.getZ());
+		return access.getBlockState(inverted).getActualState(access, inverted);
 	}
 	
 	private IBlockState getBlockAppearance(IBlockState state) {
@@ -135,12 +156,12 @@ public class SurrealBlock extends BasicBlock {
 		return null;
 	}
 	
-	private Chunk getChunk(BlockPos pos, Side side) {
+	private IBlockAccess getBlockAccess(Side side) {
 		switch (side) {
 			case CLIENT:
-				return buffer.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+				return localBlockAccess;
 			case SERVER:
-				return MiscUtils.worldServerForDimension(DIM_ID).getChunkFromBlockCoords(pos);
+				return MiscUtils.worldServerForDimension(DIM_ID);
 			default:
 				return null;
 		}
@@ -154,14 +175,14 @@ public class SurrealBlock extends BasicBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess access, BlockPos pos, EnumFacing side) {
-		IBlockState appearance = getBlockAppearance(state);
-		return (appearance != null) ? appearance.shouldSideBeRendered(access, pos, side) : super.shouldSideBeRendered(state, access, pos, side);
+		IBlockState appearance = getBlockAppearance(state, access, pos);
+		return appearance.shouldSideBeRendered(access, pos, side);
 	}
 	
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		IBlockState appearance = getBlockAppearance(state);
-		return (appearance != null) ? invert(appearance.getBoundingBox(source, pos)) : super.getBoundingBox(state, source, pos);
+		IBlockState appearance = getBlockAppearance(state, source, pos);
+		return invert(appearance.getBoundingBox(source, pos));
 	}
 	
 	private AxisAlignedBB invert(AxisAlignedBB aabb) {
@@ -177,9 +198,7 @@ public class SurrealBlock extends BasicBlock {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (heldItem != null && heldItem.getItem() == Items.STICK) {
 			IBlockState appearance = getBlockAppearance(world, pos);
-			if (appearance != null) {
-				player.addChatMessage(new TextComponentString(appearance.getBlock().getRegistryName().toString()));
-			}
+			player.addChatMessage(new TextComponentString(appearance.getBlock().getRegistryName().toString()));
 			return true;
 		}
 		return false;

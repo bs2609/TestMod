@@ -3,11 +3,9 @@ package mod.block;
 import mod.TestMod;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BlockModelShapes;
-import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -35,15 +33,12 @@ public class SurrealBlockModel implements IBakedModel {
 
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
 		IExtendedBlockState extendedState = (IExtendedBlockState) state;
 		IBlockState appearance = extendedState.getValue(SurrealBlock.APPEARANCE);
-		if (appearance != null && appearance.getBlock().canRenderInLayer(appearance, layer)) {
-			Minecraft mc = Minecraft.getMinecraft();
-			BlockRendererDispatcher blockRendererDispatcher = mc.getBlockRendererDispatcher();
-			BlockModelShapes blockModelShapes = blockRendererDispatcher.getBlockModelShapes();
-			IBakedModel copiedBlockModel = blockModelShapes.getModelForState(appearance);
-			return copiedBlockModel.getQuads(appearance, side, rand);
+		if (appearance != null && appearance.getRenderType() == EnumBlockRenderType.MODEL
+				&& appearance.getBlock().canRenderInLayer(appearance, MinecraftForgeClient.getRenderLayer())) {
+			IBakedModel copiedModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(appearance);
+			return copiedModel.getQuads(appearance, side, rand);
 		}
 		return Collections.emptyList();
 	}
