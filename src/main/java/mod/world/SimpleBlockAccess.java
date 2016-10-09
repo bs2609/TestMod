@@ -62,7 +62,7 @@ public abstract class SimpleBlockAccess implements IBlockAccess {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Biome getBiomeGenForCoords(BlockPos pos) {
+	public Biome getBiome(BlockPos pos) {
 		Chunk chunk = getChunk(pos);
 		return (chunk != null) ? chunk.getBiome(pos, getWorld().getBiomeProvider()) : defaultBiome;
 	}

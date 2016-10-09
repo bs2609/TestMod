@@ -31,7 +31,7 @@ public class TestChunkGenerator extends AbstractChunkGenerator {
 	}
 
 	private void initBiomes(Chunk chunk, int x, int z) {
-		Biome[] biomes = world.getBiomeProvider().loadBlockGeneratorData(null, x << 4, z << 4, 16, 16);
+		Biome[] biomes = world.getBiomeProvider().getBiomes(null, x << 4, z << 4, 16, 16);
 		byte[] bytes = chunk.getBiomeArray();
 		int n = Math.min(biomes.length, bytes.length);
 		for (int i = 0; i < n; ++i) {
