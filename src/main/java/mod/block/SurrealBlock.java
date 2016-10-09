@@ -65,7 +65,7 @@ public class SurrealBlock extends BasicBlock {
 		}
 	};
 	
-	private final IBlockAccess localBlockAccess = new SimpleBlockAccess() {
+	private final IBlockAccess bufferAccess = new SimpleBlockAccess() {
 		
 		@Override
 		protected Chunk getChunk(int x, int z) {
@@ -159,7 +159,7 @@ public class SurrealBlock extends BasicBlock {
 	private IBlockAccess getBlockAccess(Side side) {
 		switch (side) {
 			case CLIENT:
-				return localBlockAccess;
+				return bufferAccess;
 			case SERVER:
 				return MiscUtils.worldServerForDimension(DIM_ID);
 			default:
@@ -182,11 +182,24 @@ public class SurrealBlock extends BasicBlock {
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		IBlockState appearance = getBlockAppearance(state, source, pos);
-		return invert(appearance.getBoundingBox(source, pos));
+		return appearance.getBoundingBox(source, pos);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+		IBlockState appearance = getBlockAppearance(state, world, pos);
+		return appearance.getSelectedBoundingBox(world, pos);
+	}
+	
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+		IBlockState appearance = getBlockAppearance(state, world, pos);
+		return appearance.getCollisionBoundingBox(world, pos);
 	}
 	
 	private AxisAlignedBB invert(AxisAlignedBB aabb) {
-		return (aabb.minY + aabb.maxY == 1.0) ? aabb : new AxisAlignedBB(aabb.minX, 1.0-aabb.maxY, aabb.minZ, aabb.maxX, 1.0-aabb.minY, aabb.maxZ);
+		return (aabb == null || aabb.minY + aabb.maxY == 1.0) ? aabb : new AxisAlignedBB(aabb.minX, 1.0-aabb.maxY, aabb.minZ, aabb.maxX, 1.0-aabb.minY, aabb.maxZ);
 	}
 	
 	@Override
