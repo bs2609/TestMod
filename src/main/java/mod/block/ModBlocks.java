@@ -31,4 +31,8 @@ public class ModBlocks {
 		surrealBlock.initItemModel();
 	}
 
+	@SideOnly(Side.CLIENT)
+	public static void registerHandlers() {
+		surrealBlock.registerColourHandler();
+	}
 }

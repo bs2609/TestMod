@@ -14,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -78,6 +79,16 @@ public class SurrealBlock extends BasicBlock {
 		}
 	};
 	
+	@SideOnly(Side.CLIENT)
+	private final IBlockColor colourHandler = new IBlockColor() {
+		
+		@Override
+		public int colorMultiplier(IBlockState state, IBlockAccess world, BlockPos pos, int tintIndex) {
+			IBlockState appearance = getBlockAppearance(state, world, pos);
+			return Minecraft.getMinecraft().getBlockColors().colorMultiplier(appearance, world, pos, tintIndex);
+		}
+	};
+	
 	private class EventHandler {
 		
 		private boolean checkWorld(World world) {
@@ -120,6 +131,11 @@ public class SurrealBlock extends BasicBlock {
 		Item item = Item.REGISTRY.getObject(getRegistryName());
 		ModelResourceLocation itemMRL = new ModelResourceLocation(getRegistryName(), "inventory");
 		ModelLoader.setCustomModelResourceLocation(item, 0, itemMRL);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	void registerColourHandler() {
+		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(colourHandler, this);
 	}
 
 	@Override

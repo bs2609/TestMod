@@ -20,5 +20,6 @@ public class ClientProxy extends CommonProxy {
 	public void init(FMLInitializationEvent event) {
 		super.init(event);
 		ModBlocks.initItemModels();
+		ModBlocks.registerHandlers();
 	}
 }
