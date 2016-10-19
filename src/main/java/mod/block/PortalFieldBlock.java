@@ -20,7 +20,7 @@ import java.util.Random;
 @SuppressWarnings("deprecation")
 public class PortalFieldBlock extends BasicBlock {
 
-	public static final String NAME = "portal_field_block";
+	public static final String NAME = "portal_field";
 
 	PortalFieldBlock() {
 		super(NAME, Material.PORTAL);
