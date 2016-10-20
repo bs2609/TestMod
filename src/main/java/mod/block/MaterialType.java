@@ -8,16 +8,22 @@ import java.util.EnumSet;
 
 public enum MaterialType implements IStringSerializable {
 	
-	SOLID,
-	TRANSLUCENT,
-	PASSABLE,
-	CLEAR;
+	SOLID("solid"),
+	TRANSLUCENT("translucent"),
+	PASSABLE("passable"),
+	CLEAR("clear");
 	
 	public static final PropertyEnum<MaterialType> PROPERTY = PropertyEnum.create("material", MaterialType.class, EnumSet.allOf(MaterialType.class));
 	
+	private final String name;
+	
+	MaterialType(String name) {
+		this.name = name;
+	}
+	
 	@Override
 	public String getName() {
-		return name();
+		return name;
 	}
 	
 	public static MaterialType getType(Material material) {
