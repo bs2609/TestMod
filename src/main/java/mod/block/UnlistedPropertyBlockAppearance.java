@@ -1,5 +1,6 @@
 package mod.block;
 
+import mod.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
@@ -7,12 +8,12 @@ public class UnlistedPropertyBlockAppearance implements IUnlistedProperty<IBlock
 
 	@Override
 	public String getName() {
-		return "UnlistedPropertyBlockAppearance";
+		return "appearance";
 	}
 
 	@Override
 	public boolean isValid(IBlockState value) {
-		return true;
+		return value != null;
 	}
 
 	@Override
@@ -22,6 +23,6 @@ public class UnlistedPropertyBlockAppearance implements IUnlistedProperty<IBlock
 
 	@Override
 	public String valueToString(IBlockState value) {
-		return value.toString();
+		return MiscUtils.toString(value);
 	}
 }

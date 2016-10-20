@@ -9,6 +9,7 @@ import mod.world.ModDimensions;
 import mod.world.SimpleBlockAccess;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -44,6 +46,11 @@ import java.util.Random;
 public class SurrealBlock extends BasicBlock {
 
 	public static final String NAME = "surreal_block";
+	
+	public static final IProperty<Boolean> FULL_CUBE = PropertyBool.create("full");
+	public static final IProperty<Boolean> OPAQUE_CUBE = PropertyBool.create("opaque");
+	public static final IProperty<MaterialType> MATERIAL_TYPE = MaterialType.PROPERTY;
+	
 	public static final IUnlistedProperty<IBlockState> APPEARANCE = new UnlistedPropertyBlockAppearance();
 	
 	public static final int DIM_ID = 0;
@@ -112,6 +119,7 @@ public class SurrealBlock extends BasicBlock {
 
 	SurrealBlock() {
 		super(NAME, Material.ROCK);
+		setDefaultState(makeDefaultState());
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 
@@ -137,14 +145,36 @@ public class SurrealBlock extends BasicBlock {
 	void registerColourHandler() {
 		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(colourHandler, this);
 	}
+	
+	private IBlockState makeDefaultState() {
+		return blockState.getBaseState()
+				.withProperty(FULL_CUBE, true)
+				.withProperty(OPAQUE_CUBE, true)
+				.withProperty(MATERIAL_TYPE, MaterialType.SOLID);
+	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		IProperty[] listedProperties = new IProperty[0];
+		IProperty[] listedProperties = new IProperty[] {FULL_CUBE, OPAQUE_CUBE, MATERIAL_TYPE};
 		IUnlistedProperty[] unlistedProperties = new IUnlistedProperty[] {APPEARANCE};
 		return new ExtendedBlockState(this, listedProperties, unlistedProperties);
 	}
-
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState()
+				.withProperty(FULL_CUBE, (meta & 8) != 0)
+				.withProperty(OPAQUE_CUBE, (meta & 4) != 0)
+				.withProperty(MATERIAL_TYPE, MaterialType.values()[meta & 3]);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(MATERIAL_TYPE).ordinal()
+				+ (state.getValue(OPAQUE_CUBE) ? 4 : 0)
+				+ (state.getValue(FULL_CUBE) ? 8 : 0);
+	}
+	
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		IExtendedBlockState extendedState = (IExtendedBlockState) state;
@@ -225,6 +255,16 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
+	public boolean isFullCube(IBlockState state) {
+		return state.getValue(FULL_CUBE);
+	}
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return state.getValue(OPAQUE_CUBE);
+	}
+	
+	@Override
 	public int quantityDropped(Random random) {
 		return 0;
 	}
@@ -233,9 +273,20 @@ public class SurrealBlock extends BasicBlock {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (heldItem != null && heldItem.getItem() == Items.STICK) {
 			IBlockState appearance = getBlockAppearance(world, pos);
-			player.addChatMessage(new TextComponentString(appearance.getBlock().getRegistryName().toString()));
+			player.addChatMessage(new TextComponentString(MiscUtils.toString(appearance)));
 			return true;
 		}
 		return false;
+	}
+	
+	public static boolean canReplace(IBlockState state) {
+		return state.getRenderType() == EnumBlockRenderType.MODEL;
+	}
+	
+	public static IBlockState getStateFor(IBlockState state) {
+		return ModBlocks.surrealBlock.getDefaultState()
+				.withProperty(FULL_CUBE, state.isFullCube())
+				.withProperty(OPAQUE_CUBE, state.isOpaqueCube())
+				.withProperty(MATERIAL_TYPE, MaterialType.getType(state.getMaterial()));
 	}
 }

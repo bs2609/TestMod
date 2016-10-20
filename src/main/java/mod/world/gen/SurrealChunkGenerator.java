@@ -1,9 +1,8 @@
 package mod.world.gen;
 
-import mod.block.ModBlocks;
+import mod.block.SurrealBlock;
 import mod.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
@@ -11,7 +10,6 @@ import net.minecraft.world.chunk.ChunkPrimer;
 public class SurrealChunkGenerator extends AbstractChunkGenerator {
 	
 	private final PortalFieldGenerator portalGen = new PortalFieldGenerator();
-	private final IBlockState blockState = ModBlocks.surrealBlock.getDefaultState();
 	
 	private Chunk templateChunk;
 
@@ -41,7 +39,7 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 			for (int cz = 0; cz < 16; ++cz) {
 				for (int cy = 0; cy < 256; ++cy) {
 					if (testBlock(cx, cy, cz)) {
-						primer.setBlockState(cx, 255-cy, cz, blockState);
+						primer.setBlockState(cx, 255-cy, cz, getBlockState(cx, cy, cz));
 					}
 				}
 			}
@@ -49,7 +47,11 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 	}
 
 	private boolean testBlock(int x, int y, int z) {
-		return templateChunk.getBlockState(x, y, z).getRenderType() == EnumBlockRenderType.MODEL;
+		return SurrealBlock.canReplace(templateChunk.getBlockState(x, y, z));
+	}
+	
+	private IBlockState getBlockState(int x, int y, int z) {
+		return SurrealBlock.getStateFor(templateChunk.getBlockState(x, y, z));
 	}
 
 	private void copyBiomes(Chunk src, Chunk dst) {

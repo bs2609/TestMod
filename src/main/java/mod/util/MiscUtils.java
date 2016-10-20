@@ -1,5 +1,7 @@
 package mod.util;
 
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -8,6 +10,8 @@ import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.Map;
 
 public class MiscUtils {
 
@@ -46,5 +50,18 @@ public class MiscUtils {
 			return world.isRemote ? Side.CLIENT : Side.SERVER;
 		}
 		return FMLCommonHandler.instance().getEffectiveSide();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T extends Comparable<T>> String toString(IBlockState state) {
+		StringBuilder str = new StringBuilder();
+		str.append(state.getBlock().getRegistryName()).append('[');
+		for (Map.Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
+			IProperty<T> property = (IProperty<T>) entry.getKey();
+			T value = (T) entry.getValue();
+			str.append(property.getName()).append('=').append(property.getName(value)).append(',');
+		}
+		str.deleteCharAt(str.length()-1).append(']');
+		return str.toString();
 	}
 }

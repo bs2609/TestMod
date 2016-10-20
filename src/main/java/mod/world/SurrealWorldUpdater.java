@@ -1,11 +1,9 @@
 package mod.world;
 
-import mod.block.ModBlocks;
 import mod.block.SurrealBlock;
 import mod.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -15,20 +13,16 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class SurrealWorldUpdater extends AbstractWorldEventListener {
 	
-	private final IBlockState set = ModBlocks.surrealBlock.getDefaultState();
-	private final IBlockState clear = Blocks.AIR.getDefaultState();
+	private final IBlockState air = Blocks.AIR.getDefaultState();
 	
 	@Override
 	public void notifyBlockUpdate(World worldIn, BlockPos pos, IBlockState oldState, IBlockState newState, int flags) {
 		WorldServer world = MiscUtils.worldServerForDimension(ModDimensions.DIM_SURREAL);
 		Chunk chunk = world.getChunkProvider().loadChunk(pos.getX() >> 4, pos.getZ() >> 4);
 		if (chunk != null) {
-			chunk.setBlockState(new BlockPos(pos.getX(), 255-pos.getY(), pos.getZ()), checkState(newState) ? set : clear);
+			BlockPos inverted = new BlockPos(pos.getX(), 255-pos.getY(), pos.getZ());
+			chunk.setBlockState(inverted, SurrealBlock.canReplace(newState) ? SurrealBlock.getStateFor(newState) : air);
 		}
-	}
-	
-	private boolean checkState(IBlockState state) {
-		return state.getRenderType() == EnumBlockRenderType.MODEL;
 	}
 	
 	@SubscribeEvent
