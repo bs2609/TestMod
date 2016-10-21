@@ -265,6 +265,11 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
+	public Material getMaterial(IBlockState state) {
+		return state.getValue(MATERIAL_TYPE).getExample();
+	}
+	
+	@Override
 	public int quantityDropped(Random random) {
 		return 0;
 	}
