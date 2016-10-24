@@ -91,6 +91,7 @@ public class SurrealBlock extends BasicBlock {
 		
 		@Override
 		public int colorMultiplier(IBlockState state, IBlockAccess world, BlockPos pos, int tintIndex) {
+			if (world == null || pos == null) return -1;
 			IBlockState appearance = getBlockAppearance(state, world, pos);
 			return Minecraft.getMinecraft().getBlockColors().colorMultiplier(appearance, world, pos, tintIndex);
 		}
