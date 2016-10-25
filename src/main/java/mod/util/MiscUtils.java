@@ -55,13 +55,16 @@ public class MiscUtils {
 	@SuppressWarnings("unchecked")
 	public static <T extends Comparable<T>> String toString(IBlockState state) {
 		StringBuilder str = new StringBuilder();
-		str.append(state.getBlock().getRegistryName()).append('[');
-		for (Map.Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
-			IProperty<T> property = (IProperty<T>) entry.getKey();
-			T value = (T) entry.getValue();
-			str.append(property.getName()).append('=').append(property.getName(value)).append(',');
+		str.append(state.getBlock().getRegistryName());
+		if (!state.getProperties().isEmpty()) {
+			str.append('[');
+			for (Map.Entry<IProperty<?>, Comparable<?>> entry : state.getProperties().entrySet()) {
+				IProperty<T> property = (IProperty<T>) entry.getKey();
+				T value = (T) entry.getValue();
+				str.append(property.getName()).append('=').append(property.getName(value)).append(',');
+			}
+			str.deleteCharAt(str.length() - 1).append(']');
 		}
-		str.deleteCharAt(str.length()-1).append(']');
 		return str.toString();
 	}
 }
