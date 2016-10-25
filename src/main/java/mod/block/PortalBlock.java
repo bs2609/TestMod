@@ -42,6 +42,8 @@ public class PortalBlock extends BasicBlock {
 
 	PortalBlock() {
 		super(NAME, Material.ROCK, CreativeTabs.BUILDING_BLOCKS);
+		setHardness(1.5f);
+		setResistance(5.0f);
 	}
 
 	@SideOnly(Side.CLIENT)

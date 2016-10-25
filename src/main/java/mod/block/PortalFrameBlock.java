@@ -29,13 +29,15 @@ public class PortalFrameBlock extends VariantBlock<PortalType> {
 
 	PortalFrameBlock() {
 		super(NAME, Material.ROCK, CreativeTabs.BUILDING_BLOCKS);
+		setHardness(1.5f);
+		setResistance(5.0f);
 	}
 
 	@SideOnly(Side.CLIENT)
 	void initModel() {
 		Item item = Item.getItemFromBlock(this);
 		for (PortalType type : PortalType.values()) {
-			ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), "type="+type.getName());
+			ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), TYPE.getName() + "=" + type.getName());
 			ModelLoader.setCustomModelResourceLocation(item, getMetaForType(type), location);
 		}
 	}
