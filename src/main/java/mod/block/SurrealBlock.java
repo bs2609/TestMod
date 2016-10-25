@@ -1,5 +1,6 @@
 package mod.block;
 
+import mod.model.SurrealBlockModel;
 import mod.network.ChunkDataPacket;
 import mod.network.ChunkRequestPacket;
 import mod.network.ModPacketHandler;

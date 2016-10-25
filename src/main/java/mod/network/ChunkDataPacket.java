@@ -1,7 +1,6 @@
 package mod.network;
 
 import io.netty.buffer.ByteBuf;
-import mod.TestMod;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;

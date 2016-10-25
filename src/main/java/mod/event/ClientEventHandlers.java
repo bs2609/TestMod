@@ -1,6 +1,6 @@
 package mod.event;
 
-import mod.block.SurrealBlockModel;
+import mod.model.SurrealBlockModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

@@ -1,4 +1,4 @@
-package mod.render;
+package mod.model;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 

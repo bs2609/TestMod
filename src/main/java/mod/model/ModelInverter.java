@@ -1,4 +1,4 @@
-package mod.render;
+package mod.model;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -53,9 +53,8 @@ public class ModelInverter extends ModelTransformer {
 		
 		//flip(quad.getVertexData(), format.getIntegerSize());
 		quad.pipe(transformer);
-		
 		BakedQuad built = builder.build();
-		flip(built.getVertexData(), format.getIntegerSize());
+		//flip(built.getVertexData(), format.getIntegerSize());
 		
 		return built;
 	}

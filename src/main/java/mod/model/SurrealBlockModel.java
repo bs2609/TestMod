@@ -1,6 +1,7 @@
-package mod.block;
+package mod.model;
 
 import mod.TestMod;
+import mod.block.SurrealBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
@@ -19,6 +20,8 @@ import java.util.List;
 public class SurrealBlockModel implements IBakedModel {
 
 	public static final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(TestMod.MOD_ID + ":" + SurrealBlock.NAME);
+	
+	private static final ModelTransformer transformer = new ModelInverter();
 	
 	public static class EventHandler {
 		
@@ -42,7 +45,7 @@ public class SurrealBlockModel implements IBakedModel {
 		}
 		return Collections.emptyList();
 	}
-
+	
 	@Override
 	public boolean isAmbientOcclusion() {
 		return true;

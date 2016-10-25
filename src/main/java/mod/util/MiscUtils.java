@@ -63,7 +63,7 @@ public class MiscUtils {
 				T value = (T) entry.getValue();
 				str.append(property.getName()).append('=').append(property.getName(value)).append(',');
 			}
-			str.deleteCharAt(str.length() - 1).append(']');
+			str.deleteCharAt(str.length()-1).append(']');
 		}
 		return str.toString();
 	}
