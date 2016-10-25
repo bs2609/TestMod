@@ -17,6 +17,7 @@ public class SurrealWorldUpdater extends AbstractWorldEventListener {
 	
 	@Override
 	public void notifyBlockUpdate(World worldIn, BlockPos pos, IBlockState oldState, IBlockState newState, int flags) {
+		if (oldState == newState) return;
 		WorldServer world = MiscUtils.worldServerForDimension(ModDimensions.DIM_SURREAL);
 		Chunk chunk = world.getChunkProvider().loadChunk(pos.getX() >> 4, pos.getZ() >> 4);
 		if (chunk != null) {
