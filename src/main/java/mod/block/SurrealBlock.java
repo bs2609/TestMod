@@ -251,6 +251,11 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
+	public boolean isVisuallyOpaque() {
+		return false;
+	}
+	
+	@Override
 	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
 		IBlockState appearance = getBlockAppearance(state, world, pos);
 		return appearance.isNormalCube();
