@@ -4,6 +4,8 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
 
+import java.util.Arrays;
+
 public class QuadRewindingTransformer implements IVertexConsumer {
 	
 	private final IVertexConsumer parent;
@@ -40,7 +42,7 @@ public class QuadRewindingTransformer implements IVertexConsumer {
 	
 	@Override
 	public void put(int element, float... data) {
-		buffer[vertex][element] = data;
+		buffer[vertex][element] = Arrays.copyOf(data, data.length);
 		if (element == elements - 1) {
 			vertex++;
 		}
