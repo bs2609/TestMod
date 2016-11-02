@@ -22,8 +22,8 @@ public class ModelInverter extends ModelTransformer {
 		final VertexFormat format = quad.getFormat();
 		
 		UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
-		
-		VertexTransformer transformer = new VertexTransformer(builder) {
+		QuadRewindingTransformer rewinder = new QuadRewindingTransformer(builder);
+		VertexTransformer transformer = new VertexTransformer(rewinder) {
 			
 			private final Vector4f vec = new Vector4f();
 			
@@ -51,23 +51,7 @@ public class ModelInverter extends ModelTransformer {
 			}
 		};
 		
-		//flip(quad.getVertexData(), format.getIntegerSize());
 		quad.pipe(transformer);
-		BakedQuad built = builder.build();
-		//flip(built.getVertexData(), format.getIntegerSize());
-		
-		return built;
-	}
-	
-	private int[] buffer = new int[32];
-	
-	private void flip(int[] vertices, int offset) {
-		int len = offset << 2, src = 0, dst = len;
-		System.arraycopy(vertices, 0, buffer, 0, len);
-		for (int i = 0; i < 4; ++i) {
-			dst -= offset;
-			System.arraycopy(buffer, src, vertices, dst, offset);
-			src += offset;
-		}
+		return builder.build();
 	}
 }
