@@ -44,6 +44,14 @@ public class BlockUtils {
 			return 0;
 		}
 	};
+	
+	private static final Comparator<BlockArea> compareDimensions = new Comparator<BlockArea>() {
+		@Override
+		public int compare(BlockArea o1, BlockArea o2) {
+			int d1 = o1.getDims(), d2 = o2.getDims();
+			return d2 - d1;
+		}
+	};
 
 	public static Set<BlockOffset> countBlocksInRange(World world, BlockPos from, IBlockState matching, EnumSet<EnumFacing> directions, int range) {
 		Set<BlockOffset> blocks = new HashSet<BlockOffset>();
@@ -70,6 +78,21 @@ public class BlockUtils {
 			}
 		}
 		return true;
+	}
+	
+	public static void placeStructure(World world, BlockArea area, BlockStructure structure) {
+		placeStructure(world, area, structure, 3);
+	}
+	
+	public static void placeStructure(World world, BlockArea area, BlockStructure structure, int flags) {
+		List<BlockArea> components = getStructureComponents(area);
+		Collections.sort(components, compareDimensions);
+		for (BlockArea component: components) {
+			IBlockState state = structure.getStateFor(component);
+			if (state != null) {
+				fillArea(world, component, state, flags);
+			}
+		}
 	}
 
 	public static void fillArea(World world, BlockArea area, IBlockState state) {
