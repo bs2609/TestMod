@@ -6,6 +6,7 @@ import mod.event.CommonEventHandlers;
 import mod.item.ModItems;
 import mod.network.ModPacketHandler;
 import mod.world.ModDimensions;
+import mod.world.gen.ModWorldGenerators;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -18,6 +19,7 @@ public class CommonProxy implements IProxy {
 		ModItems.init();
 		ModCrafting.init();
 		ModDimensions.init();
+		ModWorldGenerators.register();
 		ModPacketHandler.init();
 		CommonEventHandlers.register();
 	}
