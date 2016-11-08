@@ -1,7 +1,14 @@
 package mod;
 
+import mod.block.ModBlocks;
 import mod.command.ModCommands;
-import mod.proxy.CommonProxy;
+import mod.crafting.ModCrafting;
+import mod.event.CommonEventHandlers;
+import mod.item.ModItems;
+import mod.network.ModPacketHandler;
+import mod.proxy.IProxy;
+import mod.world.ModDimensions;
+import mod.world.gen.ModWorldGenerators;
 import net.minecraft.command.ICommand;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -23,8 +30,8 @@ public class TestMod {
 	@Mod.Instance(MOD_ID)
 	public static TestMod instance;
 
-	@SidedProxy(clientSide = "mod.proxy.ClientProxy", serverSide = "mod.proxy.CommonProxy")
-	public static CommonProxy proxy;
+	@SidedProxy(clientSide = "mod.proxy.ClientProxy", serverSide = "mod.proxy.DefaultProxy")
+	public static IProxy proxy;
 
 	private static Logger logger;
 
@@ -34,6 +41,15 @@ public class TestMod {
 	public void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
 		config = new Configuration(event.getSuggestedConfigurationFile());
+		
+		ModBlocks.init();
+		ModItems.init();
+		ModCrafting.init();
+		ModDimensions.init();
+		ModWorldGenerators.register();
+		ModPacketHandler.init();
+		CommonEventHandlers.register();
+		
 		proxy.preInit(event);
 	}
 
