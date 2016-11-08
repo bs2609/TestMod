@@ -15,7 +15,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityFishHook;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -91,17 +91,10 @@ public class PortalInteriorBlock extends BasicBlock {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		if (worldIn.isRemote || !PortalUtils.checkEntity(entityIn)) return;
-		if (entityIn instanceof EntityPlayerMP) {
-			onPlayerCollision(worldIn, pos, state, (EntityPlayerMP) entityIn);
-		}
-		if (entityIn instanceof EntityFishHook) {
-			onFishingExpedition(worldIn, pos, state, (EntityFishHook) entityIn);
-		}
-	}
-
-	private void onPlayerCollision(World world, BlockPos pos, IBlockState state, EntityPlayerMP player) {
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+		
+		if (world.isRemote || !PortalUtils.checkEntity(entity)) return;
+		
 		PortalType typeIn = state.getValue(TYPE);
 		BlockArea area = PortalUtils.isInsideActivePortal(world, pos);
 		if (area == null) {
@@ -109,48 +102,33 @@ public class PortalInteriorBlock extends BasicBlock {
 			IBlockState border = Portal.getBorder();
 			if (area == null || !PortalUtils.checkPortal(world, area, border, state)) return;
 		}
+		
 		int origin = world.provider.getDimension();
 		int destination = PortalUtils.getDestinationDimension(typeIn, origin);
+		
 		WorldServer worldOut = MiscUtils.worldServerForDimension(destination);
-
 		Teleporter teleporter;
-		if (PortalUtils.checkDestination(player, world, worldOut)) {
+		
+		if (PortalUtils.checkDestination(entity, world, worldOut)) {
 			PortalType typeOut = PortalUtils.getTypeMapping(destination, origin);
 			teleporter = new PortalTeleporter(worldOut, area.getSize(), typeOut);
 		} else {
 			destination = ModDimensions.DIM_SURREAL;
 			worldOut = MiscUtils.worldServerForDimension(destination);
 			teleporter = new SurrealWorldTeleporter(worldOut);
-			player.addChatComponentMessage(new TextComponentString("Error/.Error"));
+			entity.addChatMessage(new TextComponentString("Error/.Error"));
 		}
 		
-		MiscUtils.setInvulnerableDimensionChange(player);
-
-		world.getMinecraftServer().getPlayerList().transferPlayerToDimension(player, destination, teleporter);
-	}
-
-	private void onFishingExpedition(World world, BlockPos pos, IBlockState state, EntityFishHook fishHook) {
-		PortalType typeIn = state.getValue(TYPE);
-		BlockArea area = PortalUtils.isInsideActivePortal(world, pos);
-		if (area == null) {
-			area = PortalUtils.isInsidePortal(world, pos);
-			IBlockState border = Portal.getBorder();
-			if (area == null || !PortalUtils.checkPortal(world, area, border, state)) return;
+		PlayerList playerList = world.getMinecraftServer().getPlayerList();
+		
+		if (entity instanceof EntityPlayerMP) {
+			EntityPlayerMP player = (EntityPlayerMP) entity;
+			MiscUtils.setInvulnerableDimensionChange(player);
+			playerList.transferPlayerToDimension(player, destination, teleporter);
+		} else {
+			WorldServer worldIn = (WorldServer) world;
+			playerList.transferEntityToWorld(entity, origin, worldIn, worldOut, teleporter);
 		}
-		int origin = world.provider.getDimension();
-		int destination = PortalUtils.getDestinationDimension(typeIn, origin);
-		WorldServer worldOut = MiscUtils.worldServerForDimension(destination);
-		PortalType typeOut = PortalUtils.getTypeMapping(destination, origin);
-		Teleporter teleporter = new PortalTeleporter(worldOut, area.getSize(), typeOut);
-		WorldServer worldIn = (WorldServer) world;
-
-		fishHook.angler.addChatComponentMessage(new TextComponentString("Probing (" + typeIn + ") portal at " + area + "..."));
-
-		world.getMinecraftServer().getPlayerList().transferEntityToWorld(fishHook, origin, worldIn, worldOut, teleporter);
-
-		fishHook.angler.addChatComponentMessage(new TextComponentString("Portal to dimension " + destination + " around " + new BlockPos(fishHook.posX, fishHook.posY, fishHook.posZ)));
-
-		world.getMinecraftServer().getPlayerList().transferEntityToWorld(fishHook, destination, worldOut, worldIn, teleporter);
 	}
 
 	@Override
