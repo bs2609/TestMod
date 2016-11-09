@@ -3,6 +3,7 @@ package mod.util;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -50,6 +51,10 @@ public class MiscUtils {
 			return world.isRemote ? Side.CLIENT : Side.SERVER;
 		}
 		return FMLCommonHandler.instance().getEffectiveSide();
+	}
+	
+	public static EnumFacing getReflected(EnumFacing side, EnumFacing.Axis axis) {
+		return (side != null && side.getAxis() == axis) ? side.getOpposite() : side;
 	}
 	
 	@SuppressWarnings("unchecked")

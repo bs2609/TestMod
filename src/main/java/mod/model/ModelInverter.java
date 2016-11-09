@@ -1,5 +1,6 @@
 package mod.model;
 
+import mod.util.MiscUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
@@ -43,11 +44,7 @@ public class ModelInverter extends ModelTransformer {
 			
 			@Override
 			public void setQuadOrientation(EnumFacing orientation) {
-				parent.setQuadOrientation(getInverted(orientation));
-			}
-			
-			private EnumFacing getInverted(EnumFacing side) {
-				return (side.getAxis() == EnumFacing.Axis.Y) ? side.getOpposite() : side;
+				parent.setQuadOrientation(MiscUtils.getReflected(orientation, EnumFacing.Axis.Y));
 			}
 		};
 		
