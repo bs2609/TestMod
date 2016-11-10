@@ -251,6 +251,18 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+		IBlockState appearance = getBlockAppearance(state, world, pos);
+		return appearance.getLightValue();
+	}
+	
+	@Override
+	public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
+		IBlockState appearance = getBlockAppearance(state, world, pos);
+		return appearance.getLightOpacity();
+	}
+	
+	@Override
 	public boolean isVisuallyOpaque() {
 		return false;
 	}
