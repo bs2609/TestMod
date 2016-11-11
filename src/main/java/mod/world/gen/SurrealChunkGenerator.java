@@ -31,7 +31,7 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 	}
 	
 	private World getTemplate() {
-		return MiscUtils.worldServerForDimension(0);
+		return MiscUtils.worldServerForDimension(SurrealBlock.DIM_ID);
 	}
 
 	private void pregenChunk(ChunkPrimer primer) {
