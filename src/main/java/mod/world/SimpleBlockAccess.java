@@ -68,12 +68,6 @@ public abstract class SimpleBlockAccess implements IBlockAccess {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean extendedLevelsInChunkCache() {
-		return false;
-	}
-	
-	@Override
 	public int getStrongPower(BlockPos pos, EnumFacing direction) {
 		return getBlockState(pos).getStrongPower(this, pos, direction);
 	}
