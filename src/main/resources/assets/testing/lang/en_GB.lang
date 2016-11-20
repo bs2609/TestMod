@@ -4,4 +4,5 @@ tile.testing.portal_frame.inward.name=Portal Frame (inbound)
 tile.testing.portal_frame.outward.name=Portal Frame (outbound)
 
 # Items
+item.testing.portal_builder.name=Portal Builder
 item.testing.portal_compass.name=Portal Compass

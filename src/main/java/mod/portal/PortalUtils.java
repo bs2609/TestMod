@@ -101,15 +101,13 @@ public class PortalUtils {
 
 	public static void frameRemoved(World world, BlockPos pos) {
 		TestMod.getLogger().debug("Frame block removed: " + pos);
-
-		Set<BlockArea> actives = getLocationData(world).activePortals;
-		BlockArea active = isFrameBlock(pos, actives);
+		
+		BlockArea active = isPortalFrame(world, pos);
 		if (active != null) {
 			deactivatePortal(world, active);
 		}
-
-		Set<BlockArea> candidates = getLocationData(world).candidatePortals;
-		BlockArea candidate = isFrameBlock(pos, candidates);
+		
+		BlockArea candidate = isActivePortalFrame(world, pos);
 		if (candidate != null) {
 			removeCandidatePortal(world, candidate);
 		}
@@ -134,6 +132,33 @@ public class PortalUtils {
 		Set<BlockArea> portals = getLocationData(world).activePortals;
 		return getAreaContaining(pos, portals);
 	}
+	
+	private static BlockArea getAreaContaining(BlockPos pos, Set<BlockArea> areas) {
+		for (BlockArea area : areas) {
+			if (!area.hasInternalArea()) continue;
+			if (area.getInternalArea().contains(pos)) return area;
+		}
+		return null;
+	}
+	
+	public static BlockArea isPortalFrame(World world, BlockPos pos) {
+		Set<BlockArea> portals = getLocationData(world).candidatePortals;
+		return isFrameBlock(pos, portals);
+	}
+	
+	public static BlockArea isActivePortalFrame(World world, BlockPos pos) {
+		Set<BlockArea> portals = getLocationData(world).activePortals;
+		return isFrameBlock(pos, portals);
+	}
+	
+	private static BlockArea isFrameBlock(BlockPos pos, Set<BlockArea> areas) {
+		for (BlockArea area : areas) {
+			for (BlockPos framePos : BlockUtils.getVertices(area)) {
+				if (pos.equals(framePos)) return area;
+			}
+		}
+		return null;
+	}
 
 	public static List<BlockArea> getPortalsWithin(World world, BlockArea area) {
 		List<BlockArea> portals = new ArrayList<BlockArea>();
@@ -150,24 +175,7 @@ public class PortalUtils {
 		Comparator<BlockArea> distanceToEntity = BlockArea.compareDistancesTo(entity.getPositionVector());
 		return portals.isEmpty() ? null : Collections.min(portals, distanceToEntity);
 	}
-
-	private static BlockArea isFrameBlock(BlockPos pos, Set<BlockArea> areas) {
-		for (BlockArea area : areas) {
-			for (BlockPos framePos : BlockUtils.getVertices(area)) {
-				if (pos.equals(framePos)) return area;
-			}
-		}
-		return null;
-	}
-
-	private static BlockArea getAreaContaining(BlockPos pos, Set<BlockArea> areas) {
-		for (BlockArea area : areas) {
-			if (!area.hasInternalArea()) continue;
-			if (area.getInternalArea().contains(pos)) return area;
-		}
-		return null;
-	}
-
+	
 	public static boolean constructPortal(World world, BlockArea area, IBlockState frame, IBlockState border, IBlockState interior) {
 		TestMod.getLogger().debug("Constructing portal: " + area);
 		constructFrame(world, area, frame);
