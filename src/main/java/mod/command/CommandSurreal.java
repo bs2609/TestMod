@@ -12,12 +12,12 @@ import net.minecraft.world.Teleporter;
 public class CommandSurreal extends CommandBase {
 	
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "surreal";
 	}
 	
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "";
 	}
 	

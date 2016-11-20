@@ -42,7 +42,7 @@ public class PortalBuilder extends BasicItem {
 		
 		BlockArea area = PortalUtils.isPortalFrame(worldIn, pos);
 		if (area == null) {
-			playerIn.addChatMessage(new TextComponentString("No portal frame found"));
+			playerIn.sendMessage(new TextComponentString("No portal frame found"));
 			return EnumActionResult.FAIL;
 		}
 		
@@ -52,7 +52,7 @@ public class PortalBuilder extends BasicItem {
 		IBlockState interior = Portal.getInterior(type);
 		
 		if (!PortalUtils.constructPortal(worldIn, area, frame, border, interior)) {
-			playerIn.addChatMessage(new TextComponentString("Couldn't construct portal"));
+			playerIn.sendMessage(new TextComponentString("Couldn't construct portal"));
 			return EnumActionResult.FAIL;
 		}
 		return EnumActionResult.SUCCESS;

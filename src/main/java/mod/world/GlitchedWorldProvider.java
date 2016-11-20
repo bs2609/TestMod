@@ -11,7 +11,7 @@ public class GlitchedWorldProvider extends WorldProvider {
 	
 	@Override
 	public IChunkGenerator createChunkGenerator() {
-		return new GlitchedChunkGenerator(worldObj);
+		return new GlitchedChunkGenerator(world);
 	}
 	
 	@Override

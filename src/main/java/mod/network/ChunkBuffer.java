@@ -14,7 +14,7 @@ public abstract class ChunkBuffer {
 	private final TLongSet pending = new TLongHashSet();
 	
 	public synchronized Chunk getChunk(int x, int z) {
-		long key = ChunkPos.chunkXZ2Int(x, z);
+		long key = ChunkPos.asLong(x, z);
 		Chunk chunk = chunks.get(key);
 		if (chunk == null && !pending.contains(key)) {
 			pending.add(key);
@@ -24,7 +24,7 @@ public abstract class ChunkBuffer {
 	}
 	
 	public synchronized void putChunk(int x, int z, Chunk chunk) {
-		long key = ChunkPos.chunkXZ2Int(x, z);
+		long key = ChunkPos.asLong(x, z);
 		chunks.put(key, chunk);
 		if (pending.contains(key)) {
 			pending.remove(key);
@@ -33,7 +33,7 @@ public abstract class ChunkBuffer {
 	}
 	
 	public synchronized void removeChunk(int x, int z) {
-		long key = ChunkPos.chunkXZ2Int(x, z);
+		long key = ChunkPos.asLong(x, z);
 		chunks.remove(key);
 	}
 	

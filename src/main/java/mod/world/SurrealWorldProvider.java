@@ -28,7 +28,7 @@ public class SurrealWorldProvider extends WorldProvider {
 
 	@Override
 	public IChunkGenerator createChunkGenerator() {
-		return new SurrealChunkGenerator(worldObj);
+		return new SurrealChunkGenerator(world);
 	}
 
 	@Override
@@ -48,6 +48,6 @@ public class SurrealWorldProvider extends WorldProvider {
 
 	@Override
 	public boolean canCoordinateBeSpawn(int x, int z) {
-		return worldObj.getGroundAboveSeaLevel(new BlockPos(x, 0, z)).getMaterial().blocksMovement();
+		return world.getGroundAboveSeaLevel(new BlockPos(x, 0, z)).getMaterial().blocksMovement();
 	}
 }

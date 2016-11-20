@@ -24,7 +24,7 @@ public class CommonEventHandlers {
 	public void onThrowableImpactEvent(ThrowableImpactEvent event) {
 		EntityThrowable thrown = event.getEntityThrowable();
 		
-		World world = thrown.worldObj;
+		World world = thrown.world;
 		if (world.isRemote) return;
 		
 		if (thrown instanceof EntityEnderPearl) {

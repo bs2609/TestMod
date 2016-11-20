@@ -70,7 +70,7 @@ public class SurrealBlock extends BasicBlock {
 		protected void onChunkLoad(Chunk chunk) {
 			// mark chunk for render update
 			int x = chunk.xPosition << 4, z = chunk.zPosition << 4;
-			Minecraft.getMinecraft().theWorld.markBlockRangeForRenderUpdate(x, 0, z, x + 15, 255, z + 15);
+			Minecraft.getMinecraft().world.markBlockRangeForRenderUpdate(x, 0, z, x + 15, 255, z + 15);
 		}
 	};
 	
@@ -83,7 +83,7 @@ public class SurrealBlock extends BasicBlock {
 		
 		@Override
 		protected World getWorld() {
-			return Minecraft.getMinecraft().theWorld;
+			return Minecraft.getMinecraft().world;
 		}
 	};
 	
@@ -263,7 +263,7 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
-	public boolean isVisuallyOpaque() {
+	public boolean causesSuffocation() {
 		return false;
 	}
 	
@@ -297,7 +297,7 @@ public class SurrealBlock extends BasicBlock {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (heldItem != null && heldItem.getItem() == Items.STICK) {
 			IBlockState appearance = getBlockAppearance(world, pos);
-			player.addChatMessage(new TextComponentString(MiscUtils.toString(appearance)));
+			player.sendMessage(new TextComponentString(MiscUtils.toString(appearance)));
 			return true;
 		}
 		return false;

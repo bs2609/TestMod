@@ -13,12 +13,12 @@ import net.minecraft.world.chunk.Chunk;
 public class CommandSample extends CommandBase {
 	
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "sample";
 	}
 	
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "";
 	}
 	
@@ -42,6 +42,6 @@ public class CommandSample extends CommandBase {
 		}
 		
 		String msg = "Chunk [" + chunk.xPosition + ", " + chunk.zPosition + "] contains " + states.elementSet().size() + " blockstates";
-		sender.addChatMessage(new TextComponentString(msg));
+		sender.sendMessage(new TextComponentString(msg));
 	}
 }

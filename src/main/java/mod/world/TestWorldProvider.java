@@ -12,7 +12,7 @@ public class TestWorldProvider extends WorldProvider {
 
 	@Override
 	protected void createBiomeProvider() {
-		biomeProvider = ModDimensions.getSpecifier(getDimension()).getBiomeProvider(worldObj);
+		biomeProvider = ModDimensions.getSpecifier(getDimension()).getBiomeProvider(world);
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class TestWorldProvider extends WorldProvider {
 
 	@Override
 	public IChunkGenerator createChunkGenerator() {
-		return ModDimensions.getSpecifier(getDimension()).getChunkGenerator(worldObj);
+		return ModDimensions.getSpecifier(getDimension()).getChunkGenerator(world);
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class TestWorldProvider extends WorldProvider {
 
 	@Override
 	public boolean canCoordinateBeSpawn(int x, int z) {
-		return worldObj.getGroundAboveSeaLevel(new BlockPos(x, 0, z)).getMaterial().blocksMovement();
+		return world.getGroundAboveSeaLevel(new BlockPos(x, 0, z)).getMaterial().blocksMovement();
 	}
 
 	@Override

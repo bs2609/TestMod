@@ -116,7 +116,7 @@ public class PortalInteriorBlock extends BasicBlock {
 			destination = ModDimensions.DIM_SURREAL;
 			worldOut = MiscUtils.worldServerForDimension(destination);
 			teleporter = new SurrealWorldTeleporter(worldOut);
-			entity.addChatMessage(new TextComponentString("Error/.Error"));
+			entity.sendMessage(new TextComponentString("Error/.Error"));
 		}
 		
 		PlayerList playerList = world.getMinecraftServer().getPlayerList();
