@@ -34,7 +34,7 @@ public class PortalBlock extends BasicBlock {
 		
 		DimensionPos(int dim, BlockPos pos) {
 			dimension = dim;
-			position = pos;
+			position = pos.toImmutable();
 		}
 	}
 	

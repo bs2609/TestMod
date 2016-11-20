@@ -21,8 +21,8 @@ public class BlockArea implements Iterable<BlockPos>, INBTSerializable<NBTTagCom
 	private final Vec3i in;
 
 	public BlockArea(BlockPos min, BlockPos max) {
-		minPos = min;
-		maxPos = max;
+		minPos = min.toImmutable();
+		maxPos = max.toImmutable();
 		in = createInternalVector();
 	}
 

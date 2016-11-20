@@ -11,7 +11,7 @@ public class BlockOffset {
 	public final int distance;
 
 	public BlockOffset(BlockPos orig, EnumFacing dir, int dist) {
-		origin = orig;
+		origin = orig.toImmutable();
 		direction = dir;
 		distance = dist;
 	}

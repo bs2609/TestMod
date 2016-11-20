@@ -10,7 +10,7 @@ public class BlockPosTeleporter extends SimpleTeleporter {
 	
 	public BlockPosTeleporter(WorldServer world, BlockPos pos) {
 		super(world);
-		destination = pos;
+		destination = pos.toImmutable();
 	}
 	
 	@Override
