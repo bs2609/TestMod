@@ -230,20 +230,22 @@ public class SurrealBlock extends BasicBlock {
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		IBlockState appearance = getBlockAppearance(state, source, pos);
-		return appearance.getBoundingBox(source, pos);
+		return invert(appearance.getBoundingBox(source, pos));
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
 		IBlockState appearance = getBlockAppearance(state, world, pos);
-		return appearance.getSelectedBoundingBox(world, pos);
+		AxisAlignedBB aabb = appearance.getSelectedBoundingBox(world, pos);
+		double x = pos.getX(), y = pos.getY(), z = pos.getZ();
+		return invert(aabb.offset(-x, -y, -z)).offset(x, y, z);
 	}
 	
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
 		IBlockState appearance = getBlockAppearance(state, world, pos);
-		return appearance.getCollisionBoundingBox(world, pos);
+		return invert(appearance.getCollisionBoundingBox(world, pos));
 	}
 	
 	private AxisAlignedBB invert(AxisAlignedBB aabb) {

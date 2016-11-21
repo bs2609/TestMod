@@ -2,6 +2,7 @@ package mod.model;
 
 import mod.TestMod;
 import mod.block.SurrealBlock;
+import mod.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
@@ -23,6 +24,15 @@ public class SurrealBlockModel implements IBakedModel {
 	
 	private static final ModelTransformer transformer = new ModelInverter();
 	
+	private static final ModelCache cache = new ModelCache(320) {
+		
+		@Override
+		protected List<BakedQuad> buildQuads(IBlockState state, EnumFacing side, long rand) {
+			IBakedModel copiedModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state);
+			return transformer.transformQuads(copiedModel.getQuads(state, MiscUtils.getReflected(side, EnumFacing.Axis.Y), rand));
+		}
+	};
+	
 	public static class EventHandler {
 		
 		@SubscribeEvent
@@ -40,8 +50,7 @@ public class SurrealBlockModel implements IBakedModel {
 		IBlockState appearance = extendedState.getValue(SurrealBlock.APPEARANCE);
 		if (appearance != null && appearance.getRenderType() == EnumBlockRenderType.MODEL
 				&& appearance.getBlock().canRenderInLayer(appearance, MinecraftForgeClient.getRenderLayer())) {
-			IBakedModel copiedModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(appearance);
-			return copiedModel.getQuads(appearance, side, rand);
+			return cache.getQuads(appearance, side, rand);
 		}
 		return Collections.emptyList();
 	}
