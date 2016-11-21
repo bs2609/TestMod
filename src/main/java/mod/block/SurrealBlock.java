@@ -91,10 +91,12 @@ public class SurrealBlock extends BasicBlock {
 	private final IBlockColor colourHandler = new IBlockColor() {
 		
 		@Override
-		public int colorMultiplier(IBlockState state, IBlockAccess world, BlockPos pos, int tintIndex) {
-			if (world == null || pos == null) return -1;
-			IBlockState appearance = getBlockAppearance(state, world, pos);
-			return Minecraft.getMinecraft().getBlockColors().colorMultiplier(appearance, world, pos, tintIndex);
+		public int colorMultiplier(IBlockState state, IBlockAccess access, BlockPos pos, int tintIndex) {
+			if (access == null || pos == null) return -1;
+			IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
+			BlockPos inverted = getInverted(pos);
+			IBlockState appearance = getBlockAppearance(source, inverted);
+			return Minecraft.getMinecraft().getBlockColors().colorMultiplier(appearance, source, inverted, tintIndex);
 		}
 	};
 	
@@ -178,30 +180,22 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess access, BlockPos pos) {
 		IExtendedBlockState extendedState = (IExtendedBlockState) state;
-		IBlockState blockAppearance = getBlockAppearance(world, pos);
+		if (extendedState.getValue(APPEARANCE) != null) return extendedState;
+		IBlockState blockAppearance = getBlockAppearance(access, pos, true);
 		return extendedState.withProperty(APPEARANCE, blockAppearance);
 	}
 	
-	private IBlockState getBlockAppearance(IBlockState state, IBlockAccess world, BlockPos pos) {
-		IBlockState appearance = getBlockAppearance(state);
-		if (appearance != null) return appearance;
-		return getBlockAppearance(world, pos);
-	}
-
-	private IBlockState getBlockAppearance(IBlockAccess world, BlockPos pos) {
-		IBlockAccess access = getBlockAccess(MiscUtils.getSide(world));
-		BlockPos inverted = new BlockPos(pos.getX(), 255-pos.getY(), pos.getZ());
-		return access.getBlockState(inverted).getActualState(access, inverted);
+	private IBlockState getBlockAppearance(IBlockAccess access, BlockPos pos, boolean remap) {
+		if (!remap) return getBlockAppearance(access, pos);
+		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
+		BlockPos inverted = getInverted(pos);
+		return getBlockAppearance(source, inverted);
 	}
 	
-	private IBlockState getBlockAppearance(IBlockState state) {
-		if (state instanceof IExtendedBlockState) {
-			IExtendedBlockState extendedState = (IExtendedBlockState) state;
-			return extendedState.getValue(APPEARANCE);
-		}
-		return null;
+	private IBlockState getBlockAppearance(IBlockAccess access, BlockPos pos) {
+		return access.getBlockState(pos).getActualState(access, pos);
 	}
 	
 	private IBlockAccess getBlockAccess(Side side) {
@@ -211,8 +205,12 @@ public class SurrealBlock extends BasicBlock {
 			case SERVER:
 				return MiscUtils.worldServerForDimension(DIM_ID);
 			default:
-				return null;
+				throw new IllegalArgumentException("Invalid side: " + side);
 		}
+	}
+	
+	private static BlockPos getInverted(BlockPos pos) {
+		return new BlockPos(pos.getX(), 255-pos.getY(), pos.getZ());
 	}
 
 	@Override
@@ -223,20 +221,25 @@ public class SurrealBlock extends BasicBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess access, BlockPos pos, EnumFacing side) {
-		IBlockState appearance = getBlockAppearance(state, access, pos);
-		return appearance.shouldSideBeRendered(access, pos, side);
+		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(source, inverted);
+		EnumFacing opposite = MiscUtils.getReflected(side, EnumFacing.Axis.Y);
+		return appearance.shouldSideBeRendered(source, inverted, opposite);
 	}
 	
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		IBlockState appearance = getBlockAppearance(state, source, pos);
-		return invert(appearance.getBoundingBox(source, pos));
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess access, BlockPos pos) {
+		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(source, inverted);
+		return invert(appearance.getBoundingBox(source, inverted));
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
-		IBlockState appearance = getBlockAppearance(state, world, pos);
+		IBlockState appearance = getBlockAppearance(world, pos, true);
 		AxisAlignedBB aabb = appearance.getSelectedBoundingBox(world, pos);
 		double x = pos.getX(), y = pos.getY(), z = pos.getZ();
 		return invert(aabb.offset(-x, -y, -z)).offset(x, y, z);
@@ -244,31 +247,37 @@ public class SurrealBlock extends BasicBlock {
 	
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
-		IBlockState appearance = getBlockAppearance(state, world, pos);
+		IBlockState appearance = getBlockAppearance(world, pos, true);
 		return invert(appearance.getCollisionBoundingBox(world, pos));
 	}
 	
-	private AxisAlignedBB invert(AxisAlignedBB aabb) {
+	private static AxisAlignedBB invert(AxisAlignedBB aabb) {
 		return (aabb == null || aabb.minY + aabb.maxY == 1.0) ? aabb : new AxisAlignedBB(aabb.minX, 1.0-aabb.maxY, aabb.minZ, aabb.maxX, 1.0-aabb.minY, aabb.maxZ);
 	}
 	
 	@Override
-	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-		IBlockState appearance = getBlockAppearance(state, world, pos);
-		return appearance.getLightValue();
+	public int getLightValue(IBlockState state, IBlockAccess access, BlockPos pos) {
+		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(source, inverted);
+		return appearance.getLightValue(source, inverted);
 	}
 	
 	@Override
-	public int getLightOpacity(IBlockState state, IBlockAccess world, BlockPos pos) {
-		IBlockState appearance = getBlockAppearance(state, world, pos);
-		return appearance.getLightOpacity();
+	public int getLightOpacity(IBlockState state, IBlockAccess access, BlockPos pos) {
+		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(source, inverted);
+		return appearance.getLightOpacity(source, inverted);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public int getPackedLightmapCoords(IBlockState state, IBlockAccess source, BlockPos pos) {
-		IBlockState appearance = getBlockAppearance(state, source, pos);
-		return appearance.getPackedLightmapCoords(source, pos) ^ 0xf0;
+	public int getPackedLightmapCoords(IBlockState state, IBlockAccess access, BlockPos pos) {
+		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(source, inverted);
+		return appearance.getPackedLightmapCoords(source, inverted) ^ 0xf000f0;
 	}
 	
 	@Override
@@ -283,8 +292,8 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
-	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
-		IBlockState appearance = getBlockAppearance(state, world, pos);
+	public boolean isNormalCube(IBlockState state, IBlockAccess access, BlockPos pos) {
+		IBlockState appearance = getBlockAppearance(access, pos, true);
 		return appearance.isNormalCube();
 	}
 	
@@ -311,7 +320,7 @@ public class SurrealBlock extends BasicBlock {
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (heldItem != null && heldItem.getItem() == Items.STICK) {
-			IBlockState appearance = getBlockAppearance(world, pos);
+			IBlockState appearance = getBlockAppearance(world, pos, true);
 			player.sendMessage(new TextComponentString(MiscUtils.toString(appearance)));
 			return true;
 		}
