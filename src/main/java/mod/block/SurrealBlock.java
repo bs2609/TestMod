@@ -264,6 +264,13 @@ public class SurrealBlock extends BasicBlock {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
+	public int getPackedLightmapCoords(IBlockState state, IBlockAccess source, BlockPos pos) {
+		IBlockState appearance = getBlockAppearance(state, source, pos);
+		return appearance.getPackedLightmapCoords(source, pos) ^ 0xf0;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
 	public float getAmbientOcclusionLightValue(IBlockState state) {
 		return state.isBlockNormalCube() ? 0.8f : 1.0f;
 	}
