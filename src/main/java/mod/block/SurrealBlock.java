@@ -263,6 +263,12 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
+	public float getAmbientOcclusionLightValue(IBlockState state) {
+		return state.isBlockNormalCube() ? 0.8f : 1.0f;
+	}
+	
+	@Override
 	public boolean causesSuffocation() {
 		return false;
 	}
