@@ -24,12 +24,11 @@ public class SurrealBlockModel implements IBakedModel {
 	
 	private static final ModelTransformer transformer = new ModelInverter();
 	
-	private static final ModelCache cache = new ModelCache(320) {
+	private static final ModelCache<List<BakedQuad>> cache = new ModelCache<List<BakedQuad>>() {
 		
 		@Override
-		protected List<BakedQuad> buildQuads(IBlockState state, EnumFacing side, long rand) {
-			IBakedModel copiedModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state);
-			return transformer.transformQuads(copiedModel.getQuads(state, MiscUtils.getReflected(side, EnumFacing.Axis.Y), rand));
+		protected List<BakedQuad> buildQuads(List<BakedQuad> key) {
+			return transformer.transformQuads(key);
 		}
 	};
 	
@@ -50,7 +49,8 @@ public class SurrealBlockModel implements IBakedModel {
 		IBlockState appearance = extendedState.getValue(SurrealBlock.APPEARANCE);
 		if (appearance != null && appearance.getRenderType() == EnumBlockRenderType.MODEL
 				&& appearance.getBlock().canRenderInLayer(appearance, MinecraftForgeClient.getRenderLayer())) {
-			return cache.getQuads(appearance, side, rand);
+			IBakedModel copiedModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(appearance);
+			return cache.getQuads(copiedModel.getQuads(appearance, MiscUtils.getReflected(side, EnumFacing.Axis.Y), rand));
 		}
 		return Collections.emptyList();
 	}
