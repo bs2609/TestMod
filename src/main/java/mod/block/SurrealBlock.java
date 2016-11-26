@@ -274,10 +274,8 @@ public class SurrealBlock extends BasicBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getPackedLightmapCoords(IBlockState state, IBlockAccess access, BlockPos pos) {
-		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
-		BlockPos inverted = getInverted(pos);
-		IBlockState appearance = getBlockAppearance(source, inverted);
-		return appearance.getPackedLightmapCoords(source, inverted) ^ 0xf000f0;
+		IBlockState appearance = getBlockAppearance(access, pos, true);
+		return appearance.getPackedLightmapCoords(access, pos) ^ 0xf0;
 	}
 	
 	@Override
