@@ -13,32 +13,45 @@ public abstract class ChunkBuffer {
 	
 	private final TLongSet pending = new TLongHashSet();
 	
-	public synchronized Chunk getChunk(int x, int z) {
+	public Chunk getChunk(int x, int z) {
 		long key = ChunkPos.asLong(x, z);
-		Chunk chunk = chunks.get(key);
-		if (chunk == null && !pending.contains(key)) {
-			pending.add(key);
-			onMissingChunk(x, z);
+		synchronized (chunks) {
+			Chunk chunk = chunks.get(key);
+			if (chunk != null) return chunk;
 		}
-		return chunk;
+		synchronized (pending) {
+			if (!pending.contains(key)) {
+				pending.add(key);
+				onMissingChunk(x, z);
+			}
+		}
+		return null;
 	}
 	
-	public synchronized void putChunk(int x, int z, Chunk chunk) {
+	public void putChunk(int x, int z, Chunk chunk) {
 		long key = ChunkPos.asLong(x, z);
-		chunks.put(key, chunk);
-		if (pending.contains(key)) {
-			pending.remove(key);
-			onChunkLoad(chunk);
+		synchronized (chunks) {
+			chunks.put(key, chunk);
+		}
+		synchronized (pending) {
+			if (pending.contains(key)) {
+				pending.remove(key);
+				onChunkLoad(chunk);
+			}
 		}
 	}
 	
-	public synchronized void removeChunk(int x, int z) {
+	public void removeChunk(int x, int z) {
 		long key = ChunkPos.asLong(x, z);
-		chunks.remove(key);
+		synchronized (chunks) {
+			chunks.remove(key);
+		}
 	}
 	
-	public synchronized void clearChunks() {
-		chunks.clear();
+	public void clearChunks() {
+		synchronized (chunks) {
+			chunks.clear();
+		}
 	}
 	
 	protected abstract void onMissingChunk(int x, int z);
