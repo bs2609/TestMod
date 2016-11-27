@@ -20,7 +20,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = TestMod.MOD_ID, name = TestMod.MOD_NAME, version = TestMod.VERSION,
-		dependencies = "required-after:Forge@[12.18.1.2011,)", acceptedMinecraftVersions = "[1.10.2,)")
+		dependencies = "required-after:Forge@[12.18.2.2099,)", acceptedMinecraftVersions = "[1.10.2,)")
 public class TestMod {
 
 	public static final String MOD_ID = "testing";

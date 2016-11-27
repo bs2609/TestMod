@@ -1,5 +1,6 @@
 package mod.model;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.pipeline.IVertexConsumer;
@@ -38,6 +39,11 @@ public class QuadRewindingTransformer implements IVertexConsumer {
 	@Override
 	public void setApplyDiffuseLighting(boolean diffuse) {
 		parent.setApplyDiffuseLighting(diffuse);
+	}
+	
+	@Override
+	public void setTexture(TextureAtlasSprite texture) {
+		parent.setTexture(texture);
 	}
 	
 	@Override

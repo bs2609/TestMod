@@ -19,7 +19,7 @@ group = "com.example.testing" // http://maven.apache.org/guides/mini/guide-namin
 archivesBaseName = "testing"
 
 minecraft {
-    version = "1.10.2-12.18.1.2011"
+    version = "1.10.2-12.18.2.2099"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
