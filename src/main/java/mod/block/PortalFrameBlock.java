@@ -2,6 +2,7 @@ package mod.block;
 
 import mod.portal.PortalType;
 import mod.portal.PortalUtils;
+import mod.util.BlockArea;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -10,9 +11,13 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -63,7 +68,19 @@ public class PortalFrameBlock extends VariantBlock<PortalType> {
 		}
 		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
-
+	
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (heldItem != null && heldItem.getItem() == Items.STICK) {
+			if (!world.isRemote) {
+				BlockArea area = PortalUtils.isPortalFrame(world, pos);
+				player.sendMessage(new TextComponentString("Portal area " + (area != null ? area : "not found")));
+			}
+			return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public int damageDropped(IBlockState state) {
 		return getMetaFromState(state);
