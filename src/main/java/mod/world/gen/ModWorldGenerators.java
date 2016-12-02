@@ -28,7 +28,7 @@ public class ModWorldGenerators implements IWorldGenerator {
 	}
 	
 	private void generatePortalRuins(World world, Random random, BlockPos pos) {
-		if (random.nextInt(256) == 0) {
+		if (random.nextInt(1024) == 0) {
 			portalRuinsGenerator.generate(world, random, world.getTopSolidOrLiquidBlock(getOffsetPos(random, pos)));
 		}
 	}
