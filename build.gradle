@@ -14,7 +14,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "0.2.5"
+version = "0.2.6"
 group = "com.example.testing" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "testing"
 
@@ -55,8 +55,7 @@ dependencies {
 
 }
 
-processResources
-{
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
