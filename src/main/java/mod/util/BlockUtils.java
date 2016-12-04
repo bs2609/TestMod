@@ -85,7 +85,7 @@ public class BlockUtils {
 	}
 	
 	public static void placeStructure(World world, BlockArea area, BlockStructure structure, int flags) {
-		List<BlockArea> components = getStructureComponents(area);
+		List<BlockArea> components = getStructureComponents(area, true);
 		Collections.sort(components, compareDimensions);
 		for (BlockArea component: components) {
 			IBlockState state = structure.getStateFor(component);
@@ -130,33 +130,33 @@ public class BlockUtils {
 		return vertices;
 	}
 
-	public static List<BlockArea> getStructureComponents(BlockArea area) {
+	public static List<BlockArea> getStructureComponents(BlockArea area, boolean all) {
 
 		List<BlockArea> components = new ArrayList<BlockArea>();
-
 		List<BlockPos> vertices = getVertices(area);
+
 		for (int i = 0; i < vertices.size(); i++) {
+			BlockPos a = vertices.get(i);
+			if (all) {
+				components.add(new BlockArea(a, a));
+			}
 			for (int j = i+1; j < vertices.size(); j++) {
-				BlockPos a = vertices.get(i), b = vertices.get(j);
+				BlockPos b = vertices.get(j);
 				if (compareStrict.compare(a, b) < 0) {
 					components.add(new BlockArea(a, b));
 				}
 			}
 		}
-
 		return components;
 	}
 
 	public static List<BlockArea> getStructureComponents(BlockArea area, int dims) {
-
 		List<BlockArea> components = new ArrayList<BlockArea>();
-
-		for (BlockArea component : getStructureComponents(area)) {
+		for (BlockArea component : getStructureComponents(area, dims == 0)) {
 			if (component.getDims() == dims) {
 				components.add(component);
 			}
 		}
-
 		return components;
 	}
 }
