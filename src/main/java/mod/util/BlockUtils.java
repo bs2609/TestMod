@@ -125,8 +125,6 @@ public class BlockUtils {
 			vertices.add(new BlockPos(vertex[0], vertex[1], vertex[2]));
 		}
 
-		Collections.sort(vertices, comparePositions);
-
 		return vertices;
 	}
 
@@ -134,6 +132,7 @@ public class BlockUtils {
 
 		List<BlockArea> components = new ArrayList<BlockArea>();
 		List<BlockPos> vertices = getVertices(area);
+		Collections.sort(vertices, comparePositions);
 
 		for (int i = 0; i < vertices.size(); i++) {
 			BlockPos a = vertices.get(i);
