@@ -1,5 +1,6 @@
 package mod.event;
 
+import mod.gui.ModDebugInfo;
 import mod.model.SurrealBlockModel;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
@@ -10,5 +11,6 @@ public class ClientEventHandlers {
 	
 	public static void register() {
 		MinecraftForge.EVENT_BUS.register(new SurrealBlockModel.EventHandler());
+		MinecraftForge.EVENT_BUS.register(new ModDebugInfo.EventHandler());
 	}
 }
