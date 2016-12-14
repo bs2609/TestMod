@@ -311,6 +311,21 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
+	public boolean isFullBlock(IBlockState state) {
+		return state.isOpaqueCube();
+	}
+	
+	@Override
+	public int getLightOpacity(IBlockState state) {
+		return state.isFullBlock() ? 255 : 0;
+	}
+	
+	@Override
+	public boolean isTranslucent(IBlockState state) {
+		return !state.getMaterial().blocksLight();
+	}
+	
+	@Override
 	public int quantityDropped(Random random) {
 		return 0;
 	}
