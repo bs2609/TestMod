@@ -35,23 +35,17 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 	}
 
 	private void pregenChunk(ChunkPrimer primer) {
+		int top = templateChunk.getTopFilledSegment() + 16;
 		for (int cx = 0; cx < 16; ++cx) {
 			for (int cz = 0; cz < 16; ++cz) {
-				for (int cy = 0; cy < 256; ++cy) {
-					if (testBlock(cx, cy, cz)) {
-						primer.setBlockState(cx, 255-cy, cz, getBlockState(cx, cy, cz));
+				for (int cy = 0; cy < top; ++cy) {
+					IBlockState state = templateChunk.getBlockState(cx, cy, cz);
+					if (SurrealBlock.canReplace(state)) {
+						primer.setBlockState(cx, 255-cy, cz, SurrealBlock.getStateFor(state));
 					}
 				}
 			}
 		}
-	}
-
-	private boolean testBlock(int x, int y, int z) {
-		return SurrealBlock.canReplace(templateChunk.getBlockState(x, y, z));
-	}
-	
-	private IBlockState getBlockState(int x, int y, int z) {
-		return SurrealBlock.getStateFor(templateChunk.getBlockState(x, y, z));
 	}
 
 	private void copyBiomes(Chunk src, Chunk dst) {
