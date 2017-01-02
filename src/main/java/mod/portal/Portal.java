@@ -15,7 +15,7 @@ public class Portal {
 	}
 
 	public static IBlockState getInterior() {
-		return Blocks.GLASS_PANE.getDefaultState();
+		return Blocks.GLASS.getDefaultState();
 	}
 
 	public static IBlockState getInterior(PortalType type) {
