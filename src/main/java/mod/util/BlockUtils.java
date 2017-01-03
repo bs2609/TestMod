@@ -1,5 +1,6 @@
 package mod.util;
 
+import com.google.common.base.Predicate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -74,6 +75,15 @@ public class BlockUtils {
 		for (BlockPos pos : area) {
 			if (matchState && world.getBlockState(pos) != state
 					|| world.getBlockState(pos).getBlock() != state.getBlock()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static boolean containsOnly(World world, BlockArea area, Predicate<IBlockState> check) {
+		for (BlockPos pos : area) {
+			if (!check.apply(world.getBlockState(pos))) {
 				return false;
 			}
 		}
