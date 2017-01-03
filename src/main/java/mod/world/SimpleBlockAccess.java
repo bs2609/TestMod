@@ -23,8 +23,12 @@ public abstract class SimpleBlockAccess implements IBlockAccess {
 	
 	@Override
 	public TileEntity getTileEntity(BlockPos pos) {
+		return getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK);
+	}
+	
+	public TileEntity getTileEntity(BlockPos pos, Chunk.EnumCreateEntityType mode) {
 		Chunk chunk = getChunk(pos);
-		return (chunk != null) ? chunk.getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK) : null;
+		return (chunk != null) ? chunk.getTileEntity(pos, mode) : null;
 	}
 	
 	@Override
