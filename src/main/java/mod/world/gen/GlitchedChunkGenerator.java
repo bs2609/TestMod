@@ -5,7 +5,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.gen.ChunkProviderOverworld;
 import net.minecraft.world.storage.WorldInfo;
 
@@ -41,10 +40,9 @@ public class GlitchedChunkGenerator extends AbstractChunkGenerator {
 	}
 	
 	private void cloneChunk(Chunk in, Chunk out) {
-		ExtendedBlockStorage[] dataFrom = in.getBlockStorageArray(), dataTo = out.getBlockStorageArray();
-		System.arraycopy(dataFrom, 0, dataTo, 0, 16);
+		out.setStorageArrays(in.getBlockStorageArray());
 		out.setBiomeArray(in.getBiomeArray());
-		out.generateSkylightMap();
+		out.setHeightMap(in.getHeightMap());
 	}
 	
 	@Override

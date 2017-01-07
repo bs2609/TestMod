@@ -24,7 +24,7 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 		pregenChunk(primer);
 		portalGen.generate(primer);
 		Chunk chunk = new Chunk(world, primer, x, z);
-		copyBiomes(templateChunk, chunk);
+		chunk.setBiomeArray(templateChunk.getBiomeArray());
 		templateChunk = null;
 		chunk.generateSkylightMap();
 		return chunk;
@@ -46,9 +46,5 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 				}
 			}
 		}
-	}
-
-	private void copyBiomes(Chunk src, Chunk dst) {
-		dst.setBiomeArray(src.getBiomeArray());
 	}
 }
