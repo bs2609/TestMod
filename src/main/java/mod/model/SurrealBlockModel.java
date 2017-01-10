@@ -21,6 +21,7 @@ import java.util.List;
 public class SurrealBlockModel implements IBakedModel {
 
 	public static final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(TestMod.MOD_ID + ":" + SurrealBlock.NAME);
+	private static final String textureName = TestMod.MOD_ID + ":blocks/" + SurrealBlock.NAME;
 	
 	private static final ModelTransformer transformer = new ModelInverter();
 	
@@ -36,8 +37,8 @@ public class SurrealBlockModel implements IBakedModel {
 		
 		@SubscribeEvent
 		public void onModelBakeEvent(ModelBakeEvent event) {
-			Object object = event.getModelRegistry().getObject(modelResourceLocation);
-			if (object != null) {
+			IBakedModel model = event.getModelRegistry().getObject(modelResourceLocation);
+			if (model != null) {
 				event.getModelRegistry().putObject(modelResourceLocation, new SurrealBlockModel());
 			}
 		}
@@ -72,8 +73,7 @@ public class SurrealBlockModel implements IBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		String name = TestMod.MOD_ID + ":blocks/" + SurrealBlock.NAME;
-		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(name);
+		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureName);
 	}
 
 	@Override
