@@ -5,14 +5,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 public class ModDebugInfo {
 	
-	private static final SortedMap<String, IDebugInfo> providers = new TreeMap<String, IDebugInfo>();
+	private static final Map<String, IDebugInfo> providers = new LinkedHashMap<String, IDebugInfo>();
 	
 	public static void register(String id, IDebugInfo provider) {
 		providers.put(id, provider);
