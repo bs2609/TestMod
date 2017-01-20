@@ -41,7 +41,7 @@ public class PortalFrameBlock extends VariantBlock<PortalType> {
 	@SideOnly(Side.CLIENT)
 	void initModel() {
 		Item item = Item.getItemFromBlock(this);
-		for (PortalType type : PortalType.values()) {
+		for (PortalType type : PortalType.VALUES) {
 			ModelResourceLocation location = new ModelResourceLocation(getRegistryName(), TYPE.getName() + "=" + type.getName());
 			ModelLoader.setCustomModelResourceLocation(item, getMetaForType(type), location);
 		}
@@ -49,7 +49,7 @@ public class PortalFrameBlock extends VariantBlock<PortalType> {
 
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-		for (PortalType type : PortalType.values()) {
+		for (PortalType type : PortalType.VALUES) {
 			list.add(new ItemStack(itemIn, 1, getMetaForType(type)));
 		}
 	}

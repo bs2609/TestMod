@@ -18,13 +18,11 @@ import java.util.*;
 public class PortalUtils {
 
 	private static final Map<World, PortalLocationData> portalLocations = new WeakHashMap<World, PortalLocationData>();
-
 	private static final Map<PortalType, Map<Integer, Integer>> dimensionMappings = new EnumMap<PortalType, Map<Integer, Integer>>(PortalType.class);
-
 	private static final Map<Entity, Long> entityPortalTimes = new WeakHashMap<Entity, Long>();
 
 	static {
-		for (PortalType type : EnumSet.allOf(PortalType.class)) {
+		for (PortalType type : PortalType.VALUES) {
 			dimensionMappings.put(type, new HashMap<Integer, Integer>());
 		}
 	}
@@ -38,7 +36,7 @@ public class PortalUtils {
 	}
 
 	public static PortalType getTypeMapping(int from, int to) {
-		for (PortalType type : PortalType.values()) {
+		for (PortalType type : PortalType.VALUES) {
 			if (Integer.valueOf(to).equals(dimensionMappings.get(type).get(from))) return type;
 		}
 		return null;
