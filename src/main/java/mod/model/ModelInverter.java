@@ -14,8 +14,14 @@ import javax.vecmath.Vector4f;
 
 public class ModelInverter extends ModelTransformer {
 	
-	private final TRSRTransformation transform = new TRSRTransformation(new Vector3f(0.0f, 1.0f, 0.0f), null, new Vector3f(1.0f, -1.0f, 1.0f), null);
-	private final Matrix4f matrix = transform.getMatrix();
+	private static final Matrix4f matrix;
+	
+	static {
+		Vector3f translate = new Vector3f(0.0f, 1.0f, 0.0f);
+		Vector3f scale = new Vector3f(1.0f, -1.0f, 1.0f);
+		TRSRTransformation transform = new TRSRTransformation(translate, null, scale, null);
+		matrix = transform.getMatrix();
+	}
 	
 	@Override
 	protected BakedQuad transformQuad(BakedQuad quad) {
