@@ -83,12 +83,13 @@ public class SurrealBlock extends BasicBlock {
 		
 		@Override
 		protected World getWorld() {
-			return Minecraft.getMinecraft().world;
+			// init() returns World, not WorldClient
+			return Minecraft.getMinecraft().world.init();
 		}
 	};
 	
 	@SideOnly(Side.CLIENT)
-	private final IBlockColor colourHandler = new IBlockColor() {
+	private class ColourHandler implements IBlockColor {
 		
 		@Override
 		public int colorMultiplier(IBlockState state, IBlockAccess access, BlockPos pos, int tintIndex) {
@@ -98,7 +99,7 @@ public class SurrealBlock extends BasicBlock {
 			IBlockState appearance = getBlockAppearance(source, inverted);
 			return Minecraft.getMinecraft().getBlockColors().colorMultiplier(appearance, source, inverted, tintIndex);
 		}
-	};
+	}
 	
 	private class EventHandler {
 		
@@ -147,7 +148,7 @@ public class SurrealBlock extends BasicBlock {
 	
 	@SideOnly(Side.CLIENT)
 	void registerColourHandler() {
-		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(colourHandler, this);
+		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new ColourHandler(), this);
 	}
 	
 	private IBlockState makeDefaultState() {
