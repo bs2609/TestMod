@@ -51,15 +51,15 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
 		return NULL_AABB;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-		IBlockState other = worldIn.getBlockState(pos.offset(side));
-		return other != state && super.shouldSideBeRendered(state, worldIn, pos, side);
+	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		IBlockState other = world.getBlockState(pos.offset(side));
+		return other != state && super.shouldSideBeRendered(state, world, pos, side);
 	}
 
 	@Override
@@ -84,6 +84,7 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 		
 		PortalType typeIn = state.getValue(TYPE);
 		BlockArea area = PortalUtils.isInsideActivePortal(world, pos);
+		
 		if (area == null) {
 			area = PortalUtils.isInsidePortal(world, pos);
 			IBlockState border = Portal.getBorder();
@@ -99,6 +100,7 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 		if (PortalUtils.checkDestination(entity, world, worldOut)) {
 			PortalType typeOut = PortalUtils.getTypeMapping(destination, origin);
 			teleporter = new PortalTeleporter(worldOut, area.getSize(), typeOut);
+			
 		} else {
 			destination = ModDimensions.DIM_SURREAL;
 			worldOut = MiscUtils.worldServerForDimension(destination);
@@ -112,6 +114,7 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 			EntityPlayerMP player = (EntityPlayerMP) entity;
 			MiscUtils.setInvulnerableDimensionChange(player);
 			playerList.transferPlayerToDimension(player, destination, teleporter);
+			
 		} else {
 			WorldServer worldIn = (WorldServer) world;
 			playerList.transferEntityToWorld(entity, origin, worldIn, worldOut, teleporter);
@@ -119,12 +122,12 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block neighborBlock) {
-		if (worldIn.isRemote) return;
-		BlockArea portal = PortalUtils.isInsideActivePortal(worldIn, pos);
-		IBlockState border = Portal.getBorder();
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock) {
+		if (world.isRemote) return;
+		BlockArea portal = PortalUtils.isInsideActivePortal(world, pos);
 		if (portal != null) {
-			PortalUtils.checkPortal(worldIn, portal, border, state);
+			IBlockState border = Portal.getBorder();
+			PortalUtils.checkPortal(world, portal, border, state);
 		}
 	}
 }

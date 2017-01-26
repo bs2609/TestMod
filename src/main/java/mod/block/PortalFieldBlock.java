@@ -34,19 +34,19 @@ public class PortalFieldBlock extends UnobtainableBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
 		return NULL_AABB;
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		if (!worldIn.isRemote && entityIn instanceof EntityPlayerMP && PortalUtils.checkEntity(entityIn)) {
-			EntityPlayerMP player = (EntityPlayerMP) entityIn;
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+		if (!world.isRemote && entity instanceof EntityPlayerMP && PortalUtils.checkEntity(entity)) {
+			EntityPlayerMP player = (EntityPlayerMP) entity;
 			int dim = 0;
 			WorldServer destination = MiscUtils.worldServerForDimension(dim);
 			Teleporter teleporter = new SpawnTeleporter(destination);
 			
-			worldIn.getMinecraftServer().getPlayerList().transferPlayerToDimension(player, dim, teleporter);
+			world.getMinecraftServer().getPlayerList().transferPlayerToDimension(player, dim, teleporter);
 		}
 	}
 }

@@ -48,16 +48,16 @@ public class PortalFrameBlock extends VariantBlock<PortalType> {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item item, CreativeTabs tab, List<ItemStack> list) {
 		for (PortalType type : PortalType.VALUES) {
-			list.add(new ItemStack(itemIn, 1, getMetaForType(type)));
+			list.add(new ItemStack(item, 1, getMetaForType(type)));
 		}
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if (!worldIn.isRemote) {
-			PortalUtils.framePlaced(worldIn, pos, state, RANGE);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		if (!world.isRemote) {
+			PortalUtils.framePlaced(world, pos, state, RANGE);
 		}
 	}
 
