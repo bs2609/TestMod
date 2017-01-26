@@ -14,7 +14,10 @@ public abstract class BasicBlock extends Block {
 		setUnlocalizedName(TestMod.MOD_ID + "." + name);
 		setRegistryName(name);
 		GameRegistry.register(this);
-		GameRegistry.register(createItemBlock(), getRegistryName());
+		ItemBlock itemBlock = createItemBlock();
+		if (itemBlock != null) {
+			GameRegistry.register(itemBlock, getRegistryName());
+		}
 	}
 	
 	protected BasicBlock(String name, Material material, CreativeTabs tab) {

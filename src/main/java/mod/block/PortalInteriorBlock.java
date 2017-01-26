@@ -16,7 +16,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.management.PlayerList;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -29,10 +28,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.Random;
-
 @SuppressWarnings("deprecation")
-public class PortalInteriorBlock extends BasicBlock {
+public class PortalInteriorBlock extends UnobtainableBlock {
 
 	public static final String NAME = "portal_interior";
 	public static final IProperty<PortalType> TYPE = PortalType.PROPERTY;
@@ -65,16 +62,6 @@ public class PortalInteriorBlock extends BasicBlock {
 		return other != state && super.shouldSideBeRendered(state, worldIn, pos, side);
 	}
 
-	@Override
-	public int quantityDropped(Random random) {
-		return 0;
-	}
-	
-	@Override
-	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		return null;
-	}
-	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(TYPE, PortalType.values()[meta]);

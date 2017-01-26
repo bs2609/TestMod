@@ -7,7 +7,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -15,10 +14,8 @@ import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
-import java.util.Random;
-
 @SuppressWarnings("deprecation")
-public class PortalFieldBlock extends BasicBlock {
+public class PortalFieldBlock extends UnobtainableBlock {
 
 	public static final String NAME = "portal_field";
 
@@ -51,15 +48,5 @@ public class PortalFieldBlock extends BasicBlock {
 			
 			worldIn.getMinecraftServer().getPlayerList().transferPlayerToDimension(player, dim, teleporter);
 		}
-	}
-
-	@Override
-	public int quantityDropped(Random random) {
-		return 0;
-	}
-	
-	@Override
-	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		return null;
 	}
 }
