@@ -33,7 +33,9 @@ public class CommonEventHandlers {
 			
 			BlockPos pos = trace.getBlockPos();
 			TestMod.getLogger().debug("Event target: " + pos);
-			if (world.getBlockState(pos) != Portal.getInterior()) return;
+			
+			IBlockState interior = Portal.getInterior();
+			if (world.getBlockState(pos) != interior) return;
 			
 			// check for portal at this location
 			TestMod.getLogger().debug("Searching for portal...");
@@ -42,7 +44,6 @@ public class CommonEventHandlers {
 			
 			TestMod.getLogger().debug("Found portal: " + portal);
 			IBlockState border = Portal.getBorder();
-			IBlockState interior = Portal.getInterior();
 			if (PortalUtils.checkPortal(world, portal, border, interior)) {
 				event.setCanceled(true);
 				thrown.setDead();

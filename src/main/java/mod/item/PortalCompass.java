@@ -18,11 +18,6 @@ public class PortalCompass extends BasicItem {
 	
 	public static final String NAME = "portal_compass";
 	
-	PortalCompass() {
-		super(NAME, CreativeTabs.TOOLS);
-		addPropertyOverride(new ResourceLocation("angle"), new PortalFinder());
-	}
-	
 	private class PortalFinder implements IItemPropertyGetter {
 		@Override
 		@SideOnly(Side.CLIENT)
@@ -35,6 +30,11 @@ public class PortalCompass extends BasicItem {
 			double a = entity.rotationYaw / 180.0 + 0.5, b = Math.atan2(dz, dx) / Math.PI;
 			return (float) ((a + b + 1.0) % 2.0 * 0.5);
 		}
+	}
+	
+	PortalCompass() {
+		super(NAME, CreativeTabs.TOOLS);
+		addPropertyOverride(new ResourceLocation("angle"), new PortalFinder());
 	}
 	
 	@SideOnly(Side.CLIENT)
