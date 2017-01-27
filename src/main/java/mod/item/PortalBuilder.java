@@ -35,14 +35,14 @@ public class PortalBuilder extends BasicItem {
 	}
 	
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		IBlockState state = worldIn.getBlockState(pos);
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		IBlockState state = world.getBlockState(pos);
 		if (state.getBlock() != ModBlocks.portalFrameBlock) return EnumActionResult.PASS;
-		if (worldIn.isRemote) return EnumActionResult.SUCCESS;
+		if (world.isRemote) return EnumActionResult.SUCCESS;
 		
-		BlockArea area = PortalUtils.isPortalFrame(worldIn, pos);
+		BlockArea area = PortalUtils.isPortalFrame(world, pos);
 		if (area == null) {
-			playerIn.sendMessage(new TextComponentString("No portal frame found"));
+			player.sendMessage(new TextComponentString("No portal frame found"));
 			return EnumActionResult.FAIL;
 		}
 		
@@ -51,8 +51,8 @@ public class PortalBuilder extends BasicItem {
 		IBlockState border = Portal.getBorder();
 		IBlockState interior = Portal.getInterior(type);
 		
-		if (!PortalUtils.constructPortal(worldIn, area, frame, border, interior)) {
-			playerIn.sendMessage(new TextComponentString("Couldn't construct portal"));
+		if (!PortalUtils.constructPortal(world, area, frame, border, interior)) {
+			player.sendMessage(new TextComponentString("Couldn't construct portal"));
 			return EnumActionResult.FAIL;
 		}
 		return EnumActionResult.SUCCESS;
