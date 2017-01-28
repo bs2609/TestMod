@@ -70,7 +70,7 @@ public class SurrealBlock extends BasicBlock {
 		protected void onChunkLoad(Chunk chunk) {
 			// mark chunk for render update
 			int x = chunk.xPosition << 4, z = chunk.zPosition << 4;
-			Minecraft.getMinecraft().world.markBlockRangeForRenderUpdate(x, 0, z, x + 15, 255, z + 15);
+			Minecraft.getMinecraft().world.markBlockRangeForRenderUpdate(x, 0, z, x | 15, 255, z | 15);
 		}
 	};
 	
@@ -176,8 +176,8 @@ public class SurrealBlock extends BasicBlock {
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(MATERIAL_TYPE).ordinal()
-				+ (state.getValue(OPAQUE_CUBE) ? 4 : 0)
-				+ (state.getValue(FULL_CUBE) ? 8 : 0);
+				| (state.getValue(OPAQUE_CUBE) ? 4 : 0)
+				| (state.getValue(FULL_CUBE) ? 8 : 0);
 	}
 	
 	@Override
