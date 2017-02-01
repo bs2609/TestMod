@@ -43,11 +43,12 @@ public class PortalUtils {
 	}
 
 	public static boolean checkEntity(Entity entity) {
-		if (entityPortalTimes.containsKey(entity) && entityPortalTimes.get(entity) > System.currentTimeMillis() - 2000L) {
+		long currentTime = System.currentTimeMillis();
+		if (entityPortalTimes.containsKey(entity) && entityPortalTimes.get(entity) > currentTime - 2000L) {
 			return false;
 		}
-		TestMod.getLogger().debug(entity.getName() + "@" + System.currentTimeMillis());
-		entityPortalTimes.put(entity, System.currentTimeMillis());
+		TestMod.getLogger().debug(entity.getName() + "@" + currentTime);
+		entityPortalTimes.put(entity, currentTime);
 		return true;
 	}
 
