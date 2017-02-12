@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class SurrealWorldUpdater extends AbstractWorldEventListener {
 	
-	private final IBlockState air = Blocks.AIR.getDefaultState();
+	private static final IBlockState air = Blocks.AIR.getDefaultState();
 	
 	@Override
 	public void notifyBlockUpdate(World worldIn, BlockPos pos, IBlockState oldState, IBlockState newState, int flags) {
@@ -28,15 +28,21 @@ public class SurrealWorldUpdater extends AbstractWorldEventListener {
 	
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load event) {
-		if (event.getWorld().provider.getDimension() == SurrealBlock.DIM_ID) {
-			event.getWorld().addEventListener(this);
+		World world = event.getWorld();
+		if (world.isRemote) return;
+		int dimension = world.provider.getDimension();
+		if (dimension == SurrealBlock.DIM_ID) {
+			world.addEventListener(this);
 		}
 	}
 	
 	@SubscribeEvent
 	public void onWorldUnload(WorldEvent.Unload event) {
-		if (event.getWorld().provider.getDimension() == SurrealBlock.DIM_ID) {
-			event.getWorld().removeEventListener(this);
+		World world = event.getWorld();
+		if (world.isRemote) return;
+		int dimension = world.provider.getDimension();
+		if (dimension == SurrealBlock.DIM_ID) {
+			world.removeEventListener(this);
 		}
 	}
 }
