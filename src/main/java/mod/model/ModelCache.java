@@ -1,10 +1,32 @@
 package mod.model;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.CacheStats;
+import com.google.common.cache.LoadingCache;
 import mod.gui.IDebugInfo;
 import mod.gui.ModDebugInfo;
-import mod.util.ReferenceCache;
 
-public abstract class ModelCache<T> extends ReferenceCache<T, T> implements IDebugInfo {
+public abstract class ModelCache<T> implements IDebugInfo {
+	
+	private class Loader extends CacheLoader<T, T> {
+		
+		@Override
+		public T load(T key) {
+			return create(key);
+		}
+	}
+	
+	private final LoadingCache<T, T> cache;
+	
+	{
+		cache = CacheBuilder.newBuilder()
+				.initialCapacity(160)
+				.recordStats()
+				.weakKeys()
+				.weakValues()
+				.build(new Loader());
+	}
 	
 	ModelCache(String id) {
 		ModDebugInfo.register(id, this);
@@ -12,6 +34,13 @@ public abstract class ModelCache<T> extends ReferenceCache<T, T> implements IDeb
 	
 	@Override
 	public String getInfoText() {
-		return "access: " + accessCount.get() + ", miss: " + missCount.get() + ", size: " + map.size();
+		CacheStats stats = cache.stats();
+		return "access: " + stats.requestCount() + ", miss: " + stats.missCount() + ", size: " + cache.size();
 	}
+	
+	public T get(T key) {
+		return cache.getUnchecked(key);
+	}
+	
+	protected abstract T create(T key);
 }
