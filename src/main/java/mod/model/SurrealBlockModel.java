@@ -23,7 +23,7 @@ public class SurrealBlockModel implements IBakedModel {
 	public static final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(TestMod.MOD_ID + ":" + SurrealBlock.NAME);
 	private static final String textureName = TestMod.MOD_ID + ":blocks/" + SurrealBlock.NAME;
 	
-	private static final ModelTransformer transformer = new ModelInverter();
+	private final ModelTransformer transformer = new ModelInverter();
 	
 	public static class EventHandler {
 		
