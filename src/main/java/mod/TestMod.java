@@ -25,7 +25,7 @@ public class TestMod {
 
 	public static final String MOD_ID = "testing";
 	public static final String MOD_NAME = "a test mod";
-	public static final String VERSION = "0.2.8";
+	public static final String VERSION = "0.2.9";
 
 	@Mod.Instance(MOD_ID)
 	public static TestMod instance;
