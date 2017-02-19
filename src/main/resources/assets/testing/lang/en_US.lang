@@ -2,6 +2,7 @@
 tile.testing.portal_block.name=Portal Block
 tile.testing.portal_frame.inward.name=Portal Frame (inbound)
 tile.testing.portal_frame.outward.name=Portal Frame (outbound)
+tile.testing.surreal_block.name=Surreal Block
 
 # Items
 item.testing.portal_builder.name=Portal Builder
