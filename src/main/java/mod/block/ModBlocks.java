@@ -27,11 +27,6 @@ public class ModBlocks {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static void initItemModels() {
-		surrealBlock.initItemModel();
-	}
-
-	@SideOnly(Side.CLIENT)
 	public static void registerHandlers() {
 		surrealBlock.registerColourHandler();
 	}

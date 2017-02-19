@@ -17,7 +17,6 @@ public class ClientProxy extends DefaultProxy {
 	
 	@Override
 	public void init(FMLInitializationEvent event) {
-		ModBlocks.initItemModels();
 		ModBlocks.registerHandlers();
 	}
 }
