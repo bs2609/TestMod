@@ -17,7 +17,7 @@ public class HemisphereGenerator extends ShapeGenerator {
 		Hemisphere(int x, int z, Random random) {
 			cx = (x << 4) + random.nextInt(16);
 			cz = (z << 4) + random.nextInt(16);
-			cy = random.nextInt(256);
+			cy = random.nextInt(240) + 16;
 			size = random.nextInt(16);
 		}
 
