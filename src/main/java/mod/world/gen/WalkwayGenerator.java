@@ -12,9 +12,12 @@ import java.util.Random;
 public class WalkwayGenerator extends SeededTerrainGenerator {
 
 	private final int baseLevel = 64;
+
 	private final IBlockState base = Blocks.STONEBRICK.getDefaultState();
 	private final IBlockState join = Blocks.STONE_BRICK_STAIRS.getDefaultState();
 	private final IBlockState clear = Blocks.AIR.getDefaultState();
+
+	private final int[] north = {0, 1, 2}, south = {6, 7, 8}, west = {0, 3, 6}, east = {2, 5, 8};
 
 	public WalkwayGenerator(long seed) {
 		super(seed);
@@ -87,7 +90,6 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 	}
 
 	private void joinEdgeN(int x, int z, int level, boolean[] grid, ChunkPrimer primer) {
-		final int[] side = {0, 1, 2}, opposite = {6, 7, 8};
 
 		IBlockState up = join.withProperty(BlockStairs.FACING, EnumFacing.NORTH);
 		IBlockState down = join.withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
@@ -103,7 +105,7 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 		int cy = baseLevel + (level << 2);
 		for (int cx = 2; cx < 14; ++cx) {
 			int i = (cx-2) >> 2;
-			if (grid[side[i]] && adjGrid[opposite[i]]) {
+			if (grid[north[i]] && adjGrid[south[i]]) {
 				if (level < adjLevel) {
 					placeBlockColumn(cx, cy+2, 0, primer, up, upAlt);
 					placeBlockColumn(cx, cy+1, 1, primer, up, upAlt);
@@ -119,7 +121,6 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 	}
 
 	private void joinEdgeS(int x, int z, int level, boolean[] grid, ChunkPrimer primer) {
-		final int[] side = {6, 7, 8}, opposite = {0, 1, 2};
 
 		IBlockState up = join.withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
 		IBlockState down = join.withProperty(BlockStairs.FACING, EnumFacing.NORTH);
@@ -135,7 +136,7 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 		int cy = baseLevel + (level << 2);
 		for (int cx = 2; cx < 14; ++cx) {
 			int i = (cx-2) >> 2;
-			if (grid[side[i]] && adjGrid[opposite[i]]) {
+			if (grid[south[i]] && adjGrid[north[i]]) {
 				if (level < adjLevel) {
 					placeBlockColumn(cx, cy+1, 14, primer, up, upAlt);
 					placeBlockColumn(cx, cy+2, 15, primer, up, upAlt);
@@ -151,7 +152,6 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 	}
 
 	private void joinEdgeW(int x, int z, int level, boolean[] grid, ChunkPrimer primer) {
-		final int[] side = {0, 3, 6}, opposite = {2, 5, 8};
 
 		IBlockState up = join.withProperty(BlockStairs.FACING, EnumFacing.WEST);
 		IBlockState down = join.withProperty(BlockStairs.FACING, EnumFacing.EAST);
@@ -167,7 +167,7 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 		int cy = baseLevel + (level << 2);
 		for (int cz = 2; cz < 14; ++cz) {
 			int i = (cz-2) >> 2;
-			if (grid[side[i]] && adjGrid[opposite[i]]) {
+			if (grid[west[i]] && adjGrid[east[i]]) {
 				if (level < adjLevel) {
 					placeBlockColumn(0, cy+2, cz, primer, up, upAlt);
 					placeBlockColumn(1, cy+1, cz, primer, up, upAlt);
@@ -183,7 +183,6 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 	}
 
 	private void joinEdgeE(int x, int z, int level, boolean[] grid, ChunkPrimer primer) {
-		final int[] side = {2, 5, 8}, opposite = {0, 3, 6};
 
 		IBlockState up = join.withProperty(BlockStairs.FACING, EnumFacing.EAST);
 		IBlockState down = join.withProperty(BlockStairs.FACING, EnumFacing.WEST);
@@ -199,7 +198,7 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 		int cy = baseLevel + (level << 2);
 		for (int cz = 2; cz < 14; ++cz) {
 			int i = (cz-2) >> 2;
-			if (grid[side[i]] && adjGrid[opposite[i]]) {
+			if (grid[east[i]] && adjGrid[west[i]]) {
 				if (level < adjLevel) {
 					placeBlockColumn(14, cy+1, cz, primer, up, upAlt);
 					placeBlockColumn(15, cy+2, cz, primer, up, upAlt);
