@@ -32,6 +32,7 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 	
 	public void generate(int x, int z, ChunkPrimer primer) {
 		int level = getLevel(x, z);
+		if (!checkLevel(level)) return;
 		boolean[] grid = getGrid(x, z);
 		fillChunk(level, grid, primer);
 		joinEdges(x, z, level, grid, primer);
@@ -43,9 +44,14 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 		int acc = 0, level = 0;
 		while (acc < total) {
 			acc += random.nextInt(16) + 1;
-			level += random.nextBoolean() ? 1 : -1;
+			level += (random.nextInt(30) >= level + 15) ? 1 : -1;
 		}
 		return level;
+	}
+	
+	private boolean checkLevel(int level) {
+		int y = baseLevel + (level << 2);
+		return y > 0 && y < 256;
 	}
 	
 	private boolean[] getGrid(int x, int z) {
@@ -63,7 +69,6 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 
 	private void fillChunk(int level, boolean[] grid, ChunkPrimer primer) {
 		int y = baseLevel + (level << 2);
-		if (y < 1 || y > 255) return;
 		for (int x = 2; x < 14; ++x) {
 			for (int z = 2; z < 14; ++z) {
 				int i = (x-2) >> 2, j = (z-2) >> 2;
@@ -90,12 +95,12 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 		IBlockState upAlt = down.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
 		IBlockState downAlt = up.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
 
-		int cy = baseLevel + (level << 2);
-		if (cy < 1 || cy > 255) return;
-
 		int adjLevel = getLevel(x, z-1);
+		if (!checkLevel(adjLevel)) return;
+
 		boolean[] adjGrid = getGrid(x, z-1);
 
+		int cy = baseLevel + (level << 2);
 		for (int cx = 2; cx < 14; ++cx) {
 			int i = (cx-2) >> 2;
 			if (grid[side[i]] && adjGrid[opposite[i]]) {
@@ -122,12 +127,12 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 		IBlockState upAlt = down.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
 		IBlockState downAlt = up.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
 
-		int cy = baseLevel + (level << 2);
-		if (cy < 1 || cy > 255) return;
-
 		int adjLevel = getLevel(x, z+1);
+		if (!checkLevel(adjLevel)) return;
+
 		boolean[] adjGrid = getGrid(x, z+1);
 
+		int cy = baseLevel + (level << 2);
 		for (int cx = 2; cx < 14; ++cx) {
 			int i = (cx-2) >> 2;
 			if (grid[side[i]] && adjGrid[opposite[i]]) {
@@ -154,12 +159,12 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 		IBlockState upAlt = down.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
 		IBlockState downAlt = up.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
 
-		int cy = baseLevel + (level << 2);
-		if (cy < 1 || cy > 255) return;
-
 		int adjLevel = getLevel(x-1, z);
+		if (!checkLevel(adjLevel)) return;
+
 		boolean[] adjGrid = getGrid(x-1, z);
 
+		int cy = baseLevel + (level << 2);
 		for (int cz = 2; cz < 14; ++cz) {
 			int i = (cz-2) >> 2;
 			if (grid[side[i]] && adjGrid[opposite[i]]) {
@@ -186,12 +191,12 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 		IBlockState upAlt = down.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
 		IBlockState downAlt = up.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
 
-		int cy = baseLevel + (level << 2);
-		if (cy < 1 || cy > 255) return;
-
 		int adjLevel = getLevel(x+1, z);
+		if (!checkLevel(adjLevel)) return;
+
 		boolean[] adjGrid = getGrid(x+1, z);
 
+		int cy = baseLevel + (level << 2);
 		for (int cz = 2; cz < 14; ++cz) {
 			int i = (cz-2) >> 2;
 			if (grid[side[i]] && adjGrid[opposite[i]]) {
