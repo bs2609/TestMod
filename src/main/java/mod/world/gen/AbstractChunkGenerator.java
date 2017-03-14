@@ -22,7 +22,7 @@ public abstract class AbstractChunkGenerator implements IChunkGenerator {
 	public void populate(int x, int z) {}
 
 	@Override
-	public boolean generateStructures(Chunk chunkIn, int x, int z) {
+	public boolean generateStructures(Chunk chunk, int x, int z) {
 		return false;
 	}
 
@@ -32,11 +32,11 @@ public abstract class AbstractChunkGenerator implements IChunkGenerator {
 	}
 
 	@Override
-	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position) {
+	public BlockPos getStrongholdGen(World world, String structureName, BlockPos position) {
 		return null;
 	}
 
 	@Override
-	public void recreateStructures(Chunk chunkIn, int x, int z) {}
+	public void recreateStructures(Chunk chunk, int x, int z) {}
 
 }

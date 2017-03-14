@@ -12,8 +12,8 @@ public class TestChunkGenerator extends AbstractChunkGenerator {
 	private final List<ITerrainGenerator> generators;
 	private final PortalFieldGenerator portalGen = new PortalFieldGenerator();
 
-	public TestChunkGenerator(World worldIn, List<ITerrainGenerator> generatorList) {
-		super(worldIn);
+	public TestChunkGenerator(World world, List<ITerrainGenerator> generatorList) {
+		super(world);
 		generators = generatorList;
 	}
 

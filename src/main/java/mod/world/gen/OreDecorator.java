@@ -9,7 +9,7 @@ import java.util.Random;
 public class OreDecorator extends BiomeDecorator {
 	
 	@Override
-	protected void genDecorations(Biome biomeGenBaseIn, World worldIn, Random random) {
-		generateOres(worldIn, random);
+	protected void genDecorations(Biome biome, World world, Random random) {
+		generateOres(world, random);
 	}
 }

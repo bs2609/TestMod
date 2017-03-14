@@ -32,28 +32,28 @@ public class PortalTeleporter extends Teleporter {
 	}
 
 	@Override
-	public void placeInPortal(Entity entityIn, float rotationYaw) {
-		if (!placeInExistingPortal(entityIn, rotationYaw)) {
-			makePortal(entityIn);
-			placeInExistingPortal(entityIn, rotationYaw);
+	public void placeInPortal(Entity entity, float rotationYaw) {
+		if (!placeInExistingPortal(entity, rotationYaw)) {
+			makePortal(entity);
+			placeInExistingPortal(entity, rotationYaw);
 		}
 	}
 
 	@Override
-	public boolean placeInExistingPortal(Entity entityIn, float rotationYaw) {
-		BlockArea existing = hasExistingPortal(entityIn);
+	public boolean placeInExistingPortal(Entity entity, float rotationYaw) {
+		BlockArea existing = hasExistingPortal(entity);
 		if (existing == null) return false;
 		BlockArea cleared = clearArea(existing);
 		Vec3d v1 = getBottomCentre(cleared);
-		placeEntity(entityIn, v1);
-		Vec3d v2 = getEntityOffset(entityIn, existing);
-		placeEntity(entityIn, v1.add(v2));
+		placeEntity(entity, v1);
+		Vec3d v2 = getEntityOffset(entity, existing);
+		placeEntity(entity, v1.add(v2));
 		return true;
 	}
 
 	@Override
-	public boolean makePortal(Entity entityIn) {
-		BlockArea area = getPortalArea(entityIn);
+	public boolean makePortal(Entity entity) {
+		BlockArea area = getPortalArea(entity);
 		IBlockState frame = Portal.getFrame(portalType);
 		IBlockState border = Portal.getBorder();
 		IBlockState interior = Portal.getInterior(portalType);
