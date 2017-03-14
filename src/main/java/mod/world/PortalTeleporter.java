@@ -102,7 +102,8 @@ public class PortalTeleporter extends Teleporter {
 		IBlockState floorBlock = Blocks.COBBLESTONE.getDefaultState();
 
 		for (BlockPos pos : floorArea) {
-			if (!worldAccess.getBlockState(pos).getBlock().isBlockSolid(worldAccess, pos, EnumFacing.UP)) {
+			IBlockState state = worldAccess.getBlockState(pos);
+			if (!state.getBlock().isSideSolid(state, worldAccess, pos, EnumFacing.UP)) {
 				worldAccess.setBlockState(pos, floorBlock);
 			}
 		}
