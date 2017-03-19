@@ -125,21 +125,23 @@ public class BlockArea implements Iterable<BlockPos>, INBTSerializable<NBTTagCom
 	}
 
 	public boolean intersects(BlockArea other) {
-
-		boolean outside = false;
-
-		outside = outside || this.maxPos.getX() < other.minPos.getX();
-		outside = outside || this.minPos.getX() > other.maxPos.getX();
-		outside = outside || this.maxPos.getY() < other.minPos.getY();
-		outside = outside || this.minPos.getY() > other.maxPos.getY();
-		outside = outside || this.maxPos.getZ() < other.minPos.getZ();
-		outside = outside || this.minPos.getZ() > other.maxPos.getZ();
-
-		return !outside;
+		return gte(this.maxPos, other.minPos) && lte(this.minPos, other.maxPos);
 	}
 
 	public boolean contains(BlockPos pos) {
-		return intersects(new BlockArea(pos, pos));
+		return gte(maxPos, pos) && lte(minPos, pos);
+	}
+
+	public boolean contains(BlockArea other) {
+		return gte(this.maxPos, other.maxPos) && lte(this.minPos, other.minPos);
+	}
+
+	private static boolean gte(BlockPos a, BlockPos b) {
+		return a.equals(b) || BlockUtils.compareStrict.compare(a, b) > 0;
+	}
+
+	private static boolean lte(BlockPos a, BlockPos b) {
+		return a.equals(b) || BlockUtils.compareStrict.compare(a, b) < 0;
 	}
 
 	public BlockArea translate(Vec3i vector) {
