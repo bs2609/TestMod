@@ -20,7 +20,7 @@ public class WorldUpdateAggregator {
 	}
 	
 	public void queueUpdate(BlockPos pos, IBlockState state) {
-		updates.put(pos, state);
+		updates.put(pos.toImmutable(), state);
 		if (updates.size() >= 256) {
 			applyUpdates();
 		}
