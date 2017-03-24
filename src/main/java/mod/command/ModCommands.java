@@ -11,6 +11,7 @@ public class ModCommands {
 	private static List<ICommand> commands = new ArrayList<ICommand>();
 	
 	static {
+		commands.add(new CommandPlacement());
 		commands.add(new CommandSample());
 		commands.add(new CommandSurreal());
 	}
