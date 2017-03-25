@@ -101,12 +101,12 @@ public class PortalUtils {
 	public static void frameRemoved(World world, BlockPos pos) {
 		TestMod.getLogger().debug("Frame block removed: " + pos);
 		
-		BlockArea active = isPortalFrame(world, pos);
+		BlockArea active = isActivePortalFrame(world, pos);
 		if (active != null) {
 			deactivatePortal(world, active);
 		}
 		
-		BlockArea candidate = isActivePortalFrame(world, pos);
+		BlockArea candidate = isPortalFrame(world, pos);
 		if (candidate != null) {
 			removeCandidatePortal(world, candidate);
 		}
