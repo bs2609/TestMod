@@ -13,7 +13,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.Iterator;
 
-public class BlockArea implements Iterable<BlockPos.MutableBlockPos>, INBTSerializable<NBTTagCompound> {
+public class BlockArea implements Iterable<BlockPos>, INBTSerializable<NBTTagCompound> {
 
 	public final BlockPos minPos;
 	public final BlockPos maxPos;
@@ -177,8 +177,8 @@ public class BlockArea implements Iterable<BlockPos.MutableBlockPos>, INBTSerial
 	}
 
 	@Override
-	public Iterator<BlockPos.MutableBlockPos> iterator() {
-		return BlockPos.getAllInBoxMutable(minPos, maxPos).iterator();
+	public Iterator<BlockPos> iterator() {
+		return BlockPos.getAllInBox(minPos, maxPos).iterator();
 	}
 
 	@Override
