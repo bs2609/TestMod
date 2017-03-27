@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class PortalLocationData extends WorldSavedData {
 
-	public static final String ID = "portalLocations";
+	public static final String ID = "portal_locations";
 
 	final Set<BlockArea> candidatePortals = new HashSet<BlockArea>();
 	final Set<BlockArea> activePortals = new HashSet<BlockArea>();
