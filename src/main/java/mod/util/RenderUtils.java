@@ -10,37 +10,34 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 @SideOnly(Side.CLIENT)
 public class RenderUtils {
 	
 	public static class EndSkyRenderer extends IRenderHandler {
 		
-		private static final String[] methodNames = {"renderSkyEnd", "func_180448_r"};
-		private static final Method renderMethod = ReflectionHelper.findMethod(RenderGlobal.class, null, methodNames);
+		private static final Method renderMethod = ReflectionHelper.findMethod(RenderGlobal.class, "renderSkyEnd", "func_180448_r");
 		
 		@Override
 		public void render(float partialTicks, WorldClient world, Minecraft mc) {
 			try {
 				renderMethod.invoke(mc.renderGlobal);
 			} catch (Exception e) {
-				TestMod.getLogger().warn("Exception invoking " + Arrays.toString(methodNames), e);
+				TestMod.getLogger().warn("Exception invoking " + renderMethod, e);
 			}
 		}
 	}
 	
 	public static class CloudRenderer extends IRenderHandler {
 		
-		private static final String[] methodNames = {"renderCloudsFancy", "func_180445_c"};
-		private static final Method renderMethod = ReflectionHelper.findMethod(RenderGlobal.class, null, methodNames, float.class, int.class);
+		private static final Method renderMethod = ReflectionHelper.findMethod(RenderGlobal.class, "renderCloudsFancy", "func_180445_c", float.class, int.class);
 		
 		@Override
 		public void render(float partialTicks, WorldClient world, Minecraft mc) {
 			try {
 				renderMethod.invoke(mc.renderGlobal, partialTicks, 2);
 			} catch (Exception e) {
-				TestMod.getLogger().warn("Exception invoking " + Arrays.toString(methodNames), e);
+				TestMod.getLogger().warn("Exception invoking " + renderMethod, e);
 			}
 		}
 	}

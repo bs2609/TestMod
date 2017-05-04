@@ -11,7 +11,8 @@ public class TestWorldProvider extends WorldProvider {
 	public static final int ID = 88;
 
 	@Override
-	protected void createBiomeProvider() {
+	protected void init() {
+		hasSkyLight = true;
 		biomeProvider = ModDimensions.getSpecifier(getDimension()).getBiomeProvider(world);
 	}
 

@@ -13,9 +13,9 @@ public class SurrealWorldProvider extends WorldProvider {
 	public static final int ID = 39;
 
 	@Override
-	protected void createBiomeProvider() {
-		super.createBiomeProvider();
-}
+	protected void init() {
+		super.init();
+	}
 
 	@Override
 	protected void generateLightBrightnessTable() {

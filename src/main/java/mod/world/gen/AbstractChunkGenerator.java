@@ -32,7 +32,7 @@ public abstract class AbstractChunkGenerator implements IChunkGenerator {
 	}
 
 	@Override
-	public BlockPos getStrongholdGen(World world, String structureName, BlockPos position) {
+	public BlockPos getStrongholdGen(World world, String structureName, BlockPos position, boolean p_180513_4_) {
 		return null;
 	}
 

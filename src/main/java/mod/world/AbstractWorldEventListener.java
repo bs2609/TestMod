@@ -23,6 +23,8 @@ public abstract class AbstractWorldEventListener implements IWorldEventListener 
 	
 	public void spawnParticle(int particleID, boolean ignoreRange, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters) {}
 	
+	public void spawnParticle(int id, boolean ignoreRange, boolean p_190570_3_, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, int... parameters) {}
+	
 	public void onEntityAdded(Entity entity) {}
 	
 	public void onEntityRemoved(Entity entity) {}

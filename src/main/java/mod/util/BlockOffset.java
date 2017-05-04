@@ -22,8 +22,8 @@ public class BlockOffset {
 		if (o == null || getClass() != o.getClass()) return false;
 		BlockOffset that = (BlockOffset) o;
 		return distance == that.distance &&
-				Objects.equal(origin, that.origin) &&
-				direction == that.direction;
+				direction == that.direction &&
+				Objects.equal(origin, that.origin);
 	}
 
 	@Override

@@ -39,6 +39,8 @@ public class ModDimensions {
 
 	private static void loadFromConfig() {
 		Configuration config = TestMod.getConfig();
+		DIM_SURREAL = config.get(CONFIG_CATEGORY, "surreal", DIM_SURREAL).getInt();
+		DIM_GLITCHED = config.get(CONFIG_CATEGORY, "glitched", DIM_GLITCHED).getInt();
 		dims = config.get(CONFIG_CATEGORY, "ids", DEFAULT_DIMS).getIntList();
 		names = config.get(CONFIG_CATEGORY, "names", DEFAULT_NAMES).getStringList();
 		if (config.hasChanged()) config.save();

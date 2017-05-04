@@ -43,7 +43,7 @@ public class ChunkRequestPacket implements IMessage {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+					EntityPlayerMP player = ctx.getServerHandler().player;
 					Chunk chunk = player.mcServer.worldServerForDimension(msg.dim).getChunkFromChunkCoords(msg.x, msg.z);
 					ModPacketHandler.INSTANCE.sendTo(new ChunkDataPacket(msg.id, chunk), player);
 				}

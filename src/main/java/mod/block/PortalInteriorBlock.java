@@ -51,15 +51,15 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess access, BlockPos pos) {
 		return NULL_AABB;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		IBlockState other = world.getBlockState(pos.offset(side));
-		return other != state && super.shouldSideBeRendered(state, world, pos, side);
+	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess access, BlockPos pos, EnumFacing side) {
+		IBlockState other = access.getBlockState(pos.offset(side));
+		return other != state && super.shouldSideBeRendered(state, access, pos, side);
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos fromPos) {
 		if (world.isRemote) return;
 		BlockArea portal = PortalUtils.isInsideActivePortal(world, pos);
 		if (portal != null) {

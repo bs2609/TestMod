@@ -70,8 +70,8 @@ public class PortalFrameBlock extends VariantBlock<PortalType> {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null && heldItem.getItem() == Items.STICK) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (player.getHeldItem(hand).getItem() == Items.STICK) {
 			if (!world.isRemote) {
 				BlockArea area = PortalUtils.isPortalFrame(world, pos);
 				player.sendMessage(new TextComponentString("Portal area " + (area != null ? area : "not found")));

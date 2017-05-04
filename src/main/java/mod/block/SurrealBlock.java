@@ -5,9 +5,11 @@ import mod.network.ChunkDataPacket;
 import mod.network.ChunkRequestPacket;
 import mod.network.ModPacketHandler;
 import mod.network.ChunkBuffer;
+import mod.util.BlockAccessRemapper;
 import mod.util.MiscUtils;
 import mod.world.ModDimensions;
 import mod.world.SimpleBlockAccess;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -27,6 +29,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -56,6 +59,8 @@ public class SurrealBlock extends BasicBlock {
 	
 	public static final int DIM_ID = 0;
 	
+	private final IBlockState fallback = new Block(MaterialType.SOLID.getExample()).getDefaultState();
+	
 	private final ChunkBuffer buffer = new ChunkBuffer() {
 		
 		private final int id = ChunkDataPacket.Handler.register(this);
@@ -83,7 +88,6 @@ public class SurrealBlock extends BasicBlock {
 		
 		@Override
 		protected World getWorld() {
-			// init() returns World, not WorldClient
 			return Minecraft.getMinecraft().world.init();
 		}
 	};
@@ -94,10 +98,10 @@ public class SurrealBlock extends BasicBlock {
 		@Override
 		public int colorMultiplier(IBlockState state, IBlockAccess access, BlockPos pos, int tintIndex) {
 			if (access == null || pos == null) return -1;
-			IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
+			IBlockAccess remapper = new Remapper(access);
 			BlockPos inverted = getInverted(pos);
-			IBlockState appearance = getBlockAppearance(source, inverted);
-			return Minecraft.getMinecraft().getBlockColors().colorMultiplier(appearance, source, inverted, tintIndex);
+			IBlockState appearance = getBlockAppearance(state, remapper, inverted);
+			return Minecraft.getMinecraft().getBlockColors().colorMultiplier(appearance, remapper, inverted, tintIndex);
 		}
 	}
 	
@@ -119,6 +123,34 @@ public class SurrealBlock extends BasicBlock {
 			if (!checkWorld(event.getWorld())) return;
 			Chunk chunk = event.getChunk();
 			buffer.removeChunk(chunk.xPosition, chunk.zPosition);
+		}
+	}
+	
+	private class Remapper extends BlockAccessRemapper {
+		
+		Remapper(IBlockAccess source) {
+			super(source);
+		}
+		
+		@Override
+		public IBlockState getBlockState(BlockPos pos) {
+			IBlockState state = source.getBlockState(getInverted(pos));
+			if (state.getBlock() == SurrealBlock.this) {
+				return remapBlockAccess(source).getBlockState(pos);
+			}
+			return state;
+		}
+		
+		private IBlockAccess remapBlockAccess(IBlockAccess access) {
+			Side side = MiscUtils.getSide(access);
+			switch (side) {
+				case CLIENT:
+					return bufferAccess;
+				case SERVER:
+					return MiscUtils.worldServerForDimension(DIM_ID);
+				default:
+					throw new IllegalArgumentException("Invalid side: " + side);
+			}
 		}
 	}
 
@@ -182,30 +214,26 @@ public class SurrealBlock extends BasicBlock {
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess access, BlockPos pos) {
 		IExtendedBlockState extendedState = (IExtendedBlockState) state;
 		if (extendedState.getValue(APPEARANCE) != null) return extendedState;
-		IBlockState blockAppearance = getBlockAppearance(access, pos, true);
-		return extendedState.withProperty(APPEARANCE, blockAppearance);
+		IBlockAccess remapper = new Remapper(access);
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(remapper, inverted);
+		return extendedState.withProperty(APPEARANCE, appearance.getBlock().getExtendedState(appearance.getActualState(remapper, inverted), remapper, inverted));
+	}
+	
+	private IBlockState getBlockAppearance(IBlockState state, IBlockAccess access, BlockPos pos) {
+		IExtendedBlockState extendedState = (IExtendedBlockState) state;
+		IBlockState appearance = extendedState.getValue(APPEARANCE);
+		return appearance != null ? appearance : getBlockAppearance(access, pos);
 	}
 	
 	private IBlockState getBlockAppearance(IBlockAccess access, BlockPos pos, boolean remap) {
 		if (!remap) return getBlockAppearance(access, pos);
-		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
-		BlockPos inverted = getInverted(pos);
-		return getBlockAppearance(source, inverted);
+		return getBlockAppearance(new Remapper(access), getInverted(pos));
 	}
 	
 	private IBlockState getBlockAppearance(IBlockAccess access, BlockPos pos) {
-		return access.getBlockState(pos).getActualState(access, pos);
-	}
-	
-	private IBlockAccess getBlockAccess(Side side) {
-		switch (side) {
-			case CLIENT:
-				return bufferAccess;
-			case SERVER:
-				return MiscUtils.worldServerForDimension(DIM_ID);
-			default:
-				throw new IllegalArgumentException("Invalid side: " + side);
-		}
+		IBlockState state = access.getBlockState(pos);
+		return state.getBlock() == this ? fallback : state;
 	}
 	
 	private static BlockPos getInverted(BlockPos pos) {
@@ -220,19 +248,19 @@ public class SurrealBlock extends BasicBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess access, BlockPos pos, EnumFacing side) {
-		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
+		IBlockAccess remapper = new Remapper(access);
 		BlockPos inverted = getInverted(pos);
-		IBlockState appearance = getBlockAppearance(source, inverted);
+		IBlockState appearance = getBlockAppearance(remapper, inverted);
 		EnumFacing opposite = MiscUtils.getReflected(side, EnumFacing.Axis.Y);
-		return appearance.shouldSideBeRendered(source, inverted, opposite);
+		return appearance.shouldSideBeRendered(remapper, inverted, opposite);
 	}
 	
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess access, BlockPos pos) {
-		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
+		IBlockAccess remapper = new Remapper(access);
 		BlockPos inverted = getInverted(pos);
-		IBlockState appearance = getBlockAppearance(source, inverted);
-		return invert(appearance.getBoundingBox(source, inverted));
+		IBlockState appearance = getBlockAppearance(remapper, inverted);
+		return invert(appearance.getBoundingBox(remapper, inverted));
 	}
 	
 	@Override
@@ -245,9 +273,11 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World world, BlockPos pos) {
-		IBlockState appearance = getBlockAppearance(world, pos, true);
-		return invert(appearance.getCollisionBoundingBox(world, pos));
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess access, BlockPos pos) {
+		IBlockAccess remapper = new Remapper(access);
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(remapper, inverted);
+		return invert(appearance.getCollisionBoundingBox(remapper, inverted));
 	}
 	
 	private static AxisAlignedBB invert(AxisAlignedBB aabb) {
@@ -255,19 +285,40 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
-	public int getLightValue(IBlockState state, IBlockAccess access, BlockPos pos) {
-		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
+	public Vec3d getOffset(IBlockState state, IBlockAccess access, BlockPos pos) {
+		IBlockAccess remapper = new Remapper(access);
 		BlockPos inverted = getInverted(pos);
-		IBlockState appearance = getBlockAppearance(source, inverted);
-		return appearance.getLightValue(source, inverted);
+		IBlockState appearance = getBlockAppearance(remapper, inverted);
+		return invert(appearance.getOffset(remapper, inverted));
+	}
+	
+	private static Vec3d invert(Vec3d vec) {
+		return (vec.yCoord == 0.0) ? vec : new Vec3d(vec.xCoord, -vec.yCoord, vec.zCoord);
+	}
+	
+	@Override
+	public boolean isPassable(IBlockAccess access, BlockPos pos) {
+		IBlockAccess remapper = new Remapper(access);
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(remapper, inverted);
+		return appearance.getBlock().isPassable(remapper, inverted);
+	}
+	
+	@Override
+	public int getLightValue(IBlockState state, IBlockAccess access, BlockPos pos) {
+		IBlockAccess remapper = new Remapper(access);
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(remapper, inverted);
+		return appearance.getLightValue(remapper, inverted);
 	}
 	
 	@Override
 	public int getLightOpacity(IBlockState state, IBlockAccess access, BlockPos pos) {
-		IBlockAccess source = getBlockAccess(MiscUtils.getSide(access));
-		BlockPos inverted = getInverted(pos);
-		IBlockState appearance = getBlockAppearance(source, inverted);
-		return appearance.getLightOpacity(source, inverted);
+		/* // on hold due to bugs
+		IBlockState appearance = getBlockAppearance(access, pos, true);
+		return appearance.getLightOpacity();
+		*/
+		return state.getLightOpacity();
 	}
 	
 	@Override
@@ -284,8 +335,8 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
-	public boolean causesSuffocation() {
-		return false;
+	public boolean causesSuffocation(IBlockState state) {
+		return state.getMaterial().blocksMovement() && state.isFullCube();
 	}
 	
 	@Override
@@ -330,8 +381,13 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null && heldItem.getItem() == Items.STICK) {
+	public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
+		return null;
+	}
+	
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (player.getHeldItem(hand).getItem() == Items.STICK) {
 			IBlockState appearance = getBlockAppearance(world, pos, true);
 			player.sendMessage(new TextComponentString(MiscUtils.toString(appearance)));
 			return true;

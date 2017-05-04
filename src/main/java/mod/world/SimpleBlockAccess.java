@@ -40,7 +40,7 @@ public abstract class SimpleBlockAccess implements IBlockAccess {
 	}
 	
 	public int getLightFor(EnumSkyBlock type, BlockPos pos) {
-		if (type == EnumSkyBlock.SKY && getWorld().provider.hasNoSky()) return 0;
+		if (type == EnumSkyBlock.SKY && !getWorld().provider.hasSkyLight()) return 0;
 		if (checkHeight(pos)) {
 			Chunk chunk = getChunk(pos);
 			if (chunk != null) return chunk.getLightFor(type, pos);

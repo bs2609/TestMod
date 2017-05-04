@@ -1,6 +1,5 @@
 package mod.block;
 
-import com.google.common.base.Function;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
@@ -20,13 +19,13 @@ public abstract class VariantBlock<E extends Enum<E> & IStringSerializable> exte
 	
 	@Override
 	protected ItemBlock createItemBlock() {
-		Function<ItemStack, String> function = new Function<ItemStack, String>() {
+		ItemMultiTexture.Mapper mapper = new ItemMultiTexture.Mapper() {
 			@Override
 			public String apply(ItemStack input) {
 				return getTypeForMeta(input.getMetadata()).getName();
 			}
 		};
-		return new ItemMultiTexture(this, this, function);
+		return new ItemMultiTexture(this, this, mapper);
 	}
 	
 	public abstract int getMetaForType(E type);
