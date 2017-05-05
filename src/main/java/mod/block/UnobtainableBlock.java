@@ -28,6 +28,6 @@ public abstract class UnobtainableBlock extends BasicBlock {
 	
 	@Override
 	public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 }

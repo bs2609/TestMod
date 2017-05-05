@@ -382,7 +382,7 @@ public class SurrealBlock extends BasicBlock {
 	
 	@Override
 	public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 	
 	@Override
