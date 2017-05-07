@@ -58,7 +58,7 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 	}
 	
 	private boolean[] getGrid(int x, int z) {
-		final byte[] weights = {32, 48, 32, 48, 64, 48, 32, 48, 32};
+		final byte[] weights = {0, 32, 0, 32, 64, 32, 0, 32, 0};
 		boolean[] grid = new boolean[9];
 		long xz = MiscUtils.getChunkSeed(x, z);
 		Random random = new Random(seed ^ xz);
