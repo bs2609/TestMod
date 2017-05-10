@@ -13,8 +13,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PartialChunk extends EmptyChunk {
 	
-	public PartialChunk(World worldIn, int x, int z) {
-		super(worldIn, x, z);
+	public PartialChunk(World world, int x, int z) {
+		super(world, x, z);
 	}
 	
 	@Override
