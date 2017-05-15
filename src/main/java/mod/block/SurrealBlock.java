@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -59,7 +60,8 @@ public class SurrealBlock extends BasicBlock {
 	
 	public static final int DIM_ID = 0;
 	
-	private final IBlockState fallback = new Block(MaterialType.SOLID.getExample()).getDefaultState();
+	private static final IBlockState fallback = new Block(MaterialType.SOLID.getExample()).getDefaultState();
+	private static final IBlockState air = Blocks.AIR.getDefaultState();
 	
 	private final ChunkBuffer buffer = new ChunkBuffer() {
 		
@@ -314,11 +316,8 @@ public class SurrealBlock extends BasicBlock {
 	
 	@Override
 	public int getLightOpacity(IBlockState state, IBlockAccess access, BlockPos pos) {
-		/* // on hold due to bugs
 		IBlockState appearance = getBlockAppearance(access, pos, true);
-		return appearance.getLightOpacity();
-		*/
-		return state.getLightOpacity();
+		return (appearance == air ? state : appearance).getLightOpacity();
 	}
 	
 	@Override
