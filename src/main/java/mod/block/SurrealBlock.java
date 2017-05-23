@@ -10,6 +10,7 @@ import mod.util.MiscUtils;
 import mod.world.ModDimensions;
 import mod.world.SimpleBlockAccess;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -19,6 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -304,6 +306,12 @@ public class SurrealBlock extends BasicBlock {
 		BlockPos inverted = getInverted(pos);
 		IBlockState appearance = getBlockAppearance(remapper, inverted);
 		return appearance.getBlock().isPassable(remapper, inverted);
+	}
+	
+	@Override
+	public SoundType getSoundType(IBlockState state, World world, BlockPos pos, Entity entity) {
+		IBlockState appearance = getBlockAppearance(world, pos, true);
+		return appearance.getBlock().getSoundType();
 	}
 	
 	@Override
