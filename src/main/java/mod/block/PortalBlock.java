@@ -9,7 +9,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -20,8 +19,9 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.UUID;
 
 public class PortalBlock extends BasicBlock {
 
@@ -38,7 +38,7 @@ public class PortalBlock extends BasicBlock {
 		}
 	}
 	
-	private static final Map<EntityPlayerMP, DimensionPos> cachedPositions = new WeakHashMap<EntityPlayerMP, DimensionPos>();
+	private static final Map<UUID, DimensionPos> cachedPositions = new HashMap<UUID, DimensionPos>();
 
 	PortalBlock() {
 		super(NAME, Material.ROCK, CreativeTabs.BUILDING_BLOCKS);
@@ -59,8 +59,8 @@ public class PortalBlock extends BasicBlock {
 			Teleporter teleporter;
 			
 			if (dimension == player.dimension) {
-				if (cachedPositions.containsKey(player)) {
-					DimensionPos dimPos = cachedPositions.get(player);
+				DimensionPos dimPos = cachedPositions.get(player.getUniqueID());
+				if (dimPos != null) {
 					dimension = dimPos.dimension;
 					WorldServer world = MiscUtils.worldServerForDimension(dimension);
 					teleporter = new BlockPosTeleporter(world, dimPos.position);
@@ -72,7 +72,7 @@ public class PortalBlock extends BasicBlock {
 				}
 				
 			} else {
-				cachedPositions.put(player, new DimensionPos(player.dimension, new BlockPos(player)));
+				cachedPositions.put(player.getUniqueID(), new DimensionPos(player.dimension, new BlockPos(player)));
 				WorldServer world = MiscUtils.worldServerForDimension(dimension);
 				teleporter = new PortalBlockTeleporter(world);
 			}
