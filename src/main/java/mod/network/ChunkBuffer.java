@@ -7,7 +7,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 
-public abstract class ChunkBuffer {
+public abstract class ChunkBuffer implements IDataReceiver<Chunk> {
 	
 	private final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap<Chunk>(1024);
 	
@@ -28,8 +28,8 @@ public abstract class ChunkBuffer {
 		return null;
 	}
 	
-	public void putChunk(int x, int z, Chunk chunk) {
-		long key = ChunkPos.asLong(x, z);
+	public void putChunk(Chunk chunk) {
+		long key = ChunkPos.asLong(chunk.xPosition, chunk.zPosition);
 		synchronized (chunks) {
 			chunks.put(key, chunk);
 		}
@@ -52,6 +52,11 @@ public abstract class ChunkBuffer {
 		synchronized (chunks) {
 			chunks.clear();
 		}
+	}
+	
+	@Override
+	public void accept(Chunk chunk) {
+		putChunk(chunk);
 	}
 	
 	protected abstract void onMissingChunk(int x, int z);

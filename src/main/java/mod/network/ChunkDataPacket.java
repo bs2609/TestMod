@@ -62,11 +62,11 @@ public class ChunkDataPacket implements IMessage {
 	
 	public static class Handler implements IMessageHandler<ChunkDataPacket, IMessage> {
 		
-		private static final Map<Integer, ChunkBuffer> chunkHandlers = new HashMap<Integer, ChunkBuffer>();
+		private static final Map<Integer, IDataReceiver<Chunk>> chunkHandlers = new HashMap<Integer, IDataReceiver<Chunk>>();
 		
 		private static int id = 0;
 		
-		public static int register(ChunkBuffer destination) {
+		public static int register(IDataReceiver<Chunk> destination) {
 			chunkHandlers.put(id, destination);
 			return id++;
 		}
@@ -76,7 +76,8 @@ public class ChunkDataPacket implements IMessage {
 			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					chunkHandlers.get(msg.id).putChunk(msg.chunk.xPosition, msg.chunk.zPosition, msg.chunk);
+					IDataReceiver<Chunk> receiver = chunkHandlers.get(msg.id);
+					if (receiver != null) receiver.accept(msg.chunk);
 				}
 			});
 			return null;
