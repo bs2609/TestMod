@@ -1,12 +1,14 @@
 package mod.block;
 
 import mod.model.SurrealBlockModel;
+import mod.network.CachingChunkBuffer;
+import mod.network.ChunkBuffer;
 import mod.network.ChunkDataPacket;
 import mod.network.ChunkRequestPacket;
 import mod.network.ModPacketHandler;
-import mod.network.ChunkBuffer;
 import mod.util.BlockAccessRemapper;
 import mod.util.MiscUtils;
+import mod.world.CachedWorldAccess;
 import mod.world.ModDimensions;
 import mod.world.SimpleBlockAccess;
 import net.minecraft.block.Block;
@@ -65,7 +67,7 @@ public class SurrealBlock extends BasicBlock {
 	private static final IBlockState fallback = new Block(MaterialType.SOLID.getExample()).getDefaultState();
 	private static final IBlockState air = Blocks.AIR.getDefaultState();
 	
-	private final ChunkBuffer buffer = new ChunkBuffer() {
+	private final ChunkBuffer buffer = new CachingChunkBuffer() {
 		
 		private final int id = ChunkDataPacket.Handler.register(this);
 		
@@ -95,6 +97,8 @@ public class SurrealBlock extends BasicBlock {
 			return Minecraft.getMinecraft().world.init();
 		}
 	};
+	
+	private final IBlockAccess worldAccess = new CachedWorldAccess(DIM_ID);
 	
 	@SideOnly(Side.CLIENT)
 	private class ColourHandler implements IBlockColor {
@@ -151,7 +155,7 @@ public class SurrealBlock extends BasicBlock {
 				case CLIENT:
 					return bufferAccess;
 				case SERVER:
-					return MiscUtils.worldServerForDimension(DIM_ID);
+					return worldAccess;
 				default:
 					throw new IllegalArgumentException("Invalid side: " + side);
 			}
