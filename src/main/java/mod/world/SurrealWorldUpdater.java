@@ -18,7 +18,7 @@ public class SurrealWorldUpdater extends AbstractWorldEventListener {
 	public void notifyBlockUpdate(World world, BlockPos pos, IBlockState oldState, IBlockState newState, int flags) {
 		if (oldState == newState) return;
 		BlockPos inverted = new BlockPos(pos.getX(), 255-pos.getY(), pos.getZ());
-		updater.queueUpdate(inverted, SurrealBlock.canReplace(newState) ? SurrealBlock.getStateFor(newState) : air);
+		updater.queueUpdate(inverted, SurrealBlock.StateMapper.isValid(newState) ? SurrealBlock.StateMapper.getStateFor(newState) : air);
 	}
 	
 	@SubscribeEvent
