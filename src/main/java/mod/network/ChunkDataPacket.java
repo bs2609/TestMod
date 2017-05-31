@@ -26,25 +26,34 @@ public class ChunkDataPacket implements IMessage {
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
+		
 		PacketBuffer buffer = new PacketBuffer(buf);
 		id = buffer.readInt();
 		chunk = new PartialChunk(null, buffer.readInt(), buffer.readInt());
+		
 		int mask = buffer.readInt();
+		boolean flag = buffer.readBoolean();
+		
 		ExtendedBlockStorage[] array = chunk.getBlockStorageArray();
 		for (int i = 0; i < array.length; ++i) {
 			if ((mask & 1 << i) != 0) {
-				array[i] = new ExtendedBlockStorage(i << 4, false);
+				array[i] = new ExtendedBlockStorage(i << 4, flag);
 				array[i].getData().read(buffer);
+				buffer.readBytes(array[i].getBlocklightArray().getData());
+				if (flag) buffer.readBytes(array[i].getSkylightArray().getData());
 			}
 		}
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf) {
+		
 		PacketBuffer buffer = new PacketBuffer(buf);
 		buffer.writeInt(id);
+		
 		buffer.writeInt(chunk.xPosition);
 		buffer.writeInt(chunk.zPosition);
+		
 		int mask = 0;
 		ExtendedBlockStorage[] array = chunk.getBlockStorageArray();
 		for (int i = 0; i < array.length; ++i) {
@@ -53,9 +62,15 @@ public class ChunkDataPacket implements IMessage {
 			}
 		}
 		buffer.writeInt(mask);
-		for (int i = 0; i < array.length; ++i) {
-			if (array[i] != Chunk.NULL_BLOCK_STORAGE) {
-				array[i].getData().write(buffer);
+		
+		boolean flag = chunk.getWorld().provider.hasSkyLight();
+		buffer.writeBoolean(flag);
+		
+		for (ExtendedBlockStorage storage : array) {
+			if (storage != Chunk.NULL_BLOCK_STORAGE) {
+				storage.getData().write(buffer);
+				buffer.writeBytes(storage.getBlocklightArray().getData());
+				if (flag) buffer.writeBytes(storage.getSkylightArray().getData());
 			}
 		}
 	}
