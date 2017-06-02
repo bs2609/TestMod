@@ -12,8 +12,6 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 public class SurrealChunkGenerator extends AbstractChunkGenerator {
 	
 	private final PortalFieldGenerator portalGen = new PortalFieldGenerator();
-	
-	private Chunk templateChunk;
 
 	public SurrealChunkGenerator(World world) {
 		super(world);
@@ -21,30 +19,40 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 
 	@Override
 	public Chunk provideChunk(int x, int z) {
-		templateChunk = getTemplate().getChunkFromChunkCoords(x, z);
+		Chunk template = loadTemplate(getWorld(), x, z);
 		ChunkPrimer primer = new ChunkPrimer();
-		pregenChunk(primer);
+		pregenChunk(primer, template);
 		portalGen.generate(primer);
 		Chunk chunk = new Chunk(world, x, z);
 		fillChunk(chunk, primer);
-		chunk.setBiomeArray(templateChunk.getBiomeArray());
-		templateChunk = null;
+		chunk.setBiomeArray(template.getBiomeArray());
 		chunk.generateSkylightMap();
 		return chunk;
 	}
 	
-	private World getTemplate() {
+	private World getWorld() {
 		return MiscUtils.worldServerForDimension(SurrealBlock.DIM_ID);
 	}
+	
+	private Chunk loadTemplate(World world, int x, int z) {
+		Chunk template = null;
+		for (int dx = -1; dx <= 1; ++dx) {
+			for (int dz = -1; dz <= 1; ++dz) {
+				Chunk chunk = world.getChunkFromChunkCoords(x+dx, z+dz);
+				if (dx == 0 && dz == 0) template = chunk;
+			}
+		}
+		return template;
+	}
 
-	private void pregenChunk(ChunkPrimer primer) {
+	private void pregenChunk(ChunkPrimer primer, Chunk template) {
 		
-		int top = templateChunk.getTopFilledSegment() + 16;
+		int top = template.getTopFilledSegment() + 16;
 		
 		for (int cx = 0; cx < 16; ++cx) {
 			for (int cz = 0; cz < 16; ++cz) {
 				for (int cy = 0; cy < top; ++cy) {
-					IBlockState state = templateChunk.getBlockState(cx, cy, cz);
+					IBlockState state = template.getBlockState(cx, cy, cz);
 					if (SurrealBlock.StateMapper.isValid(state)) {
 						primer.setBlockState(cx, 255-cy, cz, SurrealBlock.StateMapper.getStateFor(state));
 					}
