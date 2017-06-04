@@ -14,7 +14,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "0.3.2"
+version = "0.3.4"
 group = "com.example.testing" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "testing"
 
