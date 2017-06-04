@@ -43,6 +43,8 @@ public class ChunkDataPacket implements IMessage {
 				if (flag) buffer.readBytes(array[i].getSkylightArray().getData());
 			}
 		}
+		
+		buffer.readBytes(chunk.getBiomeArray());
 	}
 	
 	@Override
@@ -73,6 +75,8 @@ public class ChunkDataPacket implements IMessage {
 				if (flag) buffer.writeBytes(storage.getSkylightArray().getData());
 			}
 		}
+		
+		buffer.writeBytes(chunk.getBiomeArray());
 	}
 	
 	public static class Handler implements IMessageHandler<ChunkDataPacket, IMessage> {
