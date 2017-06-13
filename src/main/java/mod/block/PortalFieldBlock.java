@@ -44,7 +44,7 @@ public class PortalFieldBlock extends UnobtainableBlock {
 		if (!world.isRemote && entity instanceof EntityPlayerMP && PortalUtils.checkEntity(entity)) {
 			EntityPlayerMP player = (EntityPlayerMP) entity;
 			int dim = 0;
-			WorldServer destination = MiscUtils.worldServerForDimension(dim);
+			WorldServer destination = MiscUtils.getWorld(dim);
 			Teleporter teleporter = new SpawnTeleporter(destination);
 			
 			world.getMinecraftServer().getPlayerList().transferPlayerToDimension(player, dim, teleporter);

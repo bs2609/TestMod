@@ -74,7 +74,7 @@ public class PortalTeleporter extends Teleporter {
 		BlockPos entityPos = new BlockPos(entity);
 		BlockArea init = new BlockArea(entityPos, entityPos.add(portalSize));
 		Vec3d v = entity.getPositionVector().subtract(getBottomCentre(init));
-		return init.translate(new Vec3i(v.xCoord, v.yCoord, v.zCoord));
+		return init.translate(new Vec3i(v.x, v.y, v.z));
 	}
 
 	private BlockArea clearArea(BlockArea area) {
@@ -112,7 +112,7 @@ public class PortalTeleporter extends Teleporter {
 	}
 
 	private void placeEntity(Entity entity, Vec3d location) {
-		double x = location.xCoord, y = location.yCoord, z = location.zCoord;
+		double x = location.x, y = location.y, z = location.z;
 		float yaw = entity.rotationYaw, pitch = 0.0f;
 
 		entity.motionX = entity.motionY = entity.motionZ = 0.0;
@@ -130,7 +130,7 @@ public class PortalTeleporter extends Teleporter {
 	}
 
 	private Vec3d getEntityOffset(Entity entity, BlockArea area) {
-		if (entity.getEntityBoundingBox().intersectsWith(area.toAABB())) {
+		if (entity.getEntityBoundingBox().intersects(area.toAABB())) {
 			EnumFacing facing = entity.getHorizontalFacing();
 			EnumSet<EnumFacing.Axis> axes = EnumSet.complementOf(area.getAxes());
 			if (axes.contains(facing.getAxis())) {

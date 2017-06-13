@@ -41,7 +41,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -80,7 +79,7 @@ public class SurrealBlock extends BasicBlock {
 		@Override
 		protected void onChunkLoad(Chunk chunk) {
 			// mark chunk for render update
-			int x = chunk.xPosition << 4, z = chunk.zPosition << 4;
+			int x = chunk.x << 4, z = chunk.z << 4;
 			Minecraft.getMinecraft().world.markBlockRangeForRenderUpdate(x, 0, z, x | 15, 255, z | 15);
 		}
 	};
@@ -123,14 +122,14 @@ public class SurrealBlock extends BasicBlock {
 		public void onChunkLoad(ChunkEvent.Load event) {
 			if (!checkWorld(event.getWorld())) return;
 			Chunk chunk = event.getChunk();
-			buffer.getChunk(chunk.xPosition, chunk.zPosition);
+			buffer.getChunk(chunk.x, chunk.z);
 		}
 		
 		@SubscribeEvent
 		public void onChunkUnload(ChunkEvent.Unload event) {
 			if (!checkWorld(event.getWorld())) return;
 			Chunk chunk = event.getChunk();
-			buffer.removeChunk(chunk.xPosition, chunk.zPosition);
+			buffer.removeChunk(chunk.x, chunk.z);
 		}
 	}
 	
@@ -195,12 +194,13 @@ public class SurrealBlock extends BasicBlock {
 				.withProperty(OPAQUE_CUBE, true)
 				.withProperty(MATERIAL_TYPE, MaterialType.SOLID);
 	}
-
+	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		IProperty[] listedProperties = new IProperty[] {FULL_CUBE, OPAQUE_CUBE, MATERIAL_TYPE};
-		IUnlistedProperty[] unlistedProperties = new IUnlistedProperty[] {APPEARANCE};
-		return new ExtendedBlockState(this, listedProperties, unlistedProperties);
+		return new BlockStateContainer.Builder(this)
+				.add(FULL_CUBE, OPAQUE_CUBE, MATERIAL_TYPE)
+				.add(APPEARANCE)
+				.build();
 	}
 	
 	@Override
@@ -301,7 +301,7 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	private static Vec3d invert(Vec3d vec) {
-		return (vec.yCoord == 0.0) ? vec : new Vec3d(vec.xCoord, -vec.yCoord, vec.zCoord);
+		return (vec.y == 0.0) ? vec : new Vec3d(vec.x, -vec.y, vec.z);
 	}
 	
 	@Override

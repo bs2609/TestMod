@@ -39,8 +39,8 @@ public class ChunkDataPacket implements IMessage {
 			if ((mask & 1 << i) != 0) {
 				array[i] = new ExtendedBlockStorage(i << 4, flag);
 				array[i].getData().read(buffer);
-				buffer.readBytes(array[i].getBlocklightArray().getData());
-				if (flag) buffer.readBytes(array[i].getSkylightArray().getData());
+				buffer.readBytes(array[i].getBlockLight().getData());
+				if (flag) buffer.readBytes(array[i].getSkyLight().getData());
 			}
 		}
 		
@@ -53,8 +53,8 @@ public class ChunkDataPacket implements IMessage {
 		PacketBuffer buffer = new PacketBuffer(buf);
 		buffer.writeInt(id);
 		
-		buffer.writeInt(chunk.xPosition);
-		buffer.writeInt(chunk.zPosition);
+		buffer.writeInt(chunk.x);
+		buffer.writeInt(chunk.z);
 		
 		int mask = 0;
 		ExtendedBlockStorage[] array = chunk.getBlockStorageArray();
@@ -71,8 +71,8 @@ public class ChunkDataPacket implements IMessage {
 		for (ExtendedBlockStorage storage : array) {
 			if (storage != Chunk.NULL_BLOCK_STORAGE) {
 				storage.getData().write(buffer);
-				buffer.writeBytes(storage.getBlocklightArray().getData());
-				if (flag) buffer.writeBytes(storage.getSkylightArray().getData());
+				buffer.writeBytes(storage.getBlockLight().getData());
+				if (flag) buffer.writeBytes(storage.getSkyLight().getData());
 			}
 		}
 		

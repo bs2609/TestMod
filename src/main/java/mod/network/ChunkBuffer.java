@@ -29,7 +29,7 @@ public abstract class ChunkBuffer implements IDataReceiver<Chunk> {
 	}
 	
 	public void putChunk(Chunk chunk) {
-		long key = ChunkPos.asLong(chunk.xPosition, chunk.zPosition);
+		long key = ChunkPos.asLong(chunk.x, chunk.z);
 		synchronized (chunks) {
 			chunks.put(key, chunk);
 		}

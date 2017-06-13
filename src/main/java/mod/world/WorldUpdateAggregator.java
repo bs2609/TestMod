@@ -27,7 +27,7 @@ public class WorldUpdateAggregator {
 	}
 	
 	public void applyUpdates() {
-		WorldServer world = MiscUtils.worldServerForDimension(dimension);
+		WorldServer world = MiscUtils.getWorld(dimension);
 		for (Map.Entry<BlockPos, IBlockState> entry : updates.entrySet()) {
 			BlockPos pos = entry.getKey();
 			Chunk chunk = world.getChunkProvider().loadChunk(pos.getX() >> 4, pos.getZ() >> 4);

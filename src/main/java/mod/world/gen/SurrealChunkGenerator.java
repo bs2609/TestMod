@@ -18,7 +18,7 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 	}
 
 	@Override
-	public Chunk provideChunk(int x, int z) {
+	public Chunk generateChunk(int x, int z) {
 		Chunk template = loadTemplate(getWorld(), x, z);
 		ChunkPrimer primer = new ChunkPrimer();
 		pregenChunk(primer, template);
@@ -31,7 +31,7 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 	}
 	
 	private World getWorld() {
-		return MiscUtils.worldServerForDimension(SurrealBlock.DIM_ID);
+		return MiscUtils.getWorld(SurrealBlock.DIM_ID);
 	}
 	
 	private Chunk loadTemplate(World world, int x, int z) {

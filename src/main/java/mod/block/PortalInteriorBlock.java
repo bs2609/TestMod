@@ -94,7 +94,7 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 		int origin = world.provider.getDimension();
 		int destination = PortalUtils.getDestinationDimension(typeIn, origin);
 		
-		WorldServer worldOut = MiscUtils.worldServerForDimension(destination);
+		WorldServer worldOut = MiscUtils.getWorld(destination);
 		Teleporter teleporter;
 		
 		if (PortalUtils.checkDestination(entity, world, worldOut)) {
@@ -103,7 +103,7 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 			
 		} else {
 			destination = ModDimensions.DIM_SURREAL;
-			worldOut = MiscUtils.worldServerForDimension(destination);
+			worldOut = MiscUtils.getWorld(destination);
 			teleporter = new SurrealWorldTeleporter(worldOut);
 			entity.sendMessage(new TextComponentString("Error/.Error"));
 		}

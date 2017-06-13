@@ -44,7 +44,7 @@ public class ChunkRequestPacket implements IMessage {
 				@Override
 				public void run() {
 					EntityPlayerMP player = ctx.getServerHandler().player;
-					Chunk chunk = player.mcServer.worldServerForDimension(msg.dim).getChunkFromChunkCoords(msg.x, msg.z);
+					Chunk chunk = player.mcServer.getWorld(msg.dim).getChunkFromChunkCoords(msg.x, msg.z);
 					ModPacketHandler.INSTANCE.sendTo(new ChunkDataPacket(msg.id, chunk), player);
 				}
 			});

@@ -62,18 +62,18 @@ public class PortalBlock extends BasicBlock {
 				DimensionPos dimPos = cachedPositions.get(player.getUniqueID());
 				if (dimPos != null) {
 					dimension = dimPos.dimension;
-					WorldServer world = MiscUtils.worldServerForDimension(dimension);
+					WorldServer world = MiscUtils.getWorld(dimension);
 					teleporter = new BlockPosTeleporter(world, dimPos.position);
 					
 				} else {
 					dimension = 0;
-					WorldServer world = MiscUtils.worldServerForDimension(dimension);
+					WorldServer world = MiscUtils.getWorld(dimension);
 					teleporter = new SpawnTeleporter(world);
 				}
 				
 			} else {
 				cachedPositions.put(player.getUniqueID(), new DimensionPos(player.dimension, new BlockPos(player)));
-				WorldServer world = MiscUtils.worldServerForDimension(dimension);
+				WorldServer world = MiscUtils.getWorld(dimension);
 				teleporter = new PortalBlockTeleporter(world);
 			}
 			

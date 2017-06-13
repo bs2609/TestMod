@@ -41,7 +41,7 @@ public class CommandSample extends CommandBase {
 			}
 		}
 		
-		String msg = "Chunk [" + chunk.xPosition + ", " + chunk.zPosition + "] contains " + states.elementSet().size() + " blockstates";
+		String msg = "Chunk [" + chunk.x + ", " + chunk.z + "] contains " + states.elementSet().size() + " blockstates";
 		sender.sendMessage(new TextComponentString(msg));
 	}
 }

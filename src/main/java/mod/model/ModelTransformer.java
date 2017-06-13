@@ -34,7 +34,7 @@ public abstract class ModelTransformer {
 		for (BakedQuad quad : in) {
 			out.add(cacheL2.get(quad));
 		}
-		return out;
+		return Collections.unmodifiableList(out);
 	}
 	
 	protected abstract BakedQuad transformQuad(BakedQuad quad);

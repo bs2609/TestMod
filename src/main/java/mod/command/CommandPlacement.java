@@ -60,7 +60,7 @@ public class CommandPlacement extends CommandBase {
 		Vec3i offset = VectorUtils.add(VectorUtils.scale(size, 3), 2);
 		BlockArea init = new BlockArea(position, position.add(offset));
 		Vec3d v = location.subtract(init.getRelativePosition(new Vec3d(0.5, 0.0, 0.5)));
-		BlockArea area = init.translate(new Vec3i(v.xCoord, v.yCoord, v.zCoord));
+		BlockArea area = init.translate(new Vec3i(v.x, v.y, v.z));
 		
 		sender.sendMessage(new TextComponentString("Trying to place " + size + " within " + area));
 		

@@ -22,7 +22,7 @@ public class CachedWorldAccess extends SimpleBlockAccess {
 	
 	@Override
 	protected Chunk getChunk(int x, int z) {
-		if (chunk == null || chunk.xPosition != x || chunk.zPosition != z) {
+		if (chunk == null || chunk.x != x || chunk.z != z) {
 			chunk = getWorld().getChunkFromChunkCoords(x, z);
 		}
 		return chunk;
@@ -31,7 +31,7 @@ public class CachedWorldAccess extends SimpleBlockAccess {
 	@Override
 	protected World getWorld() {
 		if (world == null) {
-			world = MiscUtils.worldServerForDimension(dim);
+			world = MiscUtils.getWorld(dim);
 		}
 		return world;
 	}
@@ -40,7 +40,7 @@ public class CachedWorldAccess extends SimpleBlockAccess {
 		
 		@SubscribeEvent
 		public void onChunkUnload(ChunkEvent.Unload event) {
-			if (chunk != null && chunk.xPosition == event.getChunk().xPosition && chunk.zPosition == event.getChunk().zPosition) {
+			if (chunk != null && chunk.x == event.getChunk().x && chunk.z == event.getChunk().z) {
 				chunk = null;
 			}
 		}

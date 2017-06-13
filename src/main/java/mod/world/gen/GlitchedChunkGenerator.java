@@ -23,20 +23,20 @@ public class GlitchedChunkGenerator extends AbstractChunkGenerator {
 	}
 
 	@Override
-	public Chunk provideChunk(int x, int z) {
+	public Chunk generateChunk(int x, int z) {
 		long seed = world.getSeed();
 		long xz = MiscUtils.getChunkSeed(x, z);
 		Random random = new Random(seed ^ xz);
 
 		if (random.nextInt(48) == 0) {
 			int off = random.nextBoolean() ? random.nextInt(32) : 1;
-			Chunk in = random.nextBoolean() ? source.provideChunk(x^off, z) : source.provideChunk(x, z^off);
+			Chunk in = random.nextBoolean() ? source.generateChunk(x^off, z) : source.generateChunk(x, z^off);
 			Chunk out = new Chunk(world, x, z);
 			cloneChunk(in, out);
 			return out;
 		}
 
-		return source.provideChunk(x, z);
+		return source.generateChunk(x, z);
 	}
 	
 	private void cloneChunk(Chunk in, Chunk out) {

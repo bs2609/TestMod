@@ -18,7 +18,7 @@ public class TestChunkGenerator extends AbstractChunkGenerator {
 	}
 
 	@Override
-	public Chunk provideChunk(int x, int z) {
+	public Chunk generateChunk(int x, int z) {
 		ChunkPrimer primer = new ChunkPrimer();
 		for (ITerrainGenerator generator : generators) {
 			generator.generate(x, z, primer);

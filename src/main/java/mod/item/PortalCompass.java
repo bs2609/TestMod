@@ -26,7 +26,7 @@ public class PortalCompass extends BasicItem {
 			BlockArea portal = PortalUtils.getClosestPortal(world, entity);
 			if (portal == null) return 0.0f;
 			Vec3d src = entity.getPositionVector(), dst = portal.getCentre();
-			double dx = dst.xCoord - src.xCoord, dz = dst.zCoord - src.zCoord;
+			double dx = dst.x - src.x, dz = dst.z - src.z;
 			double a = entity.rotationYaw / 180.0 + 0.5, b = Math.atan2(dz, dx) / Math.PI;
 			return (float) ((a + b + 1.0) % 2.0 * 0.5);
 		}

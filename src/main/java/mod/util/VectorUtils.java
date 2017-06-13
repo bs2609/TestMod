@@ -23,7 +23,7 @@ public class VectorUtils {
 	}
 
 	public static Vec3d multiply(Vec3d a, Vec3d b) {
-		return new Vec3d(a.xCoord*b.xCoord, a.yCoord*b.yCoord, a.zCoord*b.zCoord);
+		return new Vec3d(a.x * b.x, a.y * b.y, a.z * b.z);
 	}
 
 	public static Vec3i add(Vec3i vec, int n) {

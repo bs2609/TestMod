@@ -34,7 +34,7 @@ public class MiscUtils {
 		return table;
 	}
 
-	public static WorldServer worldServerForDimension(int dimension) {
+	public static WorldServer getWorld(int dimension) {
 		WorldServer world = DimensionManager.getWorld(dimension);
 		if (world == null) {
 			DimensionManager.initDimension(dimension);

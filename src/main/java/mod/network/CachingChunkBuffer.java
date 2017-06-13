@@ -13,7 +13,7 @@ public abstract class CachingChunkBuffer extends ChunkBuffer {
 	public Chunk getChunk(int x, int z) {
 		Reference<Chunk> ref = lastAccess.get();
 		Chunk chunk = ref != null ? ref.get() : null;
-		if (chunk == null || chunk.xPosition != x || chunk.zPosition != z) {
+		if (chunk == null || chunk.x != x || chunk.z != z) {
 			chunk = super.getChunk(x, z);
 			lastAccess.set(new WeakReference<Chunk>(chunk));
 		}

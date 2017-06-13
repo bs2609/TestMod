@@ -87,9 +87,9 @@ public class BlockArea implements Iterable<BlockPos>, INBTSerializable<NBTTagCom
 	}
 
 	public Vec3d getRelativePosition(Vec3d vec) {
-		double x = (1.0-vec.xCoord) * minPos.getX() + vec.xCoord * (maxPos.getX()+1.0);
-		double y = (1.0-vec.yCoord) * minPos.getY() + vec.yCoord * (maxPos.getY()+1.0);
-		double z = (1.0-vec.zCoord) * minPos.getZ() + vec.zCoord * (maxPos.getZ()+1.0);
+		double x = (1.0-vec.x) * minPos.getX() + vec.x * (maxPos.getX()+1.0);
+		double y = (1.0-vec.y) * minPos.getY() + vec.y * (maxPos.getY()+1.0);
+		double z = (1.0-vec.z) * minPos.getZ() + vec.z * (maxPos.getZ()+1.0);
 		return new Vec3d(x, y, z);
 	}
 	
