@@ -21,6 +21,7 @@ public class DimensionInstances {
 		instanceMap.put("islands", new FloatingIslands());
 		instanceMap.put("ocean", new OceanChambers());
 		instanceMap.put("ice", new IceSieve());
+		instanceMap.put("pillars", new BridgedPillars());
 		instanceMap.put("pyramids", new PyramidLand());
 		instanceMap.put("walkways", new EndlessWalkways());
 	}
@@ -94,6 +95,23 @@ public class DimensionInstances {
 		public IChunkGenerator getChunkGenerator(World world) {
 			List<ITerrainGenerator> generators = new ArrayList<ITerrainGenerator>();
 			generators.add(new CrossingGenerator(world.getSeed()));
+			return new TestChunkGenerator(world, generators);
+		}
+	}
+
+	public static class BridgedPillars implements IDimensionSpecifier {
+
+		private BridgedPillars() {}
+
+		@Override
+		public BiomeProvider getBiomeProvider(World world) {
+			return new BiomeProviderSingle(Biomes.OCEAN);
+		}
+
+		@Override
+		public IChunkGenerator getChunkGenerator(World world) {
+			List<ITerrainGenerator> generators = new ArrayList<ITerrainGenerator>();
+			generators.add(new PillarGenerator(world.getSeed()));
 			return new TestChunkGenerator(world, generators);
 		}
 	}
