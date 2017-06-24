@@ -18,7 +18,7 @@ public class SpawnTeleporter extends SimpleTeleporter {
 			BlockPos bed = player.getBedLocation(0);
 			if (bed != null) return bed;
 		}
-		return worldAccess.getTopSolidOrLiquidBlock(worldAccess.getSpawnPoint());
+		return world.getTopSolidOrLiquidBlock(world.getSpawnPoint());
 	}
 
 }

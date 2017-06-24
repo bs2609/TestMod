@@ -19,14 +19,11 @@ import java.util.EnumSet;
 
 public class PortalTeleporter extends Teleporter {
 	
-	protected final WorldServer worldAccess;
-	
 	private final Vec3i portalSize;
 	private final PortalType portalType;
 	
 	public PortalTeleporter(WorldServer world, Vec3i size, PortalType type) {
 		super(world);
-		worldAccess = world;
 		portalSize = size;
 		portalType = type;
 	}
@@ -57,15 +54,15 @@ public class PortalTeleporter extends Teleporter {
 		IBlockState frame = Portal.getFrame(portalType);
 		IBlockState border = Portal.getBorder();
 		IBlockState interior = Portal.getInterior(portalType);
-		return PortalUtils.constructPortal(worldAccess, area, frame, border, interior);
+		return PortalUtils.constructPortal(world, area, frame, border, interior);
 	}
 
 	private BlockArea hasExistingPortal(Entity entity) {
 		BlockPos entityPos = new BlockPos(entity);
 		Vec3i range = new Vec3i(16, 16, 16);
 		BlockArea searchArea = new BlockArea(entityPos.subtract(range), entityPos.add(range));
-		for (BlockArea area : PortalUtils.getPortalsWithin(worldAccess, searchArea)) {
-			if (PortalUtils.getPortalType(worldAccess, area) == portalType) return area;
+		for (BlockArea area : PortalUtils.getPortalsWithin(world, searchArea)) {
+			if (PortalUtils.getPortalType(world, area) == portalType) return area;
 		}
 		return null;
 	}
@@ -93,8 +90,8 @@ public class PortalTeleporter extends Teleporter {
 		IBlockState clearBlock = Blocks.AIR.getDefaultState();
 
 		for (BlockPos pos : clearArea) {
-			if (!internal.contains(pos) && !worldAccess.isAirBlock(pos)) {
-				worldAccess.setBlockState(pos, clearBlock);
+			if (!internal.contains(pos) && !world.isAirBlock(pos)) {
+				world.setBlockState(pos, clearBlock);
 			}
 		}
 
@@ -102,9 +99,9 @@ public class PortalTeleporter extends Teleporter {
 		IBlockState floorBlock = Blocks.COBBLESTONE.getDefaultState();
 
 		for (BlockPos pos : floorArea) {
-			IBlockState state = worldAccess.getBlockState(pos);
-			if (!state.getBlock().isSideSolid(state, worldAccess, pos, EnumFacing.UP)) {
-				worldAccess.setBlockState(pos, floorBlock);
+			IBlockState state = world.getBlockState(pos);
+			if (!state.getBlock().isSideSolid(state, world, pos, EnumFacing.UP)) {
+				world.setBlockState(pos, floorBlock);
 			}
 		}
 

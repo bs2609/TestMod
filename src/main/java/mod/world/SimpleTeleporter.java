@@ -7,11 +7,8 @@ import net.minecraft.world.WorldServer;
 
 public abstract class SimpleTeleporter extends Teleporter {
 
-	protected final WorldServer worldAccess;
-
 	protected SimpleTeleporter(WorldServer world) {
 		super(world);
-		worldAccess = world;
 	}
 
 	@Override

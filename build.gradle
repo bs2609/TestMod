@@ -14,12 +14,12 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "0.3.4"
+version = "0.3.5"
 group = "com.example.testing" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "testing"
 
 minecraft {
-    version = "1.11.2-13.20.0.2308"
+    version = "1.11.2-13.20.0.2315"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
