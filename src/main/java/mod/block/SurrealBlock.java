@@ -1,11 +1,7 @@
 package mod.block;
 
 import mod.model.SurrealBlockModel;
-import mod.network.CachingChunkBuffer;
-import mod.network.ChunkBuffer;
-import mod.network.ChunkDataPacket;
-import mod.network.ChunkRequestPacket;
-import mod.network.ModPacketHandler;
+import mod.network.*;
 import mod.util.BlockAccessRemapper;
 import mod.util.MiscUtils;
 import mod.world.CachedWorldAccess;
@@ -68,7 +64,7 @@ public class SurrealBlock extends BasicBlock {
 	
 	private final ChunkBuffer buffer = new CachingChunkBuffer() {
 		
-		private final int id = ChunkDataPacket.Handler.register(this);
+		private final int id = ModPacketHandler.registerWithHandlers(this, new ChunkRequestPacket.Validator(DIM_ID));
 		
 		@Override
 		protected void onMissingChunk(int x, int z) {

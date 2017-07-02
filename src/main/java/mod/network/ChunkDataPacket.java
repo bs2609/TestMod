@@ -81,13 +81,10 @@ public class ChunkDataPacket implements IMessage {
 	
 	public static class Handler implements IMessageHandler<ChunkDataPacket, IMessage> {
 		
-		private static final Map<Integer, IDataReceiver<Chunk>> chunkHandlers = new HashMap<Integer, IDataReceiver<Chunk>>();
+		static final Map<Integer, IDataReceiver<Chunk>> chunkHandlers = new HashMap<Integer, IDataReceiver<Chunk>>();
 		
-		private static int id = 0;
-		
-		public static int register(IDataReceiver<Chunk> destination) {
+		static void register(int id, IDataReceiver<Chunk> destination) {
 			chunkHandlers.put(id, destination);
-			return id++;
 		}
 		
 		@Override
