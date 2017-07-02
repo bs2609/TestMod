@@ -1,10 +1,6 @@
 package mod.command;
 
-import mod.util.BlockArea;
-import mod.util.BlockStateChecker;
-import mod.util.BlockStructurePlacementHelper;
-import mod.util.VectorUtils;
-import net.minecraft.block.state.IBlockState;
+import mod.util.*;
 import net.minecraft.command.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
@@ -18,13 +14,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class CommandPlacement extends CommandBase {
-	
-	private static final BlockStateChecker airBlocks = new BlockStateChecker() {
-		@Override
-		public boolean check(World world, BlockPos pos, IBlockState state) {
-			return state.getBlock().isAir(state, world, pos);
-		}
-	};
 	
 	private static Vec3i parseSize(String[] args, int idx, int max) throws NumberInvalidException {
 		int x = parseInt(args[idx  ], 0, max);
@@ -64,7 +53,7 @@ public class CommandPlacement extends CommandBase {
 		
 		sender.sendMessage(new TextComponentString("Trying to place " + size + " within " + area));
 		
-		BlockStructurePlacementHelper helper = new BlockStructurePlacementHelper(world, area, airBlocks);
+		BlockStructurePlacementHelper helper = new BlockStructurePlacementHelper(world, area, BlockUtils.airBlocks);
 		Set<BlockArea> valid = helper.findPlacementsFor(size);
 		
 		sender.sendMessage(new TextComponentString("Found " + valid.size() + " valid placements"));

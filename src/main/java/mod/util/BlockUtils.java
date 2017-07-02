@@ -53,6 +53,20 @@ public class BlockUtils {
 			return d2 - d1;
 		}
 	};
+	
+	public static final BlockStateChecker excludeUnbreakable = new BlockStateChecker() {
+		@Override
+		public boolean check(World world, BlockPos pos, IBlockState state) {
+			return state.getBlockHardness(world, pos) >= 0.0f;
+		}
+	};
+	
+	public static final BlockStateChecker airBlocks = new BlockStateChecker() {
+		@Override
+		public boolean check(World world, BlockPos pos, IBlockState state) {
+			return state.getBlock().isAir(state, world, pos);
+		}
+	};
 
 	public static Set<BlockOffset> countBlocksInRange(World world, BlockPos from, IBlockState matching, EnumSet<EnumFacing> directions, int range) {
 		Set<BlockOffset> blocks = new HashSet<BlockOffset>();

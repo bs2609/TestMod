@@ -4,6 +4,9 @@ import mod.portal.Portal;
 import mod.portal.PortalType;
 import mod.portal.PortalUtils;
 import mod.util.BlockArea;
+import mod.util.BlockStructurePlacementHelper;
+import mod.util.BlockUtils;
+import mod.util.VectorUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -16,6 +19,9 @@ import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
 
 import java.util.EnumSet;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class PortalTeleporter extends Teleporter {
 	
@@ -68,8 +74,25 @@ public class PortalTeleporter extends Teleporter {
 	}
 
 	private BlockArea getPortalArea(Entity entity) {
+		
+		Vec3i size = VectorUtils.add(VectorUtils.scale(portalSize, 3), 2);
+		BlockArea searchArea = getArea(entity, size);
+		
+		BlockStructurePlacementHelper helper = new BlockStructurePlacementHelper(world, searchArea, BlockUtils.airBlocks);
+		Set<BlockArea> valid = helper.findPlacementsFor(portalSize);
+		
+		if (!valid.isEmpty()) {
+			SortedSet<BlockArea> sorted = new TreeSet<BlockArea>(BlockArea.compareDistancesTo(entity.getPositionVector()));
+			sorted.addAll(valid);
+			return sorted.first();
+		}
+		
+		return getArea(entity, portalSize);
+	}
+	
+	private BlockArea getArea(Entity entity, Vec3i size) {
 		BlockPos entityPos = new BlockPos(entity);
-		BlockArea init = new BlockArea(entityPos, entityPos.add(portalSize));
+		BlockArea init = new BlockArea(entityPos, entityPos.add(size));
 		Vec3d v = entity.getPositionVector().subtract(getBottomCentre(init));
 		return init.translate(new Vec3i(v.x, v.y, v.z));
 	}
