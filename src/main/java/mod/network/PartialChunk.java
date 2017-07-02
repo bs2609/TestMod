@@ -1,9 +1,9 @@
 package mod.network;
 
-import mod.TestMod;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -33,5 +33,23 @@ public class PartialChunk extends EmptyChunk {
 			}
 		}
 		return Blocks.AIR.getDefaultState();
+	}
+	
+	@Override
+	public int getLightFor(EnumSkyBlock type, BlockPos pos) {
+		
+		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
+		ExtendedBlockStorage storage = getBlockStorageArray()[y >> 4];
+		
+		if (storage == NULL_BLOCK_STORAGE) return type.defaultLightValue;
+		
+		switch (type) {
+			case SKY:
+				return storage.getSkyLight(x & 15, y & 15, z & 15);
+			case BLOCK:
+				return storage.getBlockLight(x & 15, y & 15, z & 15);
+			default:
+				return type.defaultLightValue;
+		}
 	}
 }
