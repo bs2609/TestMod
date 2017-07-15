@@ -3,7 +3,6 @@ package mod.model;
 import mod.util.MiscUtils;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.model.pipeline.*;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -36,16 +35,14 @@ public class ModelInverter extends ModelTransformer {
 			
 			@Override
 			public void put(int element, float... data) {
-				VertexFormatElement formatElement = format.getElement(element);
-				switch (formatElement.getUsage()) {
+				switch (format.getElement(element).getUsage()) {
 					case POSITION:
 						// set w manually due to bug
 						vec.set(data[0], data[1], data[2], 1.0f);
 						matrix.transform(vec);
 						vec.get(data);
-					default:
-						parent.put(element, data);
 				}
+				parent.put(element, data);
 			}
 			
 			@Override
