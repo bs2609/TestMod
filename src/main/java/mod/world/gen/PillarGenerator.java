@@ -28,9 +28,7 @@ public class PillarGenerator extends SeededTerrainGenerator {
 	}
 	
 	private int getPillarLevels(int x, int z) {
-		Random random = new Random(seed);
-		long mx = random.nextLong(), mz = random.nextLong();
-		random.setSeed(x*mx + z*mz ^ seed);
+		Random random = getRandom(x, z);
 		return random.nextInt(5) == 0 ? random.nextInt() : 0;
 	}
 	
