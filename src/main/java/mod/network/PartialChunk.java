@@ -13,8 +13,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class PartialChunk extends EmptyChunk {
 	
-	public PartialChunk(World world, int x, int z) {
+	private final boolean hasSkylight;
+	
+	public PartialChunk(World world, int x, int z, boolean skylight) {
 		super(world, x, z);
+		hasSkylight = skylight;
 	}
 	
 	@Override
@@ -37,6 +40,8 @@ public class PartialChunk extends EmptyChunk {
 	
 	@Override
 	public int getLightFor(EnumSkyBlock type, BlockPos pos) {
+		
+		if (type == EnumSkyBlock.SKY && !hasSkylight) return 0;
 		
 		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
 		ExtendedBlockStorage storage = getBlockStorageArray()[y >> 4];

@@ -28,11 +28,13 @@ public class ChunkDataPacket implements IMessage {
 	public void fromBytes(ByteBuf buf) {
 		
 		PacketBuffer buffer = new PacketBuffer(buf);
-		id = buffer.readInt();
-		chunk = new PartialChunk(null, buffer.readInt(), buffer.readInt());
 		
+		id = buffer.readInt();
+		int x = buffer.readInt(), z = buffer.readInt();
 		int mask = buffer.readInt();
 		boolean flag = buffer.readBoolean();
+		
+		chunk = new PartialChunk(null, x, z, flag);
 		
 		ExtendedBlockStorage[] array = chunk.getBlockStorageArray();
 		for (int i = 0; i < array.length; ++i) {
@@ -51,8 +53,8 @@ public class ChunkDataPacket implements IMessage {
 	public void toBytes(ByteBuf buf) {
 		
 		PacketBuffer buffer = new PacketBuffer(buf);
-		buffer.writeInt(id);
 		
+		buffer.writeInt(id);
 		buffer.writeInt(chunk.x);
 		buffer.writeInt(chunk.z);
 		
