@@ -86,11 +86,6 @@ public class SurrealBlock extends BasicBlock {
 		protected Chunk getChunk(int x, int z) {
 			return buffer.getChunk(x, z);
 		}
-		
-		@Override
-		protected World getWorld() {
-			return Minecraft.getMinecraft().world.init();
-		}
 	};
 	
 	private final IBlockAccess worldAccess = new CachedWorldAccess(DIM_ID);

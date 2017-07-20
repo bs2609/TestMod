@@ -1,7 +1,11 @@
 package mod.world;
 
 import mod.util.MiscUtils;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -28,12 +32,26 @@ public class CachedWorldAccess extends SimpleBlockAccess {
 		return chunk;
 	}
 	
-	@Override
-	protected World getWorld() {
+	private World getWorld() {
 		if (world == null) {
 			world = MiscUtils.getWorld(dim);
 		}
 		return world;
+	}
+	
+	@Override
+	public int getLightFor(EnumSkyBlock type, BlockPos pos) {
+		return type == EnumSkyBlock.SKY && !getWorld().provider.hasSkyLight() ? 0 : super.getLightFor(type, pos);
+	}
+	
+	@Override
+	public WorldType getWorldType() {
+		return getWorld().getWorldType();
+	}
+	
+	@Override
+	protected BiomeProvider getBiomeProvider() {
+		return getWorld().getBiomeProvider();
 	}
 	
 	private class EventHandler {

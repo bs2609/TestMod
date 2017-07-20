@@ -8,18 +8,20 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeProvider;
+import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class SimpleBlockAccess implements IBlockAccess {
 	
-	protected IBlockState defaultState = Blocks.AIR.getDefaultState();
+	protected final IBlockState defaultState = Blocks.AIR.getDefaultState();
+	protected final Biome defaultBiome = Biomes.DEFAULT;
 	
-	protected Biome defaultBiome = Biomes.DEFAULT;
+	private final BiomeProvider defaultProvider = new BiomeProviderSingle(defaultBiome);
 	
 	@Override
 	public TileEntity getTileEntity(BlockPos pos) {
@@ -40,7 +42,6 @@ public abstract class SimpleBlockAccess implements IBlockAccess {
 	}
 	
 	public int getLightFor(EnumSkyBlock type, BlockPos pos) {
-		if (type == EnumSkyBlock.SKY && !getWorld().provider.hasSkyLight()) return 0;
 		if (checkHeight(pos)) {
 			Chunk chunk = getChunk(pos);
 			if (chunk != null) return chunk.getLightFor(type, pos);
@@ -68,7 +69,7 @@ public abstract class SimpleBlockAccess implements IBlockAccess {
 	@SideOnly(Side.CLIENT)
 	public Biome getBiome(BlockPos pos) {
 		Chunk chunk = getChunk(pos);
-		return (chunk != null) ? chunk.getBiome(pos, getWorld().getBiomeProvider()) : defaultBiome;
+		return (chunk != null) ? chunk.getBiome(pos, getBiomeProvider()) : defaultBiome;
 	}
 	
 	@Override
@@ -79,7 +80,7 @@ public abstract class SimpleBlockAccess implements IBlockAccess {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public WorldType getWorldType() {
-		return getWorld().getWorldType();
+		return WorldType.DEFAULT;
 	}
 	
 	@Override
@@ -89,11 +90,13 @@ public abstract class SimpleBlockAccess implements IBlockAccess {
 		return (chunk != null) ? chunk.getBlockState(pos).isSideSolid(this, pos, side) : _default;
 	}
 	
+	protected BiomeProvider getBiomeProvider() {
+		return defaultProvider;
+	}
+	
 	protected Chunk getChunk(BlockPos pos) {
 		return getChunk(pos.getX() >> 4, pos.getZ() >> 4);
 	}
 	
 	protected abstract Chunk getChunk(int x, int z);
-	
-	protected abstract World getWorld();
 }
