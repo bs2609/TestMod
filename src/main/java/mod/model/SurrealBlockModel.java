@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -40,8 +41,9 @@ public class SurrealBlockModel implements IBakedModel {
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		IExtendedBlockState extendedState = (IExtendedBlockState) state;
 		IBlockState appearance = extendedState.getValue(SurrealBlock.APPEARANCE);
+		BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
 		if (appearance != null && appearance.getRenderType() == EnumBlockRenderType.MODEL
-				&& appearance.getBlock().canRenderInLayer(appearance, MinecraftForgeClient.getRenderLayer())) {
+				&& (layer == null || appearance.getBlock().canRenderInLayer(appearance, layer))) {
 			IBakedModel copiedModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(appearance);
 			return transformer.transformQuads(copiedModel.getQuads(appearance, MiscUtils.getReflected(side, EnumFacing.Axis.Y), rand));
 		}
