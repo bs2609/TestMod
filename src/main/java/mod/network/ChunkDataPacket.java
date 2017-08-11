@@ -27,12 +27,10 @@ public class ChunkDataPacket implements IMessage {
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		
-		PacketBuffer buffer = new PacketBuffer(buf);
-		
-		id = buffer.readInt();
-		int x = buffer.readInt(), z = buffer.readInt();
-		int mask = buffer.readInt();
-		boolean flag = buffer.readBoolean();
+		id = buf.readInt();
+		int x = buf.readInt(), z = buf.readInt();
+		int mask = buf.readInt();
+		boolean flag = buf.readBoolean();
 		
 		chunk = new PartialChunk(null, x, z, flag);
 		
@@ -40,23 +38,21 @@ public class ChunkDataPacket implements IMessage {
 		for (int i = 0; i < array.length; ++i) {
 			if ((mask & 1 << i) != 0) {
 				array[i] = new ExtendedBlockStorage(i << 4, flag);
-				array[i].getData().read(buffer);
-				buffer.readBytes(array[i].getBlockLight().getData());
-				if (flag) buffer.readBytes(array[i].getSkyLight().getData());
+				array[i].getData().read(new PacketBuffer(buf));
+				buf.readBytes(array[i].getBlockLight().getData());
+				if (flag) buf.readBytes(array[i].getSkyLight().getData());
 			}
 		}
 		
-		buffer.readBytes(chunk.getBiomeArray());
+		buf.readBytes(chunk.getBiomeArray());
 	}
 	
 	@Override
 	public void toBytes(ByteBuf buf) {
 		
-		PacketBuffer buffer = new PacketBuffer(buf);
-		
-		buffer.writeInt(id);
-		buffer.writeInt(chunk.x);
-		buffer.writeInt(chunk.z);
+		buf.writeInt(id);
+		buf.writeInt(chunk.x);
+		buf.writeInt(chunk.z);
 		
 		int mask = 0;
 		ExtendedBlockStorage[] array = chunk.getBlockStorageArray();
@@ -65,20 +61,20 @@ public class ChunkDataPacket implements IMessage {
 				mask |= 1 << i;
 			}
 		}
-		buffer.writeInt(mask);
+		buf.writeInt(mask);
 		
 		boolean flag = chunk.getWorld().provider.hasSkyLight();
-		buffer.writeBoolean(flag);
+		buf.writeBoolean(flag);
 		
 		for (ExtendedBlockStorage storage : array) {
 			if (storage != Chunk.NULL_BLOCK_STORAGE) {
-				storage.getData().write(buffer);
-				buffer.writeBytes(storage.getBlockLight().getData());
-				if (flag) buffer.writeBytes(storage.getSkyLight().getData());
+				storage.getData().write(new PacketBuffer(buf));
+				buf.writeBytes(storage.getBlockLight().getData());
+				if (flag) buf.writeBytes(storage.getSkyLight().getData());
 			}
 		}
 		
-		buffer.writeBytes(chunk.getBiomeArray());
+		buf.writeBytes(chunk.getBiomeArray());
 	}
 	
 	public static class Handler implements IMessageHandler<ChunkDataPacket, IMessage> {
