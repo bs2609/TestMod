@@ -41,6 +41,12 @@ public class ModelInverter extends ModelTransformer {
 						vec.set(data[0], data[1], data[2], 1.0f);
 						matrix.transform(vec);
 						vec.get(data);
+						break;
+					case NORMAL:
+						vec.set(data);
+						vec.setY(-vec.getY());
+						vec.get(data);
+						break;
 				}
 				parent.put(element, data);
 			}
