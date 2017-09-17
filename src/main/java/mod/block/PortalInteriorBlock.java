@@ -108,19 +108,16 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 			entity.sendMessage(new TextComponentString("Error/.Error"));
 		}
 		
-		PlayerList playerList = world.getMinecraftServer().getPlayerList();
-		
 		if (entity instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) entity;
 			MiscUtils.setInvulnerableDimensionChange(player);
-			playerList.transferPlayerToDimension(player, destination, teleporter);
+			player.mcServer.getPlayerList().transferPlayerToDimension(player, destination, teleporter);
 			
 		} else {
-			WorldServer worldIn = (WorldServer) world;
-			playerList.transferEntityToWorld(entity, origin, worldIn, worldOut, teleporter);
+			MiscUtils.changeDimension(entity, destination, teleporter);
 		}
 	}
-
+	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos fromPos) {
 		if (world.isRemote) return;

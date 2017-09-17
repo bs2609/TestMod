@@ -53,7 +53,7 @@ public class PortalBlock extends BasicBlock {
 	
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote && playerIn instanceof EntityPlayerMP) {
+		if (!worldIn.isRemote && playerIn instanceof EntityPlayerMP && hand == EnumHand.MAIN_HAND) {
 			EntityPlayerMP player = (EntityPlayerMP) playerIn;
 			int dimension = ModDimensions.DIM_GLITCHED;
 			Teleporter teleporter;
@@ -77,7 +77,7 @@ public class PortalBlock extends BasicBlock {
 				teleporter = new PortalBlockTeleporter(world);
 			}
 			
-			worldIn.getMinecraftServer().getPlayerList().transferPlayerToDimension(player, dimension, teleporter);
+			player.mcServer.getPlayerList().transferPlayerToDimension(player, dimension, teleporter);
 		}
 		return true;
 	}

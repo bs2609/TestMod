@@ -47,7 +47,7 @@ public class PortalFieldBlock extends UnobtainableBlock {
 			WorldServer destination = MiscUtils.getWorld(dim);
 			Teleporter teleporter = new SpawnTeleporter(destination);
 			
-			world.getMinecraftServer().getPlayerList().transferPlayerToDimension(player, dim, teleporter);
+			player.mcServer.getPlayerList().transferPlayerToDimension(player, dim, teleporter);
 		}
 	}
 }

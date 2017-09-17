@@ -3,9 +3,12 @@ package mod.util;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
@@ -41,6 +44,20 @@ public class MiscUtils {
 			world = DimensionManager.getWorld(dimension);
 		}
 		return world;
+	}
+	
+	public static void changeDimension(Entity entity, int dimension, Teleporter teleporter) {
+		MinecraftServer server = entity.getServer();
+		if (server == null) return;
+		
+		int prev = entity.dimension;
+		WorldServer from = server.getWorld(prev);
+		entity.dimension = dimension;
+		WorldServer to = server.getWorld(dimension);
+		from.removeEntityDangerously(entity);
+		entity.isDead = false;
+		
+		server.getPlayerList().transferEntityToWorld(entity, prev, from, to, teleporter);
 	}
 	
 	public static void setInvulnerableDimensionChange(EntityPlayerMP player) {
