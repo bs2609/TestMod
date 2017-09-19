@@ -33,7 +33,7 @@ public class PortalRuinsWorldGenerator extends WorldGenerator {
 		int yz = Math.abs(world.getTopSolidOrLiquidBlock(posZ).getY() - pos.getY()) + 1;
 		
 		BlockArea area = new BlockArea(pos, random.nextInt(yx + yz) < yz ? posX : posZ);
-		BlockUtils.placeStructure(world, area, portalStructure, 2);
+		BlockUtils.placeStructure(world, area, portalStructure, 16 | 2);
 		
 		return true;
 	}
