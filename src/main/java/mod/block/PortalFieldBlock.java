@@ -43,7 +43,7 @@ public class PortalFieldBlock extends UnobtainableBlock {
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
 		if (!world.isRemote && entity instanceof EntityPlayerMP && PortalUtils.checkEntity(entity)) {
 			EntityPlayerMP player = (EntityPlayerMP) entity;
-			int dim = 0;
+			int dim = world.provider.getRespawnDimension(player);
 			WorldServer destination = MiscUtils.getWorld(dim);
 			Teleporter teleporter = new SpawnTeleporter(destination);
 			

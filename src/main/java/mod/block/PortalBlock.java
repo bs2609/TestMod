@@ -66,7 +66,7 @@ public class PortalBlock extends BasicBlock {
 					teleporter = new BlockPosTeleporter(world, dimPos.position);
 					
 				} else {
-					dimension = 0;
+					dimension = worldIn.provider.getRespawnDimension(player);
 					WorldServer world = MiscUtils.getWorld(dimension);
 					teleporter = new SpawnTeleporter(world);
 				}

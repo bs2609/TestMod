@@ -15,7 +15,7 @@ public class SpawnTeleporter extends SimpleTeleporter {
 	public BlockPos getDestinationForEntity(Entity entity) {
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
-			BlockPos bed = player.getBedLocation(0);
+			BlockPos bed = player.getBedLocation(world.provider.getDimension());
 			if (bed != null) return bed;
 		}
 		return world.getTopSolidOrLiquidBlock(world.getSpawnPoint());
