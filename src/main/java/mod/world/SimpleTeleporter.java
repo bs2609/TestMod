@@ -13,12 +13,12 @@ public abstract class SimpleTeleporter extends Teleporter {
 
 	@Override
 	public void placeInPortal(Entity entity, float rotationYaw) {
-		BlockPos pos = getDestinationForEntity(entity);
+		BlockPos pos = getDestination(entity);
 		entity.motionX = entity.motionY = entity.motionZ = 0.0;
 		entity.fallDistance = 0.0f;
 		entity.moveToBlockPosAndAngles(pos, entity.rotationYaw, 0.0f);
 	}
 
-	public abstract BlockPos getDestinationForEntity(Entity entity);
+	public abstract BlockPos getDestination(Entity entity);
 
 }

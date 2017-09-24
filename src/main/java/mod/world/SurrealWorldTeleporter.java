@@ -11,7 +11,7 @@ public class SurrealWorldTeleporter extends SimpleTeleporter {
 	}
 
 	@Override
-	public BlockPos getDestinationForEntity(Entity entity) {
+	public BlockPos getDestination(Entity entity) {
 		double x = entity.posX, y = 256.0, z = entity.posZ;
 		return new BlockPos(x, y, z);
 	}

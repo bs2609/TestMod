@@ -14,7 +14,7 @@ public class BlockPosTeleporter extends SimpleTeleporter {
 	}
 	
 	@Override
-	public BlockPos getDestinationForEntity(Entity entity) {
+	public BlockPos getDestination(Entity entity) {
 		return destination;
 	}
 }

@@ -15,10 +15,10 @@ public class PortalBlockTeleporter extends SimpleTeleporter {
 	}
 	
 	@Override
-	public BlockPos getDestinationForEntity(Entity entity) {
+	public BlockPos getDestination(Entity entity) {
 		BlockPos entityPos = new BlockPos(entity);
 		BlockPos surfacePos = world.getTopSolidOrLiquidBlock(entityPos);
-		BlockPos destPos = (surfacePos.getY() > entityPos.getY() ? surfacePos : entityPos);
+		BlockPos destPos = surfacePos.getY() > entityPos.getY() ? surfacePos : entityPos;
 		world.setBlockState(destPos.down(), state);
 		return destPos;
 	}

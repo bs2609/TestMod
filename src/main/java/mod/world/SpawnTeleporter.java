@@ -12,7 +12,7 @@ public class SpawnTeleporter extends SimpleTeleporter {
 	}
 
 	@Override
-	public BlockPos getDestinationForEntity(Entity entity) {
+	public BlockPos getDestination(Entity entity) {
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			BlockPos bed = player.getBedLocation(world.provider.getDimension());
