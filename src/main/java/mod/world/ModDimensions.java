@@ -21,6 +21,8 @@ public class ModDimensions {
 	private static int[] dims;
 	private static String[] names;
 
+	private static int DIM_ORIGIN = 0;
+	
 	public static int DIM_SURREAL = 39;
 	public static int DIM_GLITCHED = 101;
 
@@ -39,6 +41,7 @@ public class ModDimensions {
 
 	private static void loadFromConfig() {
 		Configuration config = TestMod.getConfig();
+		DIM_ORIGIN = config.get(CONFIG_CATEGORY, "origin", DIM_ORIGIN).getInt();
 		DIM_SURREAL = config.get(CONFIG_CATEGORY, "surreal", DIM_SURREAL).getInt();
 		DIM_GLITCHED = config.get(CONFIG_CATEGORY, "glitched", DIM_GLITCHED).getInt();
 		dims = config.get(CONFIG_CATEGORY, "ids", DEFAULT_DIMS).getIntList();
@@ -69,8 +72,8 @@ public class ModDimensions {
 
 	private static void linkDimensions() {
 		if (dims.length == 0) return;
-		PortalUtils.addDimensionMapping(PortalType.IN, 0, dims[0]);
-		PortalUtils.addDimensionMapping(PortalType.OUT, dims[0], 0);
+		PortalUtils.addDimensionMapping(PortalType.IN, DIM_ORIGIN, dims[0]);
+		PortalUtils.addDimensionMapping(PortalType.OUT, dims[0], DIM_ORIGIN);
 		for (int i = 1; i < dims.length; ++i) {
 			PortalUtils.addDimensionMapping(PortalType.IN, dims[i-1], dims[i]);
 			PortalUtils.addDimensionMapping(PortalType.OUT, dims[i], dims[i-1]);
