@@ -77,7 +77,7 @@ public class PortalBlock extends BasicBlock {
 				teleporter = new PortalBlockTeleporter(world);
 			}
 			
-			player.mcServer.getPlayerList().transferPlayerToDimension(player, dimension, teleporter);
+			MiscUtils.changeDimension(player, dimension, teleporter);
 		}
 		return true;
 	}

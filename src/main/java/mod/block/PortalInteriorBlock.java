@@ -15,7 +15,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -100,19 +99,16 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 		if (PortalUtils.checkDestination(entity, world, worldOut)) {
 			PortalType typeOut = PortalUtils.getTypeMapping(destination, origin);
 			teleporter = new PortalTeleporter(worldOut, area.getSize(), typeOut);
-			
 		} else {
+			entity.sendMessage(new TextComponentString("Error/.Error"));
 			destination = ModDimensions.DIM_SURREAL;
 			worldOut = MiscUtils.getWorld(destination);
 			teleporter = new SurrealWorldTeleporter(worldOut);
-			entity.sendMessage(new TextComponentString("Error/.Error"));
 		}
 		
 		if (entity instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) entity;
-			MiscUtils.setInvulnerableDimensionChange(player);
-			player.mcServer.getPlayerList().transferPlayerToDimension(player, destination, teleporter);
-			
+			MiscUtils.changeDimension(player, destination, teleporter);
 		} else {
 			MiscUtils.changeDimension(entity, destination, teleporter);
 		}

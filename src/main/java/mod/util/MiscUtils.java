@@ -13,8 +13,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -46,7 +46,13 @@ public class MiscUtils {
 		return world;
 	}
 	
+	private static final ReflectionUtils.FieldAccessor changedDimension
+			= new ReflectionUtils.FieldAccessor(EntityPlayerMP.class, "invulnerableDimensionChange", "field_184851_cj");
+	
 	public static void changeDimension(Entity entity, int dimension, Teleporter teleporter) {
+		
+		if (!ForgeHooks.onTravelToDimension(entity, dimension)) return;
+		
 		MinecraftServer server = entity.getServer();
 		if (server == null) return;
 		
@@ -60,9 +66,10 @@ public class MiscUtils {
 		server.getPlayerList().transferEntityToWorld(entity, prev, from, to, teleporter);
 	}
 	
-	public static void setInvulnerableDimensionChange(EntityPlayerMP player) {
-		String[] fieldNames = {"invulnerableDimensionChange", "field_184851_cj"};
-		ReflectionHelper.setPrivateValue(EntityPlayerMP.class, player, true, fieldNames);
+	public static void changeDimension(EntityPlayerMP player, int dimension, Teleporter teleporter) {
+		if (!ForgeHooks.onTravelToDimension(player, dimension)) return;
+		changedDimension.set(player, true);
+		player.mcServer.getPlayerList().transferPlayerToDimension(player, dimension, teleporter);
 	}
 	
 	public static Side getSide(IBlockAccess access) {
