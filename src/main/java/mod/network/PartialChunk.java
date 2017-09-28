@@ -10,6 +10,8 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Arrays;
+
 @SideOnly(Side.CLIENT)
 public class PartialChunk extends EmptyChunk {
 	
@@ -18,6 +20,7 @@ public class PartialChunk extends EmptyChunk {
 	public PartialChunk(World world, int x, int z, boolean skylight) {
 		super(world, x, z);
 		hasSkylight = skylight;
+		Arrays.fill(getEntityLists(), null);
 	}
 	
 	@Override
