@@ -5,6 +5,7 @@ import mod.util.MiscUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -30,21 +31,28 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 		return chunk;
 	}
 	
-	private World getWorld() {
 		return MiscUtils.getWorld(SurrealBlock.DIM_ID);
+	private WorldServer getWorld() {
 	}
 	
-	private Chunk loadTemplate(World world, int x, int z) {
+	private Chunk loadTemplate(WorldServer world, int x, int z) {
 		Chunk template = null;
 		for (int dx = -1; dx <= 1; ++dx) {
 			for (int dz = -1; dz <= 1; ++dz) {
 				Chunk chunk = world.getChunkFromChunkCoords(x+dx, z+dz);
 				if (dx == 0 && dz == 0) template = chunk;
+				queueUnload(world, chunk);
 			}
 		}
 		return template;
 	}
-
+	
+	private void queueUnload(WorldServer world, Chunk chunk) {
+		if (!world.getPlayerChunkMap().contains(chunk.x, chunk.z)) {
+			world.getChunkProvider().queueUnload(chunk);
+		}
+	}
+	
 	private void pregenChunk(ChunkPrimer primer, Chunk template) {
 		
 		int top = template.getTopFilledSegment() + 16;
