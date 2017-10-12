@@ -31,8 +31,8 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 		return chunk;
 	}
 	
-		return MiscUtils.getWorld(SurrealBlock.DIM_ID);
 	private WorldServer getWorld() {
+		return MiscUtils.getWorld(SurrealBlock.DIM_ID);
 	}
 	
 	private Chunk loadTemplate(WorldServer world, int x, int z) {
