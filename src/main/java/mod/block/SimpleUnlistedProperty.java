@@ -2,12 +2,14 @@ package mod.block;
 
 import net.minecraftforge.common.property.IUnlistedProperty;
 
-public abstract class AbstractUnlistedProperty<V> implements IUnlistedProperty<V> {
+public class SimpleUnlistedProperty<V> implements IUnlistedProperty<V> {
 	
 	protected final String name;
+	protected final Class<V> type;
 	
-	protected AbstractUnlistedProperty(String name) {
+	public SimpleUnlistedProperty(String name, Class<V> type) {
 		this.name = name;
+		this.type = type;
 	}
 	
 	@Override
@@ -18,6 +20,11 @@ public abstract class AbstractUnlistedProperty<V> implements IUnlistedProperty<V
 	@Override
 	public boolean isValid(V value) {
 		return value != null;
+	}
+	
+	@Override
+	public Class<V> getType() {
+		return type;
 	}
 	
 	@Override

@@ -55,7 +55,7 @@ public class SurrealBlock extends BasicBlock {
 	public static final IProperty<Boolean> OPAQUE_CUBE = PropertyBool.create("opaque");
 	public static final IProperty<MaterialType> MATERIAL_TYPE = MaterialType.PROPERTY;
 	
-	public static final IUnlistedProperty<IBlockState> APPEARANCE = new UnlistedPropertyBlockState("appearance");
+	public static final IUnlistedProperty<IBlockState> APPEARANCE = UnlistedProperties.BlockState.create("appearance");
 	
 	public static final int DIM_ID = 0;
 	
