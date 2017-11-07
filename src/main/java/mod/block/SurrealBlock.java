@@ -352,7 +352,7 @@ public class SurrealBlock extends BasicBlock {
 	public static final class StateMapper {
 		
 		private static final IBlockState[] states = new IBlockState[16];
-		private static final IBlockState unmapped = ModBlocks.surrealVoidBlock.getDefaultState();
+		private static final IBlockState unmapped = ModBlocks.surrealVoid.getDefaultState();
 		
 		static {
 			for (int i = 0; i < 16; ++i) {

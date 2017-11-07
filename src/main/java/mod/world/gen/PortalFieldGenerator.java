@@ -6,7 +6,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 
 public class PortalFieldGenerator extends BasicTerrainGenerator {
 
-	private final IBlockState state = ModBlocks.portalFieldBlock.getDefaultState();
+	private final IBlockState state = ModBlocks.portalField.getDefaultState();
 
 	@Override
 	public void generate(ChunkPrimer genTarget) {

@@ -10,7 +10,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -37,7 +36,7 @@ public class PortalBuilder extends BasicItem {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		IBlockState state = world.getBlockState(pos);
-		if (state.getBlock() != ModBlocks.portalFrameBlock) return EnumActionResult.PASS;
+		if (state.getBlock() != ModBlocks.portalFrame) return EnumActionResult.PASS;
 		if (world.isRemote) return EnumActionResult.SUCCESS;
 		
 		BlockArea area = PortalUtils.isPortalFrame(world, pos);

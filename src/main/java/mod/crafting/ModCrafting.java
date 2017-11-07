@@ -20,14 +20,14 @@ public class ModCrafting {
 
 	private static void addPortalFrameRecipes() {
 		
-		GameRegistry.addRecipe(new ItemStack(ModBlocks.portalFrameBlock, 4, ModBlocks.portalFrameBlock.getMetaForType(PortalType.IN)),
+		GameRegistry.addRecipe(new ItemStack(ModBlocks.portalFrame, 4, ModBlocks.portalFrame.getMetaForType(PortalType.IN)),
 				"ABA", "BCB", "ABA",
 				'A', new ItemStack(Blocks.STONEBRICK, 1, BlockStoneBrick.CHISELED_META),
 				'B', Items.REDSTONE,
 				'C', Blocks.OBSIDIAN
 		);
 
-		GameRegistry.addRecipe(new ItemStack(ModBlocks.portalFrameBlock, 4, ModBlocks.portalFrameBlock.getMetaForType(PortalType.OUT)),
+		GameRegistry.addRecipe(new ItemStack(ModBlocks.portalFrame, 4, ModBlocks.portalFrame.getMetaForType(PortalType.OUT)),
 				"ABA", "BCB", "ABA",
 				'A', new ItemStack(Blocks.STONEBRICK, 1, BlockStoneBrick.CHISELED_META),
 				'B', new ItemStack(Items.DYE, 1, EnumDyeColor.BLUE.getDyeDamage()),
@@ -39,7 +39,7 @@ public class ModCrafting {
 		
 		GameRegistry.addRecipe(new ItemStack(ModBlocks.portalBlock, 1),
 				"ABA", "BCB", "ABA",
-				'A', new ItemStack(ModBlocks.portalFrameBlock, 1, ModBlocks.portalFrameBlock.getMetaForType(PortalType.IN)),
+				'A', new ItemStack(ModBlocks.portalFrame, 1, ModBlocks.portalFrame.getMetaForType(PortalType.IN)),
 				'B', Blocks.QUARTZ_BLOCK,
 				'C', Items.ENDER_PEARL
 		);

@@ -7,7 +7,7 @@ import net.minecraft.init.Blocks;
 public class Portal {
 
 	public static IBlockState getFrame(PortalType type) {
-		return ModBlocks.portalFrameBlock.getDefaultState().withProperty(PortalType.PROPERTY, type);
+		return ModBlocks.portalFrame.getDefaultState().withProperty(PortalType.PROPERTY, type);
 	}
 
 	public static IBlockState getBorder() {
@@ -19,6 +19,6 @@ public class Portal {
 	}
 
 	public static IBlockState getInterior(PortalType type) {
-		return ModBlocks.portalInteriorBlock.getDefaultState().withProperty(PortalType.PROPERTY, type);
+		return ModBlocks.portalInterior.getDefaultState().withProperty(PortalType.PROPERTY, type);
 	}
 }
