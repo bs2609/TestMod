@@ -352,6 +352,7 @@ public class SurrealBlock extends BasicBlock {
 	public static final class StateMapper {
 		
 		private static final IBlockState[] states = new IBlockState[16];
+		private static final IBlockState unmapped = ModBlocks.surrealVoidBlock.getDefaultState();
 		
 		static {
 			for (int i = 0; i < 16; ++i) {
@@ -359,16 +360,18 @@ public class SurrealBlock extends BasicBlock {
 			}
 		}
 		
-		public static boolean isValid(IBlockState state) {
+		public static IBlockState getStateFor(IBlockState state) {
+			return isValid(state)
+					? states[getStateID(state.isFullCube(), state.isOpaqueCube(), state.getMaterial())]
+					: unmapped;
+		}
+		
+		private static boolean isValid(IBlockState state) {
 			return state.getRenderType() == EnumBlockRenderType.MODEL;
 		}
 		
-		public static IBlockState getStateFor(IBlockState state) {
-			return states[getStateID(state.isFullCube(), state.isOpaqueCube(), MaterialType.getType(state.getMaterial()))];
-		}
-		
-		private static int getStateID(boolean full, boolean opaque, MaterialType material) {
-			return (full ? 8 : 0) | (opaque ? 4 : 0) | material.ordinal();
+		private static int getStateID(boolean full, boolean opaque, Material material) {
+			return (full ? 8 : 0) | (opaque ? 4 : 0) | MaterialType.getType(material).ordinal();
 		}
 	}
 }

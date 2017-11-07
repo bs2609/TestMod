@@ -2,6 +2,7 @@ package mod.world.gen;
 
 import mod.block.SurrealBlock;
 import mod.util.MiscUtils;
+import mod.util.WorldViewer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -32,7 +33,7 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 	}
 	
 	private WorldServer getWorld() {
-		return MiscUtils.getWorld(SurrealBlock.DIM_ID);
+		return MiscUtils.getWorld(WorldViewer.DIM_ID);
 	}
 	
 	private Chunk loadTemplate(WorldServer world, int x, int z) {
@@ -54,15 +55,14 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 	}
 	
 	private void pregenChunk(ChunkPrimer primer, Chunk template) {
-		
-		int top = template.getTopFilledSegment() + 16;
-		
-		for (int cx = 0; cx < 16; ++cx) {
-			for (int cz = 0; cz < 16; ++cz) {
-				for (int cy = 0; cy < top; ++cy) {
-					IBlockState state = template.getBlockState(cx, cy, cz);
-					if (SurrealBlock.StateMapper.isValid(state)) {
-						primer.setBlockState(cx, 255-cy, cz, SurrealBlock.StateMapper.getStateFor(state));
+		for (ExtendedBlockStorage storage : template.getBlockStorageArray()) {
+			if (storage == Chunk.NULL_BLOCK_STORAGE) continue;
+			int y = 255 - storage.getYLocation();
+			for (int cx = 0; cx < 16; ++cx) {
+				for (int cz = 0; cz < 16; ++cz) {
+					for (int cy = 0; cy < 16; ++cy) {
+						IBlockState state = storage.get(cx, cy, cz);
+						primer.setBlockState(cx, y - cy, cz, SurrealBlock.StateMapper.getStateFor(state));
 					}
 				}
 			}
