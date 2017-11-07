@@ -19,6 +19,7 @@ public class DimensionInstances {
 	static {
 		instanceMap.put("cube", new VoidCube());
 		instanceMap.put("islands", new FloatingIslands());
+		instanceMap.put("towers", new HollowTowers());
 		instanceMap.put("ocean", new OceanChambers());
 		instanceMap.put("ice", new IceSieve());
 		instanceMap.put("pillars", new BridgedPillars());
@@ -60,6 +61,23 @@ public class DimensionInstances {
 		public IChunkGenerator getChunkGenerator(World world) {
 			List<ITerrainGenerator> generators = new ArrayList<ITerrainGenerator>();
 			generators.add(new HemisphereGenerator(world.getSeed()));
+			return new TestChunkGenerator(world, generators);
+		}
+	}
+
+	public static class HollowTowers implements IDimensionSpecifier {
+
+		private HollowTowers() {}
+
+		@Override
+		public BiomeProvider getBiomeProvider(World world) {
+			return new BiomeProviderSingle(Biomes.HELL);
+		}
+
+		@Override
+		public IChunkGenerator getChunkGenerator(World world) {
+			List<ITerrainGenerator> generators = new ArrayList<ITerrainGenerator>();
+			generators.add(new TowerGenerator(world.getSeed()));
 			return new TestChunkGenerator(world, generators);
 		}
 	}
