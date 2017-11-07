@@ -1,12 +1,9 @@
 package mod.block;
 
 import mod.model.SurrealBlockModel;
-import mod.network.*;
 import mod.util.BlockAccessRemapper;
 import mod.util.MiscUtils;
-import mod.world.CachedWorldAccess;
-import mod.world.ModDimensions;
-import mod.world.SimpleBlockAccess;
+import mod.util.WorldViewer;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -19,6 +16,7 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -34,13 +32,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -57,41 +51,11 @@ public class SurrealBlock extends BasicBlock {
 	
 	public static final IUnlistedProperty<IBlockState> APPEARANCE = UnlistedProperties.BlockState.create("appearance");
 	
-	public static final int DIM_ID = 0;
-	
 	private static final IBlockState fallback = new Block(MaterialType.SOLID.getExample()).getDefaultState();
 	private static final IBlockState air = Blocks.AIR.getDefaultState();
 	
-	private final ChunkBuffer buffer = new CachingChunkBuffer() {
-		
-		private final int id = ModPacketHandler.registerWithHandlers(this, new ChunkRequestPacket.Validator(DIM_ID));
-		
-		@Override
-		protected void onMissingChunk(int x, int z) {
-			// send request packet
-			ModPacketHandler.INSTANCE.sendToServer(new ChunkRequestPacket(id, DIM_ID, x, z));
-		}
-		
-		@Override
-		protected void onChunkLoad(Chunk chunk) {
-			// mark chunk for render update
-			int x = chunk.x << 4, z = chunk.z << 4;
-			Minecraft.getMinecraft().world.markBlockRangeForRenderUpdate(x, 0, z, x | 15, 255, z | 15);
-		}
-	};
-	
-	private final IBlockAccess bufferAccess = new SimpleBlockAccess() {
-		
-		@Override
-		protected Chunk getChunk(int x, int z) {
-			return buffer.getChunk(x, z);
-		}
-	};
-	
-	private final IBlockAccess worldAccess = new CachedWorldAccess(DIM_ID);
-	
 	@SideOnly(Side.CLIENT)
-	private class ColourHandler implements IBlockColor {
+	private final class ColourHandler implements IBlockColor {
 		
 		@Override
 		public int colorMultiplier(IBlockState state, IBlockAccess access, BlockPos pos, int tintIndex) {
@@ -103,59 +67,31 @@ public class SurrealBlock extends BasicBlock {
 		}
 	}
 	
-	private class EventHandler {
-		
-		private boolean checkWorld(World world) {
-			return world.isRemote && world.provider.getDimension() == ModDimensions.DIM_SURREAL;
-		}
-		
-		@SubscribeEvent
-		public void onChunkLoad(ChunkEvent.Load event) {
-			if (!checkWorld(event.getWorld())) return;
-			Chunk chunk = event.getChunk();
-			buffer.getChunk(chunk.x, chunk.z);
-		}
-		
-		@SubscribeEvent
-		public void onChunkUnload(ChunkEvent.Unload event) {
-			if (!checkWorld(event.getWorld())) return;
-			Chunk chunk = event.getChunk();
-			buffer.removeChunk(chunk.x, chunk.z);
-		}
-	}
-	
-	private class Remapper extends BlockAccessRemapper {
+	private final class Remapper extends BlockAccessRemapper {
 		
 		Remapper(IBlockAccess source) {
-			super(source);
+			super(WorldViewer.instance.getBlockAccess(source), source);
 		}
 		
 		@Override
-		public IBlockState getBlockState(BlockPos pos) {
-			IBlockState state = source.getBlockState(getInverted(pos));
-			if (state.getBlock() == SurrealBlock.this) {
-				return remapBlockAccess(source).getBlockState(pos);
-			}
-			return state;
+		protected boolean shouldRemap(BlockPos pos) {
+			return other.getBlockState(remap(pos)).getBlock() != SurrealBlock.this;
 		}
 		
-		private IBlockAccess remapBlockAccess(IBlockAccess access) {
-			Side side = MiscUtils.getSide(access);
-			switch (side) {
-				case CLIENT:
-					return bufferAccess;
-				case SERVER:
-					return worldAccess;
-				default:
-					throw new IllegalArgumentException("Invalid side: " + side);
-			}
+		@Override
+		protected BlockPos remap(BlockPos pos) {
+			return getInverted(pos);
+		}
+		
+		@Override
+		protected EnumFacing remap(EnumFacing facing) {
+			return MiscUtils.getReflected(facing, EnumFacing.Axis.Y);
 		}
 	}
 
 	SurrealBlock() {
 		super(NAME, Material.ROCK);
 		setDefaultState(makeDefaultState());
-		MinecraftForge.EVENT_BUS.register(new EventHandler());
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -304,6 +240,14 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@Override
+	public boolean isLadder(IBlockState state, IBlockAccess access, BlockPos pos, EntityLivingBase entity) {
+		IBlockAccess remapper = new Remapper(access);
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(remapper, inverted);
+		return appearance.getBlock().isLadder(appearance, remapper, inverted, entity);
+	}
+	
+	@Override
 	public SoundType getSoundType(IBlockState state, World world, BlockPos pos, Entity entity) {
 		IBlockState appearance = getBlockAppearance(world, pos, true);
 		return appearance.getBlock().getSoundType();
@@ -326,14 +270,16 @@ public class SurrealBlock extends BasicBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getPackedLightmapCoords(IBlockState state, IBlockAccess access, BlockPos pos) {
-		IBlockState appearance = getBlockAppearance(access, pos, true);
-		return appearance.getPackedLightmapCoords(access, pos) ^ 0xf0;
+		IBlockAccess remapper = new Remapper(access);
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(remapper, inverted);
+		return appearance.getPackedLightmapCoords(remapper, inverted);
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getAmbientOcclusionLightValue(IBlockState state) {
-		return state.isBlockNormalCube() ? 0.8f : 1.0f;
+		return state.isBlockNormalCube() ? 0.2f : 1.0f;
 	}
 	
 	@Override
@@ -389,11 +335,17 @@ public class SurrealBlock extends BasicBlock {
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (player.getHeldItem(hand).getItem() == Items.STICK) {
-			IBlockState appearance = getBlockAppearance(world, pos, true);
+		
+		Item item = player.getHeldItem(hand).getItem();
+		
+		if (item == Items.STICK) {
+			IBlockAccess remapper = new Remapper(world);
+			BlockPos inverted = getInverted(pos);
+			IBlockState appearance = getBlockAppearance(remapper, inverted).getActualState(remapper, inverted);
 			player.sendMessage(new TextComponentString(MiscUtils.toString(appearance)));
 			return true;
 		}
+		
 		return false;
 	}
 	
