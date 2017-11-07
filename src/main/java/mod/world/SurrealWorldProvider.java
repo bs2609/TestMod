@@ -6,8 +6,6 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.IChunkGenerator;
 
-import java.util.Arrays;
-
 public class SurrealWorldProvider extends WorldProvider {
 
 	public static final int ID = 39;
@@ -15,15 +13,12 @@ public class SurrealWorldProvider extends WorldProvider {
 	@Override
 	protected void init() {
 		super.init();
+		hasSkyLight = false;
 	}
 
 	@Override
 	protected void generateLightBrightnessTable() {
 		super.generateLightBrightnessTable();
-		float[] copy = Arrays.copyOf(lightBrightnessTable, lightBrightnessTable.length);
-		for (int i = 0, j = copy.length; j > 0;) {
-			lightBrightnessTable[i++] = copy[--j];
-		}
 	}
 
 	@Override
