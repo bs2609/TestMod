@@ -6,6 +6,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ModBlocks {
 
 	public static SurrealBlock surrealBlock;
+	public static SurrealVoidBlock surrealVoidBlock;
 	public static PortalBlock portalBlock;
 	public static PortalFieldBlock portalFieldBlock;
 	public static PortalFrameBlock portalFrameBlock;
@@ -13,6 +14,7 @@ public class ModBlocks {
 
 	public static void init() {
 		surrealBlock = new SurrealBlock();
+		surrealVoidBlock = new SurrealVoidBlock();
 		portalBlock = new PortalBlock();
 		portalFieldBlock = new PortalFieldBlock();
 		portalFrameBlock = new PortalFrameBlock();
@@ -22,6 +24,7 @@ public class ModBlocks {
 	@SideOnly(Side.CLIENT)
 	public static void initModels() {
 		surrealBlock.initModel();
+		surrealVoidBlock.initModel();
 		portalBlock.initModel();
 		portalFrameBlock.initModel();
 	}
