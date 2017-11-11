@@ -12,7 +12,7 @@ public abstract class SeededTerrainGenerator implements ITerrainGenerator {
 
 	protected Random getRandom(int x, int z) {
 		Random random = new Random(seed);
-		long mx = random.nextLong(), mz = random.nextLong();
+		long mx = random.nextLong() | 1L, mz = random.nextLong() | 1L;
 		random.setSeed(x*mx + z*mz ^ seed);
 		return random;
 	}
