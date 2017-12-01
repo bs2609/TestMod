@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABC",
+    "BDB",
+    "CBA"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:redstone"
+    },
+    "B": {
+      "item": "minecraft:quartz"
+    },
+    "C": {
+      "item": "minecraft:dye",
+      "data": 4
+    },
+    "D": {
+      "item": "minecraft:compass"
+    }
+  },
+  "result": {
+    "item": "testing:portal_compass"
+  }
+}

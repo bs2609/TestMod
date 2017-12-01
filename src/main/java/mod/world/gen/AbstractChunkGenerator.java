@@ -5,7 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,11 +32,15 @@ public abstract class AbstractChunkGenerator implements IChunkGenerator {
 	}
 
 	@Override
-	public BlockPos getNearestStructurePos(World world, String structureName, BlockPos position, boolean findUnexplored) {
+	public BlockPos getNearestStructurePos(World world, String structureName, BlockPos pos, boolean findUnexplored) {
 		return null;
 	}
 
 	@Override
 	public void recreateStructures(Chunk chunk, int x, int z) {}
 
+	@Override
+	public boolean isInsideStructure(World world, String structureName, BlockPos pos) {
+		return false;
+	}
 }

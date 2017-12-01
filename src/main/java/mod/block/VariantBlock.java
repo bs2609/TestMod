@@ -25,7 +25,9 @@ public abstract class VariantBlock<E extends Enum<E> & IStringSerializable> exte
 				return getTypeForMeta(input.getMetadata()).getName();
 			}
 		};
-		return new ItemMultiTexture(this, this, mapper);
+		ItemMultiTexture itemMultiTexture = new ItemMultiTexture(this, this, mapper);
+		itemMultiTexture.setRegistryName(this.getRegistryName());
+		return itemMultiTexture;
 	}
 	
 	public abstract int getMetaForType(E type);

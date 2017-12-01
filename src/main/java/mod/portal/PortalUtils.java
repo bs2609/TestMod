@@ -208,7 +208,7 @@ public class PortalUtils {
 		EnumSet<PortalType> types = EnumSet.noneOf(PortalType.class);
 		for (BlockPos pos : BlockUtils.getVertices(area)) {
 			IBlockState state = world.getBlockState(pos);
-			if (state.getBlock() == ModBlocks.portalFrame) {
+			if (state.getBlock() == ModBlocks.PORTAL_FRAME) {
 				types.add(state.getValue(PortalFrameBlock.TYPE));
 			}
 		}

@@ -36,7 +36,7 @@ public class PortalBuilder extends BasicItem {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		IBlockState state = world.getBlockState(pos);
-		if (state.getBlock() != ModBlocks.portalFrame) return EnumActionResult.PASS;
+		if (state.getBlock() != ModBlocks.PORTAL_FRAME) return EnumActionResult.PASS;
 		if (world.isRemote) return EnumActionResult.SUCCESS;
 		
 		BlockArea area = PortalUtils.isPortalFrame(world, pos);

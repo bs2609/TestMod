@@ -13,7 +13,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Collections;
 import java.util.List;
@@ -26,10 +28,11 @@ public class SurrealBlockModel implements IBakedModel {
 	
 	private final ModelTransformer transformer = new ModelInverter();
 	
+	@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod.MOD_ID)
 	public static class EventHandler {
 		
 		@SubscribeEvent
-		public void onModelBakeEvent(ModelBakeEvent event) {
+		public static void onModelBakeEvent(ModelBakeEvent event) {
 			IBakedModel model = event.getModelRegistry().getObject(modelResourceLocation);
 			if (model != null) {
 				event.getModelRegistry().putObject(modelResourceLocation, new SurrealBlockModel());

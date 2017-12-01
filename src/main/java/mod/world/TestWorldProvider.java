@@ -4,7 +4,7 @@ import mod.util.MiscUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 
 public class TestWorldProvider extends WorldProvider {
 

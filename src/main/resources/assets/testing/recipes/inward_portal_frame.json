@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "testing:portal_frame",
+  "pattern": [
+    "ABA",
+    "BCB",
+    "ABA"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:stonebrick",
+      "data": 3
+    },
+    "B": {
+      "item": "minecraft:redstone"
+    },
+    "C": {
+      "item": "minecraft:obsidian"
+    }
+  },
+  "result": {
+    "item": "testing:portal_frame",
+    "data": 0,
+    "count": 4
+  }
+}

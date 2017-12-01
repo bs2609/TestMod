@@ -9,6 +9,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -85,7 +86,7 @@ public class SurrealBlock extends BasicBlock {
 		
 		@Override
 		protected EnumFacing remap(EnumFacing facing) {
-			return MiscUtils.getReflected(facing, EnumFacing.Axis.Y);
+			return invert(facing);
 		}
 	}
 
@@ -186,7 +187,7 @@ public class SurrealBlock extends BasicBlock {
 		IBlockAccess remapper = new Remapper(access);
 		BlockPos inverted = getInverted(pos);
 		IBlockState appearance = getBlockAppearance(remapper, inverted);
-		EnumFacing opposite = MiscUtils.getReflected(side, EnumFacing.Axis.Y);
+		EnumFacing opposite = invert(side);
 		return appearance.shouldSideBeRendered(remapper, inverted, opposite);
 	}
 	
@@ -229,6 +230,28 @@ public class SurrealBlock extends BasicBlock {
 	
 	private static Vec3d invert(Vec3d vec) {
 		return (vec.y == 0.0) ? vec : new Vec3d(vec.x, -vec.y, vec.z);
+	}
+	
+	@Override
+	public boolean isSideSolid(IBlockState state, IBlockAccess access, BlockPos pos, EnumFacing side) {
+		IBlockAccess remapper = new Remapper(access);
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(remapper, inverted);
+		EnumFacing opposite = invert(side);
+		return appearance.isSideSolid(remapper, inverted, opposite);
+	}
+	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess access, IBlockState state, BlockPos pos, EnumFacing face) {
+		IBlockAccess remapper = new Remapper(access);
+		BlockPos inverted = getInverted(pos);
+		IBlockState appearance = getBlockAppearance(remapper, inverted);
+		EnumFacing opposite = invert(face);
+		return appearance.getBlockFaceShape(remapper, inverted, opposite);
+	}
+	
+	private static EnumFacing invert(EnumFacing facing) {
+		return MiscUtils.getReflected(facing, EnumFacing.Axis.Y);
 	}
 	
 	@Override
@@ -352,11 +375,11 @@ public class SurrealBlock extends BasicBlock {
 	public static final class StateMapper {
 		
 		private static final IBlockState[] states = new IBlockState[16];
-		private static final IBlockState unmapped = ModBlocks.surrealVoid.getDefaultState();
+		private static final IBlockState unmapped = ModBlocks.SURREAL_VOID.getDefaultState();
 		
 		static {
 			for (int i = 0; i < 16; ++i) {
-				states[i] = ModBlocks.surrealBlock.getStateFromMeta(i);
+				states[i] = ModBlocks.SURREAL_BLOCK.getStateFromMeta(i);
 			}
 		}
 		

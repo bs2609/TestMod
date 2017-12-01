@@ -1,10 +1,6 @@
 package mod;
 
-import mod.block.ModBlocks;
 import mod.command.ModCommands;
-import mod.crafting.ModCrafting;
-import mod.event.CommonEventHandlers;
-import mod.item.ModItems;
 import mod.network.ModPacketHandler;
 import mod.proxy.IProxy;
 import mod.world.ModDimensions;
@@ -20,12 +16,12 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = TestMod.MOD_ID, name = TestMod.MOD_NAME, version = TestMod.VERSION,
-		dependencies = "required-after:forge@[13.20.1,)", acceptedMinecraftVersions = "[1.11.2,1.12)")
+		dependencies = "required-after:forge@[14.23.0.2526,)", acceptedMinecraftVersions = "[1.12.2,1.13)")
 public class TestMod {
 
 	public static final String MOD_ID = "testing";
 	public static final String MOD_NAME = "a test mod";
-	public static final String VERSION = "0.3.6";
+	public static final String VERSION = "0.4.0";
 
 	@Mod.Instance(MOD_ID)
 	public static TestMod instance;
@@ -34,21 +30,17 @@ public class TestMod {
 	public static IProxy proxy;
 
 	private static Logger logger;
-
 	private static Configuration config;
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		
 		logger = event.getModLog();
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		
-		ModBlocks.init();
-		ModItems.init();
-		ModCrafting.init();
 		ModDimensions.init();
 		ModWorldGenerators.register();
 		ModPacketHandler.init();
-		CommonEventHandlers.register();
 		
 		proxy.preInit(event);
 	}

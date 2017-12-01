@@ -3,7 +3,7 @@ package mod.world;
 import mod.world.gen.GlitchedChunkGenerator;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 
 public class GlitchedWorldProvider extends WorldProvider {
 	

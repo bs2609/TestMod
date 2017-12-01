@@ -4,8 +4,8 @@ import mod.util.MiscUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkGenerator;
-import net.minecraft.world.gen.ChunkProviderOverworld;
+import net.minecraft.world.gen.ChunkGeneratorOverworld;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.storage.WorldInfo;
 
 import java.util.Random;
@@ -19,7 +19,7 @@ public class GlitchedChunkGenerator extends AbstractChunkGenerator {
 	public GlitchedChunkGenerator(World worldIn) {
 		super(worldIn);
 		WorldInfo info = world.getWorldInfo();
-		source = new ChunkProviderOverworld(world, world.getSeed(), info.isMapFeaturesEnabled(), info.getGeneratorOptions());
+		source = new ChunkGeneratorOverworld(world, world.getSeed(), info.isMapFeaturesEnabled(), info.getGeneratorOptions());
 	}
 
 	@Override

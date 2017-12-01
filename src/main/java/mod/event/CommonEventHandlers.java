@@ -10,19 +10,16 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.ThrowableImpactEvent;
+import net.minecraftforge.event.entity.ProjectileImpactEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Mod.EventBusSubscriber(modid = TestMod.MOD_ID)
 public class CommonEventHandlers {
 	
-	public static void register() {
-		MinecraftForge.EVENT_BUS.register(new CommonEventHandlers());
-	}
-	
 	@SubscribeEvent
-	public void onThrowableImpactEvent(ThrowableImpactEvent event) {
-		EntityThrowable thrown = event.getEntityThrowable();
+	public static void onThrowableImpact(ProjectileImpactEvent.Throwable event) {
+		EntityThrowable thrown = event.getThrowable();
 		
 		World world = thrown.world;
 		if (world.isRemote) return;

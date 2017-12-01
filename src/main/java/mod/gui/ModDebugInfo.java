@@ -3,7 +3,9 @@ package mod.gui;
 import mod.TestMod;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -17,10 +19,11 @@ public class ModDebugInfo {
 		providers.put(id, provider);
 	}
 	
+	@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod.MOD_ID)
 	public static class EventHandler {
 		
 		@SubscribeEvent
-		public void onRenderDebugInfo(RenderGameOverlayEvent.Text event) {
+		public static void onRenderDebugInfo(RenderGameOverlayEvent.Text event) {
 			if (!Minecraft.getMinecraft().gameSettings.showDebugInfo) return;
 			List<String> left = event.getLeft();
 			left.add("");

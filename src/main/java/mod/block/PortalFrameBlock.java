@@ -47,10 +47,9 @@ public class PortalFrameBlock extends VariantBlock<PortalType> {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (PortalType type : PortalType.VALUES) {
-			list.add(new ItemStack(item, 1, getMetaForType(type)));
+			list.add(new ItemStack(this, 1, getMetaForType(type)));
 		}
 	}
 

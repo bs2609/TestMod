@@ -8,7 +8,7 @@ import net.minecraft.world.WorldServer;
 
 public class PortalBlockTeleporter extends SimpleTeleporter {
 	
-	private final IBlockState state = ModBlocks.portalBlock.getDefaultState();
+	private final IBlockState state = ModBlocks.PORTAL_BLOCK.getDefaultState();
 	
 	public PortalBlockTeleporter(WorldServer world) {
 		super(world);
