@@ -1,9 +1,9 @@
 package mod.network;
 
-import gnu.trove.set.TLongSet;
-import gnu.trove.set.hash.TLongHashSet;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 
@@ -11,7 +11,7 @@ public abstract class ChunkBuffer implements IDataReceiver<Chunk> {
 	
 	private final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap<Chunk>(1024);
 	
-	private final TLongSet pending = new TLongHashSet();
+	private final LongSet pending = new LongOpenHashSet();
 	
 	public Chunk getChunk(int x, int z) {
 		long key = ChunkPos.asLong(x, z);
@@ -20,8 +20,7 @@ public abstract class ChunkBuffer implements IDataReceiver<Chunk> {
 			if (chunk != null) return chunk;
 		}
 		synchronized (pending) {
-			if (!pending.contains(key)) {
-				pending.add(key);
+			if (pending.add(key)) {
 				onMissingChunk(x, z);
 			}
 		}
@@ -34,8 +33,7 @@ public abstract class ChunkBuffer implements IDataReceiver<Chunk> {
 			chunks.put(key, chunk);
 		}
 		synchronized (pending) {
-			if (pending.contains(key)) {
-				pending.remove(key);
+			if (pending.remove(key)) {
 				onChunkLoad(chunk);
 			}
 		}
