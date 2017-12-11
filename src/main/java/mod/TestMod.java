@@ -16,12 +16,12 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = TestMod.MOD_ID, name = TestMod.MOD_NAME, version = TestMod.VERSION,
+@Mod(modid = TestMod.MOD_ID, name = TestMod.NAME, version = TestMod.VERSION,
 		dependencies = "required-after:forge@[14.23.0.2526,)", acceptedMinecraftVersions = "[1.12.2,1.13)")
 public class TestMod {
 
 	public static final String MOD_ID = "testing";
-	public static final String MOD_NAME = "a test mod";
+	public static final String NAME = "a test mod";
 	public static final String VERSION = "0.4.0";
 
 	@Mod.Instance(MOD_ID)
