@@ -132,10 +132,12 @@ public class PortalTeleporter extends Teleporter {
 	}
 
 	private void placeEntity(Entity entity, Vec3d location) {
+
 		double x = location.x, y = location.y, z = location.z;
-		float yaw = entity.rotationYaw, pitch = 0.0f;
+		float yaw = entity.rotationYaw, pitch = entity.rotationPitch;
 
 		entity.motionX = entity.motionY = entity.motionZ = 0.0;
+		entity.fallDistance = 0.0f;
 
 		if (entity instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) entity;
