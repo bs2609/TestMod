@@ -2,7 +2,7 @@ package mod.world.gen;
 
 import mod.block.SurrealBlock;
 import mod.util.MiscUtils;
-import mod.util.WorldViewer;
+import mod.world.ModDimensions;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -33,7 +33,7 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 	}
 	
 	private WorldServer getWorld() {
-		return MiscUtils.getWorld(WorldViewer.DIM_ID);
+		return MiscUtils.getWorld(ModDimensions.DIM_ORIGIN);
 	}
 	
 	private Chunk loadTemplate(WorldServer world, int x, int z) {

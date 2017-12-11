@@ -21,8 +21,7 @@ public class ModDimensions {
 	private static int[] dims;
 	private static String[] names;
 
-	private static int DIM_ORIGIN = 0;
-	
+	public static int DIM_ORIGIN = 0;
 	public static int DIM_SURREAL = 39;
 	public static int DIM_GLITCHED = 101;
 

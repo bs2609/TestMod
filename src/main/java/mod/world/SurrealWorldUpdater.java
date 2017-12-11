@@ -1,7 +1,6 @@
 package mod.world;
 
 import mod.block.SurrealBlock;
-import mod.util.WorldViewer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,7 +23,7 @@ public class SurrealWorldUpdater extends AbstractWorldEventListener {
 		World world = event.getWorld();
 		if (world.isRemote) return;
 		int dimension = world.provider.getDimension();
-		if (dimension == WorldViewer.DIM_ID) {
+		if (dimension == ModDimensions.DIM_ORIGIN) {
 			world.addEventListener(this);
 		} else if (dimension == ModDimensions.DIM_SURREAL) {
 			updater.applyUpdates();
@@ -36,7 +35,7 @@ public class SurrealWorldUpdater extends AbstractWorldEventListener {
 		World world = event.getWorld();
 		if (world.isRemote) return;
 		int dimension = world.provider.getDimension();
-		if (dimension == WorldViewer.DIM_ID) {
+		if (dimension == ModDimensions.DIM_ORIGIN) {
 			world.removeEventListener(this);
 			updater.applyUpdates();
 		}

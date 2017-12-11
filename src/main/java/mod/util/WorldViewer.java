@@ -18,11 +18,11 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class WorldViewer {
 	
-	public static final int DIM_ID = 0;
-	
 	private static WorldViewer instance;
 	
-	private final ChunkRequestPacket.Validator validator = new ChunkRequestPacket.Validator(DIM_ID);
+	private final int dim = ModDimensions.DIM_ORIGIN;
+	
+	private final ChunkRequestPacket.Validator validator = new ChunkRequestPacket.Validator(dim);
 	
 	private final ChunkBuffer buffer = new CachingChunkBuffer() {
 		
@@ -31,7 +31,7 @@ public class WorldViewer {
 		@Override
 		protected void onMissingChunk(int x, int z) {
 			// send request packet
-			ModPacketHandler.INSTANCE.sendToServer(new ChunkRequestPacket(id, DIM_ID, x, z));
+			ModPacketHandler.INSTANCE.sendToServer(new ChunkRequestPacket(id, dim, x, z));
 		}
 		
 		@Override
@@ -50,13 +50,15 @@ public class WorldViewer {
 		}
 	};
 	
-	private final IBlockAccess worldAccess = new CachedWorldAccess(DIM_ID);
+	private final IBlockAccess worldAccess = new CachedWorldAccess(dim);
 	
 	@SuppressWarnings("unused")
 	private final class EventHandler {
 		
+		private final int target = ModDimensions.DIM_SURREAL;
+		
 		private boolean checkWorld(World world) {
-			return world.provider.getDimension() == ModDimensions.DIM_SURREAL;
+			return world.provider.getDimension() == target;
 		}
 		
 		@SubscribeEvent
