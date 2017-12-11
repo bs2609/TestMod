@@ -1,7 +1,10 @@
 package mod.network;
 
 import io.netty.buffer.ByteBuf;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -10,6 +13,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.function.Function;
 
 public class ChunkRequestPacket implements IMessage {
 	
@@ -69,17 +74,26 @@ public class ChunkRequestPacket implements IMessage {
 		
 		private final int dim;
 		
+		private final Map<EntityPlayerMP, LongSet> accepted = new WeakHashMap<>();
+		
+		private static final Function<EntityPlayerMP, LongSet> newSet = p -> new LongOpenHashSet();
+		
 		public Validator(int dim) {
 			this.dim = dim;
+		}
+		
+		public void add(EntityPlayerMP player, int x, int z) {
+			accepted.computeIfAbsent(player, newSet).add(ChunkPos.asLong(x, z));
+		}
+		
+		public void remove(EntityPlayerMP player, int x, int z) {
+			accepted.computeIfAbsent(player, newSet).remove(ChunkPos.asLong(x, z));
 		}
 		
 		@Override
 		public boolean validate(ChunkRequestPacket msg, MessageContext ctx) {
 			EntityPlayerMP player = ctx.getServerHandler().player;
-			int dx = Math.abs(((int) player.managedPosX >> 4) - msg.x);
-			int dz = Math.abs(((int) player.managedPosZ >> 4) - msg.z);
-			int range = player.mcServer.getPlayerList().getViewDistance();
-			return dim == msg.dim && Math.max(dx, dz) <= range;
+			return dim == msg.dim && accepted.computeIfAbsent(player, newSet).remove(ChunkPos.asLong(msg.x, msg.z));
 		}
 	}
 }

@@ -1,18 +1,18 @@
 package mod.util;
 
-import mod.network.CachingChunkBuffer;
-import mod.network.ChunkBuffer;
-import mod.network.ChunkRequestPacket;
-import mod.network.ModPacketHandler;
+import mod.network.*;
 import mod.world.CachedWorldAccess;
 import mod.world.ModDimensions;
 import mod.world.SimpleBlockAccess;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -20,11 +20,13 @@ public class WorldViewer {
 	
 	public static final int DIM_ID = 0;
 	
-	public static final WorldViewer instance = new WorldViewer();
+	private static WorldViewer instance;
+	
+	private final ChunkRequestPacket.Validator validator = new ChunkRequestPacket.Validator(DIM_ID);
 	
 	private final ChunkBuffer buffer = new CachingChunkBuffer() {
 		
-		private final int id = ModPacketHandler.registerWithHandlers(this, new ChunkRequestPacket.Validator(DIM_ID));
+		private final int id = ModPacketHandler.registerWithHandlers(this, validator);
 		
 		@Override
 		protected void onMissingChunk(int x, int z) {
@@ -50,29 +52,51 @@ public class WorldViewer {
 	
 	private final IBlockAccess worldAccess = new CachedWorldAccess(DIM_ID);
 	
+	@SuppressWarnings("unused")
 	private final class EventHandler {
 		
 		private boolean checkWorld(World world) {
-			return world.isRemote && world.provider.getDimension() == ModDimensions.DIM_SURREAL;
-		}
-		
-		@SubscribeEvent
-		public void onChunkLoad(ChunkEvent.Load event) {
-			if (!checkWorld(event.getWorld())) return;
-			Chunk chunk = event.getChunk();
-			buffer.getChunk(chunk.x, chunk.z);
+			return world.provider.getDimension() == ModDimensions.DIM_SURREAL;
 		}
 		
 		@SubscribeEvent
 		public void onChunkUnload(ChunkEvent.Unload event) {
-			if (!checkWorld(event.getWorld())) return;
-			Chunk chunk = event.getChunk();
-			buffer.removeChunk(chunk.x, chunk.z);
+			World world = event.getWorld();
+			if (world.isRemote && checkWorld(world)) {
+				Chunk chunk = event.getChunk();
+				buffer.removeChunk(chunk.x, chunk.z);
+			}
+		}
+		
+		@SubscribeEvent
+		public void onChunkWatch(ChunkWatchEvent.Watch event) {
+			EntityPlayerMP player = event.getPlayer();
+			if (checkWorld(player.world)) {
+				ChunkPos pos = event.getChunk();
+				validator.add(player, pos.x, pos.z);
+			}
+		}
+		
+		@SubscribeEvent
+		public void onChunkUnwatch(ChunkWatchEvent.UnWatch event) {
+			EntityPlayerMP player = event.getPlayer();
+			if (checkWorld(player.world)) {
+				ChunkPos pos = event.getChunk();
+				validator.remove(player, pos.x, pos.z);
+			}
 		}
 	}
 	
 	private WorldViewer() {
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
+	}
+	
+	public static void init() {
+		instance = new WorldViewer();
+	}
+	
+	public static WorldViewer get() {
+		return instance;
 	}
 	
 	public IBlockAccess getBlockAccess(IBlockAccess access) {

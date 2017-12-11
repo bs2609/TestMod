@@ -71,7 +71,7 @@ public class SurrealBlock extends BasicBlock {
 	private final class Remapper extends BlockAccessRemapper {
 		
 		Remapper(IBlockAccess source) {
-			super(WorldViewer.instance.getBlockAccess(source), source);
+			super(WorldViewer.get().getBlockAccess(source), source);
 		}
 		
 		@Override

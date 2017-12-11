@@ -77,7 +77,7 @@ public class SurrealVoidBlock extends UnobtainableBlock {
 	@Override
 	public int getPackedLightmapCoords(IBlockState state, IBlockAccess source, BlockPos pos) {
 		int blockLight = source.getCombinedLight(pos, 0) >> 4 & 15;
-		return WorldViewer.instance.getBlockAccess(source).getCombinedLight(getInverted(pos), blockLight);
+		return WorldViewer.get().getBlockAccess(source).getCombinedLight(getInverted(pos), blockLight);
 	}
 	
 	private static BlockPos getInverted(BlockPos pos) {

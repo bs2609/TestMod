@@ -3,6 +3,7 @@ package mod;
 import mod.command.ModCommands;
 import mod.network.ModPacketHandler;
 import mod.proxy.IProxy;
+import mod.util.WorldViewer;
 import mod.world.ModDimensions;
 import mod.world.gen.ModWorldGenerators;
 import net.minecraft.command.ICommand;
@@ -41,6 +42,7 @@ public class TestMod {
 		ModDimensions.init();
 		ModWorldGenerators.register();
 		ModPacketHandler.init();
+		WorldViewer.init();
 		
 		proxy.preInit(event);
 	}
