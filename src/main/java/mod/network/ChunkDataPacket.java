@@ -1,6 +1,7 @@
 package mod.network;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -15,24 +16,34 @@ import java.util.Map;
 public class ChunkDataPacket implements IMessage {
 	
 	private int id;
-	private Chunk chunk;
+	private ByteBuf data;
 	
 	public ChunkDataPacket() {}
 	
 	public ChunkDataPacket(int id, Chunk chunk) {
 		this.id = id;
-		this.chunk = chunk;
+		this.data = encode(chunk);
 	}
 	
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		
 		id = buf.readInt();
+		data = buf.retain();
+	}
+	
+	@Override
+	public void toBytes(ByteBuf buf) {
+		buf.writeInt(id);
+		buf.writeBytes(data);
+	}
+	
+	private static Chunk decode(ByteBuf buf) {
+		
 		int x = buf.readInt(), z = buf.readInt();
 		int mask = buf.readInt();
 		boolean flag = buf.readBoolean();
 		
-		chunk = new PartialChunk(null, x, z, flag);
+		Chunk chunk = new PartialChunk(null, x, z, flag);
 		
 		ExtendedBlockStorage[] array = chunk.getBlockStorageArray();
 		for (int i = 0; i < array.length; ++i) {
@@ -45,12 +56,14 @@ public class ChunkDataPacket implements IMessage {
 		}
 		
 		buf.readBytes(chunk.getBiomeArray());
+		
+		return chunk;
 	}
 	
-	@Override
-	public void toBytes(ByteBuf buf) {
+	private static ByteBuf encode(Chunk chunk) {
 		
-		buf.writeInt(id);
+		ByteBuf buf = Unpooled.buffer();
+		
 		buf.writeInt(chunk.x);
 		buf.writeInt(chunk.z);
 		
@@ -75,6 +88,8 @@ public class ChunkDataPacket implements IMessage {
 		}
 		
 		buf.writeBytes(chunk.getBiomeArray());
+		
+		return buf;
 	}
 	
 	public static class Handler implements IMessageHandler<ChunkDataPacket, IMessage> {
@@ -91,7 +106,10 @@ public class ChunkDataPacket implements IMessage {
 				@Override
 				public void run() {
 					IDataReceiver<Chunk> receiver = chunkHandlers.get(msg.id);
-					if (receiver != null) receiver.accept(msg.chunk);
+					if (receiver != null) {
+						receiver.accept(decode(msg.data));
+					}
+					msg.data.release();
 				}
 			});
 			return null;
