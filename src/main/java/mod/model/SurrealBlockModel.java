@@ -26,6 +26,7 @@ public class SurrealBlockModel implements IBakedModel {
 	public static final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(TestMod.MOD_ID + ":" + SurrealBlock.NAME);
 	private static final String textureName = TestMod.MOD_ID + ":blocks/" + SurrealBlock.NAME;
 	
+	private final TextureAtlasSprite particleTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureName);
 	private final ModelTransformer transformer = new ModelInverter();
 	
 	@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod.MOD_ID)
@@ -70,7 +71,7 @@ public class SurrealBlockModel implements IBakedModel {
 
 	@Override
 	public TextureAtlasSprite getParticleTexture() {
-		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureName);
+		return particleTexture;
 	}
 
 	@Override
