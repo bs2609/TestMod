@@ -14,6 +14,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -82,6 +83,13 @@ public class MiscUtils {
 	
 	public static EnumFacing getReflected(EnumFacing side, EnumFacing.Axis axis) {
 		return (side != null && side.getAxis() == axis) ? side.getOpposite() : side;
+	}
+	
+	public static IBlockState getClean(IBlockState state) {
+		if (state instanceof IExtendedBlockState) {
+			return ((IExtendedBlockState) state).getClean();
+		}
+		return state;
 	}
 	
 	@SuppressWarnings("unchecked")
