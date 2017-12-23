@@ -28,7 +28,7 @@ public class TestMod {
 	@Mod.Instance(MOD_ID)
 	public static TestMod instance;
 
-	@SidedProxy(clientSide = "mod.proxy.ClientProxy", serverSide = "mod.proxy.DefaultProxy")
+	@SidedProxy(clientSide = "mod.proxy.DefaultProxy", serverSide = "mod.proxy.DefaultProxy")
 	public static IProxy proxy;
 
 	private static Logger logger;

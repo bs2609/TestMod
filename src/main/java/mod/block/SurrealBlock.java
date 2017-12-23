@@ -12,7 +12,7 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.color.BlockColors;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.color.IBlockColor;
@@ -58,13 +58,19 @@ public class SurrealBlock extends BasicBlock {
 	@SideOnly(Side.CLIENT)
 	private final class ColourHandler implements IBlockColor {
 		
+		private final BlockColors blockColors;
+		
+		ColourHandler(BlockColors blockColors) {
+			this.blockColors = blockColors;
+		}
+		
 		@Override
 		public int colorMultiplier(IBlockState state, IBlockAccess access, BlockPos pos, int tintIndex) {
 			if (access == null || pos == null) return -1;
 			IBlockAccess remapper = new Remapper(access);
 			BlockPos inverted = getInverted(pos);
 			IBlockState appearance = getBlockAppearance(state, remapper, inverted);
-			return Minecraft.getMinecraft().getBlockColors().colorMultiplier(appearance, remapper, inverted, tintIndex);
+			return blockColors.colorMultiplier(appearance, remapper, inverted, tintIndex);
 		}
 	}
 	
@@ -112,8 +118,8 @@ public class SurrealBlock extends BasicBlock {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	void registerColourHandler() {
-		Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new ColourHandler(), this);
+	void registerColourHandler(BlockColors blockColors) {
+		blockColors.registerBlockColorHandler(new ColourHandler(blockColors), this);
 	}
 	
 	private IBlockState makeDefaultState() {
