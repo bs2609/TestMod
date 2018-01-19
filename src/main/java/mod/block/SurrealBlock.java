@@ -42,7 +42,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
-public class SurrealBlock extends BasicBlock {
+public class SurrealBlock extends UnobtainableBlock {
 
 	public static final String NAME = "surreal_block";
 	
@@ -350,16 +350,6 @@ public class SurrealBlock extends BasicBlock {
 	@Override
 	public boolean isTranslucent(IBlockState state) {
 		return !state.getMaterial().blocksLight();
-	}
-	
-	@Override
-	public int quantityDropped(Random random) {
-		return 0;
-	}
-	
-	@Override
-	public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
-		return ItemStack.EMPTY;
 	}
 	
 	@Override
