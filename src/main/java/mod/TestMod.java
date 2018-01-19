@@ -2,7 +2,7 @@ package mod;
 
 import mod.command.ModCommands;
 import mod.network.ModPacketHandler;
-import mod.proxy.IProxy;
+import mod.proxy.LoadingProxy;
 import mod.util.WorldViewer;
 import mod.world.ModDimensions;
 import mod.world.gen.ModWorldGenerators;
@@ -28,8 +28,8 @@ public class TestMod {
 	@Mod.Instance(MOD_ID)
 	public static TestMod instance;
 
-	@SidedProxy(clientSide = "mod.proxy.DefaultProxy", serverSide = "mod.proxy.DefaultProxy")
-	public static IProxy proxy;
+	@SidedProxy(clientSide = "mod.proxy.LoadingProxy$Client", serverSide = "mod.proxy.LoadingProxy$Server")
+	public static LoadingProxy proxy;
 
 	private static Logger logger;
 	private static Configuration config;
