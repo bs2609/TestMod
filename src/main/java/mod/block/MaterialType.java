@@ -2,6 +2,7 @@ package mod.block;
 
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.util.IStringSerializable;
 
@@ -18,9 +19,7 @@ public enum MaterialType implements IStringSerializable {
 	CLEAR("clear");
 	
 	public static final Set<MaterialType> VALUES = Collections.unmodifiableSet(EnumSet.allOf(MaterialType.class));
-	
-	public static final PropertyEnum<MaterialType> PROPERTY = PropertyEnum.create("material", MaterialType.class, VALUES);
-	
+	public static final IProperty<MaterialType> PROPERTY = PropertyEnum.create("material", MaterialType.class, VALUES);
 	private static final EnumMap<MaterialType, Material> MATERIALS = new EnumMap<MaterialType, Material>(MaterialType.class);
 	
 	static {
