@@ -1,4 +1,4 @@
-package mod.block;
+package mod.block.property;
 
 import net.minecraftforge.common.property.IUnlistedProperty;
 

@@ -1,4 +1,4 @@
-package mod.block;
+package mod.block.property;
 
 import net.minecraft.block.state.IBlockState;
 

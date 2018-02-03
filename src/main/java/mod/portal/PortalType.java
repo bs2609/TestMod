@@ -1,7 +1,7 @@
 package mod.portal;
 
+import mod.block.property.Properties;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.util.IStringSerializable;
 
 import java.util.Collections;
@@ -14,7 +14,7 @@ public enum PortalType implements IStringSerializable {
 	OUT("outward");
 
 	public static final Set<PortalType> VALUES = Collections.unmodifiableSet(EnumSet.allOf(PortalType.class));
-	public static final IProperty<PortalType> PROPERTY = PropertyEnum.create("type", PortalType.class, VALUES);
+	public static final IProperty<PortalType> PROPERTY = Properties.create("type", PortalType.class);
 
 	private final String name;
 
