@@ -1,9 +1,9 @@
 package mod.world.gen;
 
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -22,7 +22,7 @@ public class ModWorldGenerators implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		BlockPos basePos = new BlockPos(chunkX << 4, 0, chunkZ << 4);
-		if (world.provider.getDimensionType() == DimensionType.OVERWORLD) {
+		if (chunkGenerator instanceof ChunkGeneratorOverworld) {
 			generatePortalRuins(world, random, basePos);
 		}
 	}
