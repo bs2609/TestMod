@@ -51,6 +51,7 @@ public class ModBlocks {
 			SURREAL_BLOCK.initModel();
 			SURREAL_VOID.initModel();
 			PORTAL_BLOCK.initModel();
+			PORTAL_FIELD.initModel();
 			PORTAL_FRAME.initModel();
 		}
 		

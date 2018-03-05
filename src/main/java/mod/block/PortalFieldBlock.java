@@ -16,6 +16,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Collections;
 
 @SuppressWarnings("deprecation")
 public class PortalFieldBlock extends UnobtainableBlock {
@@ -24,6 +29,11 @@ public class PortalFieldBlock extends UnobtainableBlock {
 
 	PortalFieldBlock() {
 		super(NAME, Material.PORTAL);
+	}
+
+	@SideOnly(Side.CLIENT)
+	void initModel() {
+		ModelLoader.setCustomStateMapper(this, block -> Collections.emptyMap());
 	}
 
 	@Override

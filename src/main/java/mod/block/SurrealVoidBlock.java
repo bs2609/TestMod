@@ -1,12 +1,9 @@
 package mod.block;
 
 import mod.util.WorldViewer;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.IStateMapper;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -17,7 +14,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collections;
-import java.util.Map;
 
 @SuppressWarnings("deprecation")
 public class SurrealVoidBlock extends UnobtainableBlock {
@@ -30,13 +26,7 @@ public class SurrealVoidBlock extends UnobtainableBlock {
 	
 	@SideOnly(Side.CLIENT)
 	void initModel() {
-		IStateMapper empty = new IStateMapper() {
-			@Override
-			public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block block) {
-				return Collections.emptyMap();
-			}
-		};
-		ModelLoader.setCustomStateMapper(this, empty);
+		ModelLoader.setCustomStateMapper(this, block -> Collections.emptyMap());
 	}
 	
 	@Override
