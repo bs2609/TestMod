@@ -1,7 +1,6 @@
 package mod.block;
 
 import mod.portal.PortalUtils;
-import mod.util.MiscUtils;
 import mod.world.SpawnTeleporter;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
@@ -13,9 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -61,10 +58,7 @@ public class PortalFieldBlock extends UnobtainableBlock {
 		if (!world.isRemote && entity instanceof EntityPlayerMP && PortalUtils.checkEntity(entity)) {
 			EntityPlayerMP player = (EntityPlayerMP) entity;
 			int dim = world.provider.getRespawnDimension(player);
-			WorldServer destination = MiscUtils.getWorld(dim);
-			Teleporter teleporter = new SpawnTeleporter(destination);
-			
-			MiscUtils.changeDimension(player, dim, teleporter);
+			player.changeDimension(dim, new SpawnTeleporter());
 		}
 	}
 }

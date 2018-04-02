@@ -3,16 +3,12 @@ package mod.world;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.World;
 
 public class SpawnTeleporter extends SimpleTeleporter {
-
-	public SpawnTeleporter(WorldServer world) {
-		super(world);
-	}
-
+	
 	@Override
-	public BlockPos getDestination(Entity entity) {
+	public BlockPos getDestination(World world, Entity entity) {
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			BlockPos bed = player.getBedLocation(world.provider.getDimension());
@@ -20,5 +16,4 @@ public class SpawnTeleporter extends SimpleTeleporter {
 		}
 		return world.getTopSolidOrLiquidBlock(world.getSpawnPoint());
 	}
-
 }

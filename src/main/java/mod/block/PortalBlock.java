@@ -1,6 +1,5 @@
 package mod.block;
 
-import mod.util.MiscUtils;
 import mod.world.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -12,10 +11,9 @@ import net.minecraft.item.Item;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.util.ITeleporter;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -52,32 +50,29 @@ public class PortalBlock extends BasicBlock {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote && playerIn instanceof EntityPlayerMP && hand == EnumHand.MAIN_HAND) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote && playerIn instanceof EntityPlayerMP && hand == EnumHand.MAIN_HAND) {
 			EntityPlayerMP player = (EntityPlayerMP) playerIn;
 			int dimension = ModDimensions.DIM_GLITCHED;
-			Teleporter teleporter;
+			ITeleporter teleporter;
 			
 			if (dimension == player.dimension) {
 				DimensionPos dimPos = cachedPositions.get(player.getUniqueID());
 				if (dimPos != null) {
 					dimension = dimPos.dimension;
-					WorldServer world = MiscUtils.getWorld(dimension);
-					teleporter = new BlockPosTeleporter(world, dimPos.position);
+					teleporter = new BlockPosTeleporter(dimPos.position);
 					
 				} else {
-					dimension = worldIn.provider.getRespawnDimension(player);
-					WorldServer world = MiscUtils.getWorld(dimension);
-					teleporter = new SpawnTeleporter(world);
+					dimension = world.provider.getRespawnDimension(player);
+					teleporter = new SpawnTeleporter();
 				}
 				
 			} else {
 				cachedPositions.put(player.getUniqueID(), new DimensionPos(player.dimension, new BlockPos(player)));
-				WorldServer world = MiscUtils.getWorld(dimension);
-				teleporter = new PortalBlockTeleporter(world);
+				teleporter = new PortalBlockTeleporter();
 			}
 			
-			MiscUtils.changeDimension(player, dimension, teleporter);
+			player.changeDimension(dimension, teleporter);
 		}
 		return true;
 	}
