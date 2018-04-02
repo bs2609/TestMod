@@ -72,19 +72,17 @@ public class WorldViewer {
 		
 		@SubscribeEvent
 		public void onChunkWatch(ChunkWatchEvent.Watch event) {
-			EntityPlayerMP player = event.getPlayer();
-			if (checkWorld(player.world)) {
-				ChunkPos pos = event.getChunk();
-				validator.add(player, pos.x, pos.z);
+			Chunk chunk = event.getChunkInstance();
+			if (chunk != null && checkWorld(chunk.getWorld())) {
+				validator.add(event.getPlayer(), chunk.x, chunk.z);
 			}
 		}
 		
 		@SubscribeEvent
 		public void onChunkUnwatch(ChunkWatchEvent.UnWatch event) {
-			EntityPlayerMP player = event.getPlayer();
-			if (checkWorld(player.world)) {
-				ChunkPos pos = event.getChunk();
-				validator.remove(player, pos.x, pos.z);
+			Chunk chunk = event.getChunkInstance();
+			if (chunk != null && checkWorld(chunk.getWorld())) {
+				validator.remove(event.getPlayer(), chunk.x, chunk.z);
 			}
 		}
 	}
