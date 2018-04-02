@@ -1,5 +1,6 @@
 package mod.block;
 
+import mod.block.property.UnlistedProperties;
 import mod.model.SurrealBlockModel;
 import mod.util.BlockAccessRemapper;
 import mod.util.MiscUtils;
@@ -22,7 +23,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -38,8 +38,6 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class SurrealBlock extends UnobtainableBlock {
@@ -111,10 +109,6 @@ public class SurrealBlock extends UnobtainableBlock {
 			}
 		};
 		ModelLoader.setCustomStateMapper(this, ignoreState);
-		// register item model
-		Item item = Item.getItemFromBlock(this);
-		ModelResourceLocation itemMRL = new ModelResourceLocation(getRegistryName(), "inventory");
-		ModelLoader.setCustomModelResourceLocation(item, 0, itemMRL);
 	}
 	
 	@SideOnly(Side.CLIENT)
