@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 @SuppressWarnings("unused")
 @Mod(modid = TestMod.MOD_ID, name = TestMod.NAME, version = TestMod.VERSION,
-		dependencies = "required-after:forge@[14.23.1.2571,)", acceptedMinecraftVersions = "[1.12.2,1.13)")
+		dependencies = "required-after:forge@[14.23.2.2651,)", acceptedMinecraftVersions = "[1.12.2,1.13)")
 public class TestMod {
 
 	public static final String MOD_ID = "testing";
