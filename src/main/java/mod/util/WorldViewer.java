@@ -5,8 +5,6 @@ import mod.world.CachedWorldAccess;
 import mod.world.ModDimensions;
 import mod.world.SimpleBlockAccess;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
