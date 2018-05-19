@@ -10,8 +10,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -23,10 +25,10 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class SurrealBlockModel implements IBakedModel {
 
-	public static final ModelResourceLocation modelResourceLocation = new ModelResourceLocation(TestMod.MOD_ID + ":" + SurrealBlock.NAME);
-	private static final String textureName = TestMod.MOD_ID + ":blocks/" + SurrealBlock.NAME;
+	public static final ModelResourceLocation MODEL_LOCATION = new ModelResourceLocation(TestMod.MOD_ID + ":" + SurrealBlock.NAME);
+	private static final ResourceLocation TEXTURE_LOCATION = new ResourceLocation(TestMod.MOD_ID, "blocks/" + SurrealBlock.NAME);
 	
-	private final TextureAtlasSprite particleTexture = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(textureName);
+	private final TextureAtlasSprite particleTexture = ModelLoader.defaultTextureGetter().apply(TEXTURE_LOCATION);
 	private final ModelTransformer transformer = new ModelInverter();
 	
 	@Mod.EventBusSubscriber(value = Side.CLIENT, modid = TestMod.MOD_ID)
@@ -34,13 +36,17 @@ public class SurrealBlockModel implements IBakedModel {
 		
 		@SubscribeEvent
 		public static void onModelBakeEvent(ModelBakeEvent event) {
-			IBakedModel model = event.getModelRegistry().getObject(modelResourceLocation);
+			IBakedModel model = event.getModelRegistry().getObject(MODEL_LOCATION);
 			if (model != null) {
-				event.getModelRegistry().putObject(modelResourceLocation, new SurrealBlockModel());
+				event.getModelRegistry().putObject(MODEL_LOCATION, new SurrealBlockModel());
 			}
 		}
 	}
-
+	
+	private static IBakedModel getModelForState(IBlockState state) {
+		return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(MiscUtils.getClean(state));
+	}
+	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		if (state instanceof IExtendedBlockState) {
@@ -49,7 +55,7 @@ public class SurrealBlockModel implements IBakedModel {
 			BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
 			if (appearance != null && appearance.getRenderType() == EnumBlockRenderType.MODEL
 					&& (layer == null || appearance.getBlock().canRenderInLayer(appearance, layer))) {
-				IBakedModel copiedModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelForState(MiscUtils.getClean(appearance));
+				IBakedModel copiedModel = getModelForState(appearance);
 				return transformer.transformQuads(copiedModel.getQuads(appearance, MiscUtils.getReflected(side, EnumFacing.Axis.Y), rand));
 			}
 		}

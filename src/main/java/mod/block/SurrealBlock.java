@@ -105,7 +105,7 @@ public class SurrealBlock extends UnobtainableBlock {
 		StateMapperBase ignoreState = new StateMapperBase() {
 			@Override
 			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
-				return SurrealBlockModel.modelResourceLocation;
+				return SurrealBlockModel.MODEL_LOCATION;
 			}
 		};
 		ModelLoader.setCustomStateMapper(this, ignoreState);
