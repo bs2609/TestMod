@@ -50,13 +50,11 @@ public class SurrealBlockModel implements IBakedModel {
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		if (state instanceof IExtendedBlockState) {
-			IExtendedBlockState extendedState = (IExtendedBlockState) state;
-			IBlockState appearance = extendedState.getValue(SurrealBlock.APPEARANCE);
+			IBlockState appearance = ((IExtendedBlockState) state).getValue(SurrealBlock.APPEARANCE);
 			BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
 			if (appearance != null && appearance.getRenderType() == EnumBlockRenderType.MODEL
 					&& (layer == null || appearance.getBlock().canRenderInLayer(appearance, layer))) {
-				IBakedModel copiedModel = getModelForState(appearance);
-				return transformer.transformQuads(copiedModel.getQuads(appearance, MiscUtils.getReflected(side, EnumFacing.Axis.Y), rand));
+				return transformer.transformQuads(getModelForState(appearance).getQuads(appearance, MiscUtils.getReflected(side, EnumFacing.Axis.Y), rand));
 			}
 		}
 		return Collections.emptyList();
@@ -66,7 +64,18 @@ public class SurrealBlockModel implements IBakedModel {
 	public boolean isAmbientOcclusion() {
 		return true;
 	}
-
+	
+	@Override
+	public boolean isAmbientOcclusion(IBlockState state) {
+		if (state instanceof IExtendedBlockState) {
+			IBlockState appearance = ((IExtendedBlockState) state).getValue(SurrealBlock.APPEARANCE);
+			if (appearance != null && appearance.getRenderType() == EnumBlockRenderType.MODEL) {
+				return getModelForState(appearance).isAmbientOcclusion(appearance);
+			}
+		}
+		return isAmbientOcclusion();
+	}
+	
 	@Override
 	public boolean isGui3d() {
 		return true;
