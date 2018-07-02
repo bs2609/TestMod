@@ -18,12 +18,12 @@ import org.apache.logging.log4j.Logger;
 
 @SuppressWarnings("unused")
 @Mod(modid = TestMod.MOD_ID, name = TestMod.NAME, version = TestMod.VERSION,
-		dependencies = "required-after:forge@[14.23.2.2651,)", acceptedMinecraftVersions = "[1.12.2,1.13)")
+		dependencies = "required-after:forge@[14.23.3.2693,)", acceptedMinecraftVersions = "[1.12.2,1.13)")
 public class TestMod {
 
 	public static final String MOD_ID = "testing";
 	public static final String NAME = "a test mod";
-	public static final String VERSION = "0.4.3";
+	public static final String VERSION = "0.4.4";
 
 	@Mod.Instance(MOD_ID)
 	public static TestMod instance;
