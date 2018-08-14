@@ -21,6 +21,7 @@ public class HemisphereGenerator extends ShapeGenerator {
 			size = random.nextInt(16);
 		}
 
+		@Override
 		public boolean test(int x, int y, int z) {
 			int dx = x-cx, dy = y-cy, dz = z-cz;
 			return y <= cy && dx*dx + dy*dy + dz*dz <= size*size;
@@ -32,7 +33,7 @@ public class HemisphereGenerator extends ShapeGenerator {
 	}
 
 	@Override
-	protected Shape[] getShapes(int x, int z) {
+	protected Hemisphere[] getShapes(int x, int z) {
 		List<Hemisphere> hemispheres = new ArrayList<Hemisphere>();
 		for (int dx = -2; dx <= 2; ++dx) {
 			for (int dz = -2; dz <= 2; ++dz) {

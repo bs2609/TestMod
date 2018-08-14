@@ -61,7 +61,7 @@ public class ChunkRequestPacket implements IMessage {
 					IMessageValidator<ChunkRequestPacket> validator = validators.get(msg.id);
 					if (validator != null && validator.validate(msg, ctx)) {
 						EntityPlayerMP player = ctx.getServerHandler().player;
-						Chunk chunk = player.mcServer.getWorld(msg.dim).getChunkFromChunkCoords(msg.x, msg.z);
+						Chunk chunk = player.server.getWorld(msg.dim).getChunk(msg.x, msg.z);
 						ModPacketHandler.INSTANCE.sendTo(new ChunkDataPacket(msg.id, chunk), player);
 					}
 				}

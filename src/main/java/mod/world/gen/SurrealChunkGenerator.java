@@ -40,7 +40,7 @@ public class SurrealChunkGenerator extends AbstractChunkGenerator {
 		Chunk template = null;
 		for (int dx = -1; dx <= 1; ++dx) {
 			for (int dz = -1; dz <= 1; ++dz) {
-				Chunk chunk = world.getChunkFromChunkCoords(x+dx, z+dz);
+				Chunk chunk = world.getChunk(x+dx, z+dz);
 				if (dx == 0 && dz == 0) template = chunk;
 				queueUnload(world, chunk);
 			}

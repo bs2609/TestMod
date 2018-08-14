@@ -40,7 +40,7 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
@@ -82,7 +82,7 @@ public class PortalInteriorBlock extends UnobtainableBlock {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
 		
 		if (world.isRemote || !PortalUtils.checkEntity(entity)) return;
 		

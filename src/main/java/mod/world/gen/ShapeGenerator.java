@@ -16,9 +16,9 @@ public abstract class ShapeGenerator extends SeededTerrainGenerator {
 		public abstract boolean test(int x, int y, int z);
 	}
 
+	@Override
 	public void generate(int x, int z, ChunkPrimer primer) {
-		Shape[] shapes = getShapes(x, z);
-		buildShapes(shapes, primer);
+		buildShapes(getShapes(x, z), primer);
 	}
 
 	protected abstract Shape[] getShapes(int x, int z);

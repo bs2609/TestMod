@@ -27,7 +27,7 @@ public class CachedWorldAccess extends SimpleBlockAccess {
 	@Override
 	protected Chunk getChunk(int x, int z) {
 		if (chunk == null || chunk.x != x || chunk.z != z) {
-			chunk = getWorld().getChunkFromChunkCoords(x, z);
+			chunk = getWorld().getChunk(x, z);
 		}
 		return chunk;
 	}

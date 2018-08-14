@@ -21,6 +21,7 @@ public class PyramidGenerator extends ShapeGenerator {
 			size = random.nextInt(128);
 		}
 
+		@Override
 		public boolean test(int x, int y, int z) {
 			return Math.abs(x-cx) + Math.abs(z-cz) + (y-cy) == size;
 		}

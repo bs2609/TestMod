@@ -30,7 +30,7 @@ public class CommandSample extends CommandBase {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		
-		Chunk chunk = sender.getEntityWorld().getChunkFromBlockCoords(sender.getPosition());
+		Chunk chunk = sender.getEntityWorld().getChunk(sender.getPosition());
 		Multiset<IBlockState> states = HashMultiset.create();
 		
 		for (int x = 0; x < 16; ++x) {

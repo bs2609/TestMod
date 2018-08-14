@@ -54,7 +54,7 @@ public class PortalFieldBlock extends UnobtainableBlock {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
 		if (!world.isRemote && entity instanceof EntityPlayerMP && PortalUtils.checkEntity(entity)) {
 			EntityPlayerMP player = (EntityPlayerMP) entity;
 			int dim = world.provider.getRespawnDimension(player);

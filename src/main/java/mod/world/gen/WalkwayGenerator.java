@@ -33,6 +33,7 @@ public class WalkwayGenerator extends SeededTerrainGenerator {
 		return seed ^ offset;
 	}
 	
+	@Override
 	public void generate(int x, int z, ChunkPrimer primer) {
 		int level = getLevel(x, z);
 		if (!checkLevel(level)) return;

@@ -10,7 +10,7 @@ public abstract class BasicBlock extends Block {
 
 	protected BasicBlock(String name, Material material) {
 		super(material);
-		setUnlocalizedName(TestMod.MOD_ID + "." + name);
+		setTranslationKey(TestMod.MOD_ID + "." + name);
 	}
 	
 	protected BasicBlock(String name, Material material, CreativeTabs tab) {
